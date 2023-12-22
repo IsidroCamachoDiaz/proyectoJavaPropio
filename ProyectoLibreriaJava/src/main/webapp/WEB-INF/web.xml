@@ -12,7 +12,40 @@
 		<servlet-name>ControladorRegistro</servlet-name>
 		<url-pattern>/ControladorRegistro</url-pattern>
 	</servlet-mapping>
+	 <servlet>
+		<description>
+		</description>
+		<display-name>ControladorLogin</display-name>
+		<servlet-name>ControladorLogin</servlet-name>
+		<servlet-class>Controladores.ControladorLogin</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorLogin</servlet-name>
+		<url-pattern>/ControladorLogin</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorRestablecer</display-name>
+		<servlet-name>ControladorRestablecer</servlet-name>
+		<servlet-class>Controladores.ControladorRestablecer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorRestablecer</servlet-name>
+		<url-pattern>/ControladorRestablecer</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorOlvidar</display-name>
+		<servlet-name>ControladorOlvidar</servlet-name>
+		<servlet-class>Controladores.ControladorOlvidar</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorOlvidar</servlet-name>
+		<url-pattern>/ControladorOlvidar</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>

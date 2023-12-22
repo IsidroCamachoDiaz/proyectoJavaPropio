@@ -30,8 +30,18 @@ public class Token {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar fch_limite;
 	
+	@Column(name="id_usuario")
+	private long id_usuario;
 	// GETTER / SETTER
 	
+	public long getId_usuario() {
+		return id_usuario;
+	}
+
+	public void setId_usuario(long id_usuario) {
+		this.id_usuario = id_usuario;
+	}
+
 	public long getIdToken() {
 		return idToken;
 	}
@@ -60,8 +70,10 @@ public class Token {
 		super();
 	}
 
-	public Token(String token, Calendar fch_limite) {
+	public Token(String token, Calendar fch_limite,long id_usuario) {
+		super();
 		this.token = token;
 		this.fch_limite = fch_limite;
+		this.id_usuario=id_usuario;
 	}
 }
