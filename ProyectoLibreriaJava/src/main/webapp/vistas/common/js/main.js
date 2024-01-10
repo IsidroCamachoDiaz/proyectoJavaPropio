@@ -14,7 +14,7 @@ function validarEntrada(event, tipoForm) {
 		// Si el código de tecla no está en el rango y no es un carácter especial permitido, muestra un error y bloquea la entrada.
 		if (keycode != 8 && keycode != 13 && keycode != 27 && keycode != 0 && keycode != 32 &&
 			keycode != 225 && keycode != 233 && keycode != 237 && keycode != 243 && keycode != 250 &&
-			keycode != 193 && keycode != 201 && keycode != 205 && keycode != 211 && keycode != 218 && keycode != 46) {
+			keycode != 193 && keycode != 201 && keycode != 205 && keycode != 211 && keycode != 218 && keycode != 46 && keycode != 241) {
 
 			// Mostrar mensaje de error según el tipo de formulario
 			switch (tipoForm) {
