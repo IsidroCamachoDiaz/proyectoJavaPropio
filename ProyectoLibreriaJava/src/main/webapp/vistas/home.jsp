@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.net.URL" %>
+<%@ page import="java.net.HttpURLConnection" %>
+<%@ page import="Dtos.UsuarioDTO" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
+<%@ page import="Utilidades.Encriptado" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -37,6 +46,47 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
    </head>
    <!-- body -->
+   <%
+
+   String nombreUser="";
+   String codigoAcceso="";
+   try{
+	   Encriptado nc = new Encriptado();
+	   UsuarioDTO user = new UsuarioDTO();	
+	   String dni = request.getParameter("dni");	 
+   URL url = new URL("http://localhost:8080/usuarioApi/usuarioSelect/usuarioDni/"+dni);
+   HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+   System.out.println(url);
+   //Se le indica el metodo
+   connection.setRequestMethod("GET");
+   connection.setRequestProperty("Content-Type", "application/json");
+   connection.setDoOutput(true);
+   
+   UsuarioDTO usuarioBD;
+   
+   //Comprobamos si esta correcto la url
+	
+		//Creamos el lector
+       BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+       String linea;
+       
+       // Crear un ObjectMapper (Jackson)
+       ObjectMapper objectMapper = new ObjectMapper();
+       
+       //Pasamos el json
+       linea = reader.readLine();
+       reader.close();          
+       
+       	// Convertir el JSON a un objeto MiObjeto
+       System.out.println("---------------------------------------JSON recibido: " + linea);
+       //Lo convertimos a DTO
+           usuarioBD=objectMapper.readValue(linea, UsuarioDTO.class);
+       nombreUser=usuarioBD.getNombreUsuario()+" "+usuarioBD.getApellidosUsuario();
+       codigoAcceso=usuarioBD.getAcceso().getCodigoAcceso();
+	}catch(Exception e) {
+System.out.println(e.getLocalizedMessage());
+}
+   %>
    <body class="main-layout">
       <!-- Pantalla de carga  -->
       <div class="loader_bg">
@@ -58,7 +108,7 @@
                   <div class="col-md-4 col-sm-4">
                      <div class="logo">
                         <!--Aqui va el logo-->
-                         <a href="home.jsp"><img src="common/img/logo.webp"  alt="logito" width="175" height="100"/></a>
+                        <a href="home.jsp"><img src="common/img/logo.png" alt="#" /></a>
                      </div>
                   </div>
                   <div class="col-md-8 col-sm-8">
@@ -88,7 +138,8 @@
                            <div class="col-md-7 col-lg-5">
                               <div class="text-bg">
                                  <!--Aqui va el parameto nombre usuario-->
-                                 <h1>Bienvenido *Nombre De Usuario*</h1>
+                                 <h1>Bienvenido <%=nombreUser %></h1>
+                                 <h2>Ha Iniciado Sesion Como: <%=codigoAcceso %></h2>
                                 
                               </div>
                            </div>

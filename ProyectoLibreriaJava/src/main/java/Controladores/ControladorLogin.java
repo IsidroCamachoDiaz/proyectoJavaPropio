@@ -2,6 +2,9 @@ package Controladores;
 
 
 
+import java.io.IOException;
+import java.net.URLEncoder;
+
 import Dtos.UsuarioDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
 
@@ -29,18 +32,25 @@ public class ControladorLogin extends HttpServlet{
 		//Lammos al metodo de encriptar
 		 Encriptado nc = new Encriptado();
 			//Crearmos el DTO con los paraemos pasados y usando el metodos de encriptar
-			UsuarioDTO usuario = new UsuarioDTO(request.getParameter("dniUsuario"),nc.EncriptarContra(request.getParameter("password")));	
+			UsuarioDTO usuario = new UsuarioDTO(
+					request.getParameter("dniUsuario"),nc.EncriptarContra(request.getParameter("password")));	
 			//USamos la implementacion
 			ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
+			request.setAttribute("dni", request.getParameter("dniUsuario"));
+			// Redirigir a la vista JSP
 			
 				try {
+					String url = "vistas/home.jsp?dni=" + URLEncoder.encode(request.getParameter("dniUsuario"), "UTF-8");
 					//Comprobamos si esta bien el usuario
-					if(cosa.IniciarSesion(usuario))
-						response.sendRedirect("vistas/home.jsp");				
+					if(cosa.IniciarSesion(usuario)) {
+
+						//response.sendRedirect("vistas/home.jsp");
+						response.sendRedirect(url);
+					}
 					else
 						response.sendRedirect("login.jsp");
-				} catch(Exception e) {
-					 System.out.println("[ERROR-ControladorLogin-doPost] Se produjo un error en el metodo post al intentar iniciar sesion. | "+e);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 	 }
 }

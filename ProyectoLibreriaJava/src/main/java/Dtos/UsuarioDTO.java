@@ -302,6 +302,21 @@ public class UsuarioDTO {
 	public void setFchBajaUsuario(Calendar fchBajaUsuario) {
 		this.fchBajaUsuarioDto = fchBajaUsuario;
 	}
+	/**
+	 * Devuelve el acceso el tipo objeto
+	 * @return
+	 */
+	public AccesoDTO getAcceso() {
+		return acceso;
+	}
+	/**
+	 * Inserta un objeto de tipo Acceso
+	 * @param acceso acceso de usuario
+	 */
+
+	public void setAcceso(AccesoDTO acceso) {
+		this.acceso = acceso;
+	}
 	
 	/**
 	 * String con todos los datos del Usuario
