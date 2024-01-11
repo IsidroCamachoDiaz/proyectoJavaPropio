@@ -2,6 +2,9 @@ package Controladores;
 
 
 
+import java.io.IOException;
+import java.net.URLEncoder;
+
 import Dtos.UsuarioDTO;
 
 import jakarta.servlet.http.HttpServlet;
@@ -39,11 +42,21 @@ public class ControladorRegistro extends HttpServlet {
 				
 				ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
 				
-				if(cosa.RegistrarUsuario(usuario)) {
-					response.sendRedirect("vistas/home.jsp");
+				// Redirigir a la vista JSP
+				
+				try {
+					String url = "vistas/home.jsp?dni=" + URLEncoder.encode(request.getParameter("dniUsuario"), "UTF-8");
+					//Comprobamos si esta bien el usuario
+					if(cosa.RegistrarUsuario(usuario)) {
+
+						//response.sendRedirect("vistas/home.jsp");
+						response.sendRedirect(url);
+					}
+					else
+						response.sendRedirect("login.jsp");
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				else 
-					response.sendRedirect("login.jsp");
 				
 		 }catch(Exception e) {
 			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);

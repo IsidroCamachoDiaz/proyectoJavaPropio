@@ -100,7 +100,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		try{
 			
 			
-			
+				usu.setIdUsuario(1);
 				ObjectMapper objectMapper = new ObjectMapper();
 
 					String usuarioJson = objectMapper.writeValueAsString(usu);
