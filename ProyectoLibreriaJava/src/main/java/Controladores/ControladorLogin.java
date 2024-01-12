@@ -7,9 +7,9 @@ import java.net.URLEncoder;
 
 import Dtos.UsuarioDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
-
+import Utilidades.Alerta;
 import Utilidades.Encriptado;
-
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,11 +45,15 @@ public class ControladorLogin extends HttpServlet{
 					if(cosa.IniciarSesion(usuario)) {
 
 						//response.sendRedirect("vistas/home.jsp");
+						
 						response.sendRedirect(url);
 					}
-					else
+					else {
+						Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
 						response.sendRedirect("login.jsp");
+					}
 				} catch (IOException e) {
+					Alerta.Alerta(request,"Hubo Un Error Intentalo Mas Tarde","error");
 					e.printStackTrace();
 				}
 	 }

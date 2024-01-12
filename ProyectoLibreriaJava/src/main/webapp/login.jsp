@@ -12,6 +12,26 @@
 </head>
 
 <body>
+<!-- Lógica de JavaScript para mostrar la alerta -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+//Obtiene los atributos desde la sesión
+var mensaje = '<%= session.getAttribute("mensajeAlerta") %>';
+var tipo = '<%= session.getAttribute("tipoAlerta") %>';
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lógica para mostrar la alerta con SweetAlert2
+        if (mensaje !== null && tipo !== null && mensaje !== 'null' && tipo !== 'null') {
+        	console.log('Mensaje:', mensaje, 'Tipo:', tipo);
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
+
+<!-- Contenido de la página -->
 	<div class="container">
 		<div class="forms-container">
 			<div class="signin-signup">

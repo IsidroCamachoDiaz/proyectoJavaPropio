@@ -10,7 +10,7 @@ import Dtos.UsuarioDTO;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import Utilidades.Alerta;
 import Utilidades.Encriptado;
 import Servicios.ImplentacionIntereaccionUsuario;
 public class ControladorRegistro extends HttpServlet {
@@ -52,8 +52,10 @@ public class ControladorRegistro extends HttpServlet {
 						//response.sendRedirect("vistas/home.jsp");
 						response.sendRedirect(url);
 					}
-					else
+					else {
+						Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
 						response.sendRedirect("login.jsp");
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
