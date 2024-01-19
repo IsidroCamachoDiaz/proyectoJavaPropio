@@ -108,16 +108,39 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		}
 		return false;
 			}
+	
 	@Override
 	public boolean RegistrarUsuario(UsuarioDTO usu) {
+		
 		try{
-			
+			boolean ok=false;
+			try {
+				Properties seguridad = new Properties();
+				seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
+				//Aqui tiene que ir el buscar el usuario por el correo
+				//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+				
+				//Aqui generas la fecha limite con un tiempo de 10 minutos
+				//Aqui una vez encuentre el usuario insertas el token generado arriba y 
+				//lo inserta con la fecha limite, id_Usuario
+				 String mensaje=MenajeCorreoAlta(seguridad.getProperty("direccion"));
+				 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
+			}catch(IOException e)
+			{
+				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
+				return false;
+			}
+			catch(NullPointerException e)
+			{
+				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
+				return false;
+			}
 			
 				
 				ObjectMapper objectMapper = new ObjectMapper();
 
 					String usuarioJson = objectMapper.writeValueAsString(usu);
-		            URL url = new URL("http://localhost:8080/usuarioApi/usuarioInsertar");
+		            URL url = new URL("http://localhost:8080/usuario/Insertar");
 
 		            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		            
@@ -226,6 +249,14 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		
 		return " <p>Se a enviado una petición para restablecer la contraseña, si no has sido tu porfavor cambie la contraseña inmediatamente y si no pulsa aqui: </p>\r\n"
 		 		+ "    <a href=\""+direccion+"?tk="+token+"\"><button class=\"button-64\" role=\"button\" value=\"Cambiar contraseña\" ><span class=\"text\">Restablecer contraseña</span></button></a>\r\n";
+		 		
+	}
+	
+	private String MenajeCorreoAlta(String direccion)
+	{
+		
+		return " <p>Se a enviado una petición para restablecer la contraseña, si no has sido tu porfavor cambie la contraseña inmediatamente y si no pulsa aqui: </p>\r\n"
+		 		+ "    <a href=\""+direccion+"\"><button class=\"button-64\" role=\"button\" value=\"Cambiar contraseña\" ><span class=\"text\">Restablecer contraseña</span></button></a>\r\n";
 		 		
 	}
 	/**

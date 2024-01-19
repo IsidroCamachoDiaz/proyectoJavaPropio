@@ -32,8 +32,16 @@ public class ControladorRegistro extends HttpServlet {
 		 try {
 			 	Encriptado nc = new Encriptado();
 			 	HttpSession session = request.getSession();
+				String contrasenia2=nc.EncriptarContra(request.getParameter("contrasenia2Usuario"));
+				UsuarioDTO usuario = new UsuarioDTO(request.getParameter("nombreUsuario"),
+						request.getParameter("telefonoUsuario"),
+						request.getParameter("correoUsuario"),
+						nc.EncriptarContra(request.getParameter("contraseniaUsuario")));
 				
-				UsuarioDTO usuario = new UsuarioDTO();
+				if(!contrasenia2.equals(usuario.getClaveUsuario())) {
+					Alerta.Alerta(request,"La primera contraseña no coincide con la segunda","error");
+					response.sendRedirect("index.html");
+				}
 				
 				ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
 				
@@ -47,11 +55,12 @@ public class ControladorRegistro extends HttpServlet {
 						//response.sendRedirect("vistas/home.jsp");
 						session.setAttribute("usuario",usuario);
 						session.setAttribute("acceso","1");
-						response.sendRedirect(url);
+						Alerta.Alerta(request,"Usurario Creado Correctamente","success");
+						response.sendRedirect("index.html");
 					}
 					else {
 						Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
-						response.sendRedirect("login.jsp");
+						response.sendRedirect("index.html");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
