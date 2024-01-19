@@ -1,0 +1,200 @@
+package Dtos;
+
+import java.util.Calendar;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Clase de Usuario (DTO) 
+ *  
+ * @author El Equipazo de los Lentos
+ * 
+ * @param idUsuarioDto id del Usuario
+ * @param dniUsuarioDto DNI del usuario
+ * @param nombreUsuarioDto Nombre del Usuario
+ * @param apellidosUsuarioDto Apellido del Usuario
+ * @param tlfUsuarioDto telefono del Usuario
+ * @param emailUsuarioDto Email del usuario
+ * @param claveUsuarioDto contraseña del usuario
+ * @param estaBloqueadoUsuarioDto Estado del usuario, si esta bloqueado o no
+ * @param fchFinBloqueoDto fecha del bloqueo
+ * @param fchAltaUsuarioDto fecha de alta del usuario
+ * @param fchBajaUsuarioDto fecha de baja del usuario
+ * @param acceso indica el acceso del usuario
+ */
+public class UsuarioDTO {
+	
+	@JsonProperty("id_usuario")
+	private long idUsuario;
+	
+	@JsonProperty("nombre_usuario")
+	private String nombreUsuario;
+	
+	@JsonProperty("telefono_usuario")
+	private String tlfUsuario;
+	
+	@JsonProperty("correo_usuario")
+	private String emailUsuario;
+	
+	@JsonProperty("contrasenia_usuario")
+	private String claveUsuario;
+
+	@JsonProperty("acceso")
+	private AccesoDTO acceso;
+	
+	 @JsonProperty("tokens_usuario")
+	    private List<TokenDTO> listaTokensUsuario;
+
+	//Construtores
+   
+	/**
+	 * Constructor vacío por defecto
+	 */
+	public UsuarioDTO() {
+		super();
+	}
+
+
+	/**
+	 * Constructor para crear un objeto UsuarioDTO con todos los atributos.
+	 * 
+	 * @param idUsuario      Identificador único del usuario.
+	 * @param nombreUsuario  Nombre del usuario.
+	 * @param tlfUsuario     Número de teléfono del usuario.
+	 * @param emailUsuario   Dirección de correo electrónico del usuario.
+	 * @param claveUsuario   Clave o contraseña del usuario.
+	 */
+	public UsuarioDTO(long idUsuario, String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario) {
+	    super();
+	    this.idUsuario = idUsuario;
+	    this.nombreUsuario = nombreUsuario;
+	    this.tlfUsuario = tlfUsuario;
+	    this.emailUsuario = emailUsuario;
+	    this.claveUsuario = claveUsuario;
+	}
+
+	/**
+	 * Constructor para crear un objeto UsuarioDTO con algunos atributos.
+	 * 
+	 * @param nombreUsuario  Nombre del usuario.
+	 * @param tlfUsuario     Número de teléfono del usuario.
+	 * @param emailUsuario   Dirección de correo electrónico del usuario.
+	 * @param claveUsuario   Clave o contraseña del usuario.
+	 */
+	public UsuarioDTO(String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario) {
+	    super();
+	    this.nombreUsuario = nombreUsuario;
+	    this.tlfUsuario = tlfUsuario;
+	    this.emailUsuario = emailUsuario;
+	    this.claveUsuario = claveUsuario;
+	}
+
+	/**
+	 * Constructor para crear un objeto UsuarioDTO con los atributos mínimos necesarios.
+	 * 
+	 * @param emailUsuario   Dirección de correo electrónico del usuario.
+	 * @param claveUsuario   Clave o contraseña del usuario.
+	 */
+	public UsuarioDTO(String emailUsuario, String claveUsuario) {
+	    super();
+	    this.emailUsuario = emailUsuario;
+	    this.claveUsuario = claveUsuario;
+	}
+
+	/**
+	 * Obtiene el nombre del usuario.
+	 * 
+	 * @return Nombre del usuario.
+	 */
+	public String getNombreUsuario() {
+	    return nombreUsuario;
+	}
+
+	/**
+	 * Establece el nombre del usuario.
+	 * 
+	 * @param nombreUsuario Nuevo nombre del usuario.
+	 */
+	public void setNombreUsuario(String nombreUsuario) {
+	    this.nombreUsuario = nombreUsuario;
+	}
+
+	/**
+	 * Obtiene el número de teléfono del usuario.
+	 * 
+	 * @return Número de teléfono del usuario.
+	 */
+	public String getTlfUsuario() {
+	    return tlfUsuario;
+	}
+
+	/**
+	 * Establece el número de teléfono del usuario.
+	 * 
+	 * @param tlfUsuario Nuevo número de teléfono del usuario.
+	 */
+	public void setTlfUsuario(String tlfUsuario) {
+	    this.tlfUsuario = tlfUsuario;
+	}
+
+	/**
+	 * Obtiene la dirección de correo electrónico del usuario.
+	 * 
+	 * @return Dirección de correo electrónico del usuario.
+	 */
+	public String getEmailUsuario() {
+	    return emailUsuario;
+	}
+
+	/**
+	 * Establece la dirección de correo electrónico del usuario.
+	 * 
+	 * @param emailUsuario Nueva dirección de correo electrónico del usuario.
+	 */
+	public void setEmailUsuario(String emailUsuario) {
+	    this.emailUsuario = emailUsuario;
+	}
+
+	/**
+	 * Obtiene la clave o contraseña del usuario.
+	 * 
+	 * @return Clave o contraseña del usuario.
+	 */
+	public String getClaveUsuario() {
+	    return claveUsuario;
+	}
+
+	/**
+	 * Establece la clave o contraseña del usuario.
+	 * 
+	 * @param claveUsuario Nueva clave o contraseña del usuario.
+	 */
+	public void setClaveUsuario(String claveUsuario) {
+	    this.claveUsuario = claveUsuario;
+	}
+
+	/**
+	 * Obtiene el objeto AccesoDTO asociado al usuario.
+	 * 
+	 * @return Objeto AccesoDTO asociado al usuario.
+	 */
+	public AccesoDTO getAcceso() {
+	    return acceso;
+	}
+
+	/**
+	 * Representación en cadena del objeto UsuarioDTO.
+	 * 
+	 * @return Cadena que representa el objeto UsuarioDTO.
+	 */
+	@Override
+	public String toString() {
+	    return "UsuarioDTO [idUsuario=" + idUsuario + ", nombreUsuario=" + nombreUsuario + ", tlfUsuario=" + tlfUsuario
+	            + ", emailUsuario=" + emailUsuario + ", claveUsuario=" + claveUsuario + ", acceso=" + acceso
+	            + ", listaTokensUsuario=" + listaTokensUsuario + "]";
+	}
+
+
+}
