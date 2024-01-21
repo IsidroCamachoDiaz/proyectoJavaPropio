@@ -3,17 +3,21 @@ package Controladores;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 
 import Dtos.UsuarioDTO;
-
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
 import Utilidades.Encriptado;
 import Servicios.ImplentacionIntereaccionUsuario;
+
+@MultipartConfig
 public class ControladorRegistro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 
@@ -32,23 +36,26 @@ public class ControladorRegistro extends HttpServlet {
 		 try {
 			 	Encriptado nc = new Encriptado();
 			 	HttpSession session = request.getSession();
-				String contrasenia2=nc.EncriptarContra(request.getParameter("contrasenia2Usuario"));
+				
 				UsuarioDTO usuario = new UsuarioDTO(request.getParameter("nombreUsuario"),
 						request.getParameter("telefonoUsuario"),
 						request.getParameter("correoUsuario"),
 						nc.EncriptarContra(request.getParameter("contraseniaUsuario")));
 				
-				if(!contrasenia2.equals(usuario.getClaveUsuario())) {
-					Alerta.Alerta(request,"La primera contraseña no coincide con la segunda","error");
-					response.sendRedirect("index.html");
-				}
-				
+				 Part filePart = request.getPart("imagenUsuario");
+				 
+				  if (filePart.getSize() > 0) {
+				        InputStream fileContent = filePart.getInputStream();
+
+				        // Convertir InputStream a byte[]
+				        usuario.setFoto(fileContent.readAllBytes());
+				  }
+			
 				ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
 				
 				// Redirigir a la vista JSP
 				
 				try {
-					String url = "vistas/home.jsp?dni=" + URLEncoder.encode(request.getParameter("dniUsuario"), "UTF-8");
 					//Comprobamos si esta bien el usuario
 					if(cosa.RegistrarUsuario(usuario)) {
 
@@ -64,6 +71,7 @@ public class ControladorRegistro extends HttpServlet {
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
+					response.sendRedirect("index.html");
 				}
 				
 		 }catch(Exception e) {

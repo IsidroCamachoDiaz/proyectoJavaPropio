@@ -40,6 +40,9 @@ public class UsuarioDTO {
 	
 	@JsonProperty("contrasenia_usuario")
 	private String claveUsuario;
+	
+	@JsonProperty("foto")
+	private byte[] foto;
 
 	@JsonProperty("acceso")
 	private AccesoDTO acceso;
@@ -182,6 +185,25 @@ public class UsuarioDTO {
 	 */
 	public AccesoDTO getAcceso() {
 	    return acceso;
+	}
+
+	
+	/**
+	 * Obtiene la representación en bytes de la foto asociada a este objeto.
+	 *
+	 * @return Un array de bytes que representa la foto.
+	 */
+	public byte[] getFoto() {
+	    return foto;
+	}
+
+	/**
+	 * Establece la representación en bytes de la foto para asociarla a este objeto.
+	 *
+	 * @param foto Un array de bytes que representa la foto a establecer.
+	 */
+	public void setFoto(byte[] foto) {
+	    this.foto = foto;
 	}
 
 	/**
