@@ -62,12 +62,12 @@ public class ControladorRegistro extends HttpServlet {
 						//response.sendRedirect("vistas/home.jsp");
 						session.setAttribute("usuario",usuario);
 						session.setAttribute("acceso","1");
-						Alerta.Alerta(request,"Usurario Creado Correctamente","success");
-						response.sendRedirect("index.html");
+						Alerta.Alerta(request,"Se ha creado el Usuario Correctamente se le ha enviando un correo para activar la cuenta","success");
+						response.sendRedirect("index.jsp");
 					}
 					else {
 						Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
-						response.sendRedirect("index.html");
+						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

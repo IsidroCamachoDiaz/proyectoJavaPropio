@@ -123,8 +123,8 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 				//Aqui generas la fecha limite con un tiempo de 10 minutos
 				//Aqui una vez encuentre el usuario insertas el token generado arriba y 
 				//lo inserta con la fecha limite, id_Usuario
-				 String mensaje=MenajeCorreoAlta(seguridad.getProperty("direccion"));
-				 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
+				 String mensaje=MensajeCorreoAlta(seguridad.getProperty("direccion"));
+				 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
 			}catch(IOException e)
 			{
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
@@ -252,12 +252,13 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		 		
 	}
 	
-	private String MenajeCorreoAlta(String direccion)
-	{
-		
-		return " <p>Se a enviado una petición para restablecer la contraseña, si no has sido tu porfavor cambie la contraseña inmediatamente y si no pulsa aqui: </p>\r\n"
-		 		+ "    <a href=\""+direccion+"\"><button class=\"button-64\" role=\"button\" value=\"Cambiar contraseña\" ><span class=\"text\">Restablecer contraseña</span></button></a>\r\n";
-		 		
+	private String MensajeCorreoAlta(String direccion) {
+	    return "<div style=\"text-align: center; background-color: #7d2ae8; padding: 20px;\">\r\n"
+	            + "    <p style=\"color: white;\">Bienvenido a nuestra plataforma. Tu cuenta ha sido creada con éxito.</p>\r\n"
+	            + "    <p style=\"color: white;\">Para comenzar a utilizar nuestros servicios, por favor, haz clic en el siguiente enlace:</p>\r\n"
+	            + "    <a href=\"" + direccion + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Activar cuenta</button></a>\r\n"
+	            + "    <p style=\"color: white;\">Gracias por unirte a nosotros.</p>\r\n"
+	            + "</div>";
 	}
 	/**
 	 * Metodo para enviar correo al usuario introducido
@@ -301,7 +302,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			Message msg = new MimeMessage(session2);
 			
 			//La direccion de quien lo envia
-			addressFrom = new InternetAddress("'InfoWeb' <" + seguridad.getProperty("correo") + ">");
+			addressFrom = new InternetAddress("'SystemRevive' <" + seguridad.getProperty("correo") + ">");
 			msg.setFrom(addressFrom);
 			
 			//A quien envia el correo
@@ -320,7 +321,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			msg.setSubject(subject);
 			//Construye el body
 			if (html) {
-				body = " Restablecer contraseña: " + body;
+				body = body;
 				msg.setContent(body, "text/html; charset=ISO-8859-1");
 			} else {
 				msg.setContent(body, "text/plain; charset=ISO-8859-1");
