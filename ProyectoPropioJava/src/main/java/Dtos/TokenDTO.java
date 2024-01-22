@@ -8,11 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TokenDTO {
 	@JsonProperty("idToken")
-	private long idToken;
+	private int idToken;
 	
-
-	
-
 	@JsonProperty("token")
 	private String token;
 		
@@ -26,7 +23,7 @@ public class TokenDTO {
 		return idToken;
 	}
 
-	public void setIdToken(long idToken) {
+	public void setIdToken(int idToken) {
 		this.idToken = idToken;
 	}
 
@@ -54,7 +51,7 @@ public class TokenDTO {
 		this.id_usuario = id_usuario;
 	}
 	
-	public TokenDTO(long idToken, String token, Calendar fch_limite, long id_usuario) {
+	public TokenDTO(int idToken, String token, Calendar fch_limite, long id_usuario) {
 		super();
 		this.idToken = idToken;
 		this.token = token;

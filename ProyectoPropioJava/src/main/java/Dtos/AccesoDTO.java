@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class AccesoDTO {
     @JsonProperty("idAcceso")
-    private long idAccesoDto;
+    private int idAccesoDto;
     @JsonProperty("codigoAcceso")
     private String codigoAccesoDto;
     @JsonProperty("descripcionAcceso")
@@ -37,7 +37,7 @@ public class AccesoDTO {
      * @param codigoAccesoDto codigo de Acceso
      * @param descripcionAccesoDto Descripcion del Acceso 
      */
-    public AccesoDTO(long idAccesoDto, String codigoAccesoDto, String descripcionAccesoDto) {
+    public AccesoDTO(int idAccesoDto, String codigoAccesoDto, String descripcionAccesoDto) {
 		super();
 		this.idAccesoDto = idAccesoDto;
 		this.codigoAccesoDto = codigoAccesoDto;
@@ -68,7 +68,7 @@ public class AccesoDTO {
      * Inserta un nuevo idAcceos
      * @param idAcceso id del Acceso
      */
-    public void setIdAcceso(long idAcceso) {
+    public void setIdAcceso(int idAcceso) {
         this.idAccesoDto = idAcceso;
     }
 

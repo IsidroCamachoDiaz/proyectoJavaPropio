@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UsuarioDTO {
 	
 	@JsonProperty("id_usuario")
-	private long idUsuario;
+	private int idUsuario;
 	
 	@JsonProperty("nombre_usuario")
 	private String nombreUsuario;
@@ -69,7 +69,7 @@ public class UsuarioDTO {
 	 * @param emailUsuario   Dirección de correo electrónico del usuario.
 	 * @param claveUsuario   Clave o contraseña del usuario.
 	 */
-	public UsuarioDTO(long idUsuario, String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario) {
+	public UsuarioDTO(int idUsuario, String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario) {
 	    super();
 	    this.idUsuario = idUsuario;
 	    this.nombreUsuario = nombreUsuario;
