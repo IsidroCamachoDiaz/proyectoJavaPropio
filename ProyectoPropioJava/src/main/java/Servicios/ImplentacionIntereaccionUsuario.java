@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownServiceException;
 import java.util.Calendar;
-
+import java.util.GregorianCalendar;
 
 import javax.mail.IllegalWriteException;
 import javax.mail.Message;
@@ -30,7 +30,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
+import Utilidades.Alerta;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -188,13 +190,21 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			Properties seguridad = new Properties();
 			seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
 			//Aqui tiene que ir el buscar el usuario por el correo
+			UsuarioDTO usuarioCorreo=HacerGets("SelectCorreo/"+correo);
+			if(usuarioCorreo.getNombreUsuario()==null||usuarioCorreo.getNombreUsuario().equals("")) {
+				return false;
+			}
 			//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
 			UUID uuid = UUID.randomUUID();
 			String token = uuid.toString();
 			//Aqui generas la fecha limite con un tiempo de 10 minutos
+			TokenDTO tokenMandarBD= new TokenDTO();
+			tokenMandarBD.setFch_limite(new GregorianCalendar());
+			tokenMandarBD.getFch_limite().add(Calendar.MINUTE, 10);
+			tokenMandarBD.setToken(token);
 			//Aqui una vez encuentre el usuario insertas el token generado arriba y 
 			//lo inserta con la fecha limite, id_Usuario
-			 String mensaje=MenajeCorreo(token,seguridad.getProperty("direccion"));
+			 String mensaje=MensajeCorreo(token,seguridad.getProperty("direccion"));
 			 ok=EnviarMensaje(mensaje,correo,true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
 		}catch(IOException e)
 		{
@@ -245,12 +255,13 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	 * @param direccion
 	 * @return String
 	 */
-	private String MenajeCorreo(String token,String direccion)
-	{
-		
-		return " <p>Se a enviado una petición para restablecer la contraseña, si no has sido tu porfavor cambie la contraseña inmediatamente y si no pulsa aqui: </p>\r\n"
-		 		+ "    <a href=\""+direccion+"?tk="+token+"\"><button class=\"button-64\" role=\"button\" value=\"Cambiar contraseña\" ><span class=\"text\">Restablecer contraseña</span></button></a>\r\n";
-		 		
+	private String MensajeCorreo(String token, String direccion) {
+	    return "<div style=\"text-align: center; background-color: #7d2ae8; padding: 20px;\">\r\n"
+	            + "    <p style=\"color: white;\">Se ha enviado una solicitud para restablecer la contraseña. Si no has solicitado esto, cambia tu contraseña de inmediato.</p>\r\n"
+	            + "    <p style=\"color: white;\">Si has solicitado el restablecimiento de contraseña, por favor haz clic en el siguiente enlace:</p>\r\n"
+	            + "    <a href=\"" + direccion + "?tk=" + token + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Restablecer contraseña</button></a>\r\n"
+	            + "    <p style=\"color: white;\">Gracias por confiar en nosotros.</p>\r\n"
+	            + "</div>";
 	}
 	
 	private String MensajeCorreoAlta(String direccion) {
