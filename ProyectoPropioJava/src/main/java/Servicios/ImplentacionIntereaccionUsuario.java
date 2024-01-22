@@ -158,6 +158,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		            } else {
 		                // Si no es HTTP_CREATED, imprime la respuesta para depurar
 		                System.out.println("Respuesta del servidor: " + connection.getResponseCode() + " " + connection.getResponseMessage());
+		                return false;
 		            }							   
 			 return true;
 			
