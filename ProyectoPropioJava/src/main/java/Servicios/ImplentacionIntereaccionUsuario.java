@@ -228,7 +228,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	{
 		try{
 			
-			URL url = new URL("http://localhost:8080/usuarioApi/"+queDar);
+			URL url = new URL("http://localhost:8080/usuario/"+queDar);
 	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 	        connection.setRequestMethod("GET");
 
