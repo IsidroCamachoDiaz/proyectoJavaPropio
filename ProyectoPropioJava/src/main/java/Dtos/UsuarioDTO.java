@@ -29,16 +29,16 @@ public class UsuarioDTO {
 	@JsonProperty("id_usuario")
 	private int idUsuario;
 	
-	@JsonProperty("nombre_usuario")
+	@JsonProperty("nombre")
 	private String nombreUsuario;
 	
-	@JsonProperty("telefono_usuario")
+	@JsonProperty("telefono")
 	private String tlfUsuario;
 	
-	@JsonProperty("correo_usuario")
+	@JsonProperty("correo")
 	private String emailUsuario;
 	
-	@JsonProperty("contrasenia_usuario")
+	@JsonProperty("contrasenia")
 	private String claveUsuario;
 	
 	@JsonProperty("foto")
@@ -47,8 +47,8 @@ public class UsuarioDTO {
 	@JsonProperty("acceso")
 	private AccesoDTO acceso;
 	
-	 @JsonProperty("tokens_usuario")
-	    private List<TokenDTO> listaTokensUsuario;
+	@JsonProperty("tokens_usuario")
+	private List<TokenDTO> listaTokensUsuario;
 
 	//Construtores
    
