@@ -8,6 +8,10 @@
 <%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 <%@ page import="Dtos.TokenDTO" %>
 <%@ page import="Utilidades.Alerta" %>
+<%@ page import="Utilidades.implementacionCRUD" %>
+<%@ page import="Dtos.UsuarioDTO" %>
+<%@ page import="Dtos.AccesoDTO" %>
+<%@ page import="java.util.Calendar" %>
 <!DOCTYPE html>
 <!-- Coding by CodingNepal | www.codingnepalweb.com-->
 <html lang="en" dir="ltr">
@@ -21,53 +25,48 @@
    </head>
 <body>
 <%
+implementacionCRUD acciones = new implementacionCRUD();
 String token = request.getParameter("tk");
-TokenDTO tokenEncontrado;
+TokenDTO tokenEncontrado=acciones.SeleccionarToken(token);
 
+// Obtener la fecha actual
+Calendar ahora = Calendar.getInstance();
 
+// Simular una fecha anterior (puedes ajustar según tus necesidades)
+Calendar fechaAnterior = tokenEncontrado.getFch_limite();
 
-try {
-	//Se le pasa la url
-		URL url = new URL("http://localhost:8080/usuarioApi/token/"+token);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+long diferenciaEnMillis = ahora.getTimeInMillis() - fechaAnterior.getTimeInMillis();
+long diferenciaEnMinutos = diferenciaEnMillis / (60 * 1000); // Convertir a minutos
 
-        
-        //Se le indica el metodo
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
-        
-        
-        //Comprobamos si esta correcto la url
-		
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			//Creamos el lectpr
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String linea;
-            StringBuilder response2 = new StringBuilder();
-            
-            // Crear un ObjectMapper (Jackson)
-            ObjectMapper objectMapper = new ObjectMapper();
-            
-            //Pasamos el json
-            linea = reader.readLine();
-            reader.close();          
-            if(linea.isEmpty())
-            	Alerta.Alerta(request,"No se pudo verificar","error");
-            
-            	// Convertir el JSON a un objeto MiObjeto
-            System.out.println("JSON recibido: " + linea);
-            //Lo convertimos a DTO
-            
-                tokenEncontrado=objectMapper.readValue(linea, TokenDTO.class);
-
-            
-        } else {
-            System.out.println("La solicitud GET no fue exitosa. Código de respuesta: " + connection);
-        }
-}catch(Exception e) {
-	System.out.println(e.getLocalizedMessage());
+try{
+if(tokenEncontrado.getToken().equals("")||tokenEncontrado.getToken()==null){
+	Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 }
+else if(diferenciaEnMinutos > 10){
+	Alerta.Alerta(request,"Paso el Tiempo de verificacion","error");
+}
+else{
+	UsuarioDTO usuario=acciones.SeleccionarUsuario(String.valueOf(tokenEncontrado.getId_usuario()));
+
+	if(usuario.getEmailUsuario().equals("")||usuario.getEmailUsuario()==null){
+		Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
+	}
+	else{
+
+		AccesoDTO accesoDar=acciones.SeleccionarAcceso("3");
+		usuario.setAcceso(accesoDar);
+		if(acciones.ActualizarUsuario(usuario)){
+			Alerta.Alerta(request,"Felicidades Has dado de alta la cuenta","success");
+		}
+		else{
+			Alerta.Alerta(request,"Hubo Un error intentelo mas tarde","error");
+		}
+		}
+	}
+}catch(Exception e){
+	Alerta.Alerta(request,"Hubo Un error intentelo mas tarde","error");
+}
+
 
 
 %>

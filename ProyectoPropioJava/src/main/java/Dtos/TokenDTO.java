@@ -19,7 +19,7 @@ public class TokenDTO {
 	@JsonProperty("id_usuario")
 	private long id_usuario;
 	
-	public long getIdToken() {
+	public int getIdToken() {
 		return idToken;
 	}
 
@@ -62,4 +62,13 @@ public class TokenDTO {
 		super();
 		
 	}
+
+	public TokenDTO(String token, Calendar fch_limite, long id_usuario) {
+		super();
+		this.token = token;
+		this.fch_limite = fch_limite;
+		this.id_usuario = id_usuario;
+	}
+	
+	
 }

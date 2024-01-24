@@ -206,6 +206,21 @@ public class UsuarioDTO {
 	    this.foto = foto;
 	}
 
+	
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public void setAcceso(AccesoDTO acceso) {
+		this.acceso = acceso;
+	}
+
+
 	/**
 	 * Representación en cadena del objeto UsuarioDTO.
 	 * 

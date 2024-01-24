@@ -48,7 +48,7 @@ public class implementacionCRUD implements interfazCRUD {
 	
 	@Override
     public TokenDTO SeleccionarToken(String queDar) {
-        return hacerGet("token/" + queDar, TokenDTO.class);
+        return hacerGet("tokenSelect/" + queDar, TokenDTO.class);
     }
 	
 	@Override
@@ -144,75 +144,97 @@ public class implementacionCRUD implements interfazCRUD {
 	    }
 
 	@Override
-	public boolean EliminarAcceso(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean EliminarAcceso(String idAcceso) {
+        return hacerDelete("acceso/Eliminar/" + idAcceso);
+    }
+	@Override
+    public boolean EliminarIncidencia(String idIncidencia) {
+        return hacerDelete("incidencia/Eliminar/" + idIncidencia);
+    }
+	@Override
+    public boolean EliminarSolicitud(String idSolicitud) {
+        return hacerDelete("solicitud/Eliminar/" + idSolicitud);
+    }
+	@Override
+    public boolean EliminarTipoDeTrabajo(String idTipoTrabajo) {
+        return hacerDelete("tipoTrabajo/Eliminar/" + idTipoTrabajo);
+    }
+	@Override
+    public boolean EliminarToken(String idToken) {
+        return hacerDelete("token/Eliminar/" + idToken);
+    }
+	@Override
+    public boolean EliminarTrabajo(String idTrabajo) {
+        return hacerDelete("trabajo/Eliminar/" + idTrabajo);
+    }
+	@Override
+    public boolean EliminarUsuario(String idUsuario) {
+        return hacerDelete("usuario/Eliminar/" + idUsuario);
+    }
+
+    private boolean hacerDelete(String endpoint) {
+        try {
+            URL url = new URL(BASE_URL + endpoint);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("DELETE");
+
+            int responseCode = connection.getResponseCode();
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (IOException e) {
+            System.err.println("[ERROR-InteraccionEntidad-hacerDelete] Se produjo un error al realizar la solicitud DELETE. | " + e);
+        }
+
+        return false;
+    }
 
 	@Override
-	public boolean EliminarIncidencia(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean ActualizarIncidencia(IncidenciaDTO nuevaIncidencia) {
+        return hacerPut("incidencia/Actualizar/"+nuevaIncidencia , nuevaIncidencia);
+    }
+	@Override
+    public boolean ActualizarSolicitud(SolicitudDTO nuevaSolicitud) {
+        return hacerPut("solicitud/Actualizar/", nuevaSolicitud);
+    }
+	@Override
+    public boolean ActualizarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo) {
+        return hacerPut("tipoTrabajo/Actualizar/", nuevoTipoTrabajo);
+    }
 
 	@Override
-	public boolean EliminarSolicitud(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+    public boolean ActualizarTrabajo(TrabajoDTO nuevoTrabajo) {
+        return hacerPut("trabajo/Actualizar/" , nuevoTrabajo);
+    }
+	
 	@Override
-	public boolean EliminarTipoDeTrabajo(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean ActualizarUsuario(UsuarioDTO nuevoUsuario) {
+        return hacerPut("usuario/Actualizar/"+nuevoUsuario.getIdUsuario() , nuevoUsuario);
+    }
+	
 
-	@Override
-	public boolean EliminarToken(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    private boolean hacerPut(String endpoint, Object entidad) {
+        try {
+            URL url = new URL(BASE_URL + endpoint);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
 
-	@Override
-	public boolean EliminarTrabajo(String url) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonEntidad = objectMapper.writeValueAsString(entidad);
 
-	@Override
-	public boolean ActualizarAcceso(AccesoDTO nuevoAcceso) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonEntidad.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
 
-	@Override
-	public boolean ActualizarIncidencia(IncidenciaDTO nuevaIncidencia) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+            int responseCode = connection.getResponseCode();
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (JsonProcessingException e) {
+            System.err.println("[ERROR-InteraccionEntidad-hacerPut] Error al convertir el objeto a JSON. | " + e);
+        } catch (IOException e) {
+            System.err.println("[ERROR-InteraccionEntidad-hacerPut] Se produjo un error al realizar la solicitud PUT. | " + e);
+        }
 
-	@Override
-	public boolean ActualizarSolicitud(SolicitudDTO nuevaSolicitud) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean ActualizarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean ActualizarToken(TokenDTO nuevoToken) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean ActualizarTrabajo(TrabajoDTO nuevoTrabajo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+        return false;
+    }
 }

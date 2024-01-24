@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
 import Utilidades.Alerta;
+import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -115,29 +116,8 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	public boolean RegistrarUsuario(UsuarioDTO usu) {
 		
 		try{
+			implementacionCRUD acciones = new implementacionCRUD();
 			boolean ok=false;
-			try {
-				Properties seguridad = new Properties();
-				seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
-				//Aqui tiene que ir el buscar el usuario por el correo
-				//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
-				
-				//Aqui generas la fecha limite con un tiempo de 10 minutos
-				//Aqui una vez encuentre el usuario insertas el token generado arriba y 
-				//lo inserta con la fecha limite, id_Usuario
-				 String mensaje=MensajeCorreoAlta(seguridad.getProperty("direccion"));
-				 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
-			}catch(IOException e)
-			{
-				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
-				return false;
-			}
-			catch(NullPointerException e)
-			{
-				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
-				return false;
-			}
-			
 				
 				ObjectMapper objectMapper = new ObjectMapper();
 
@@ -160,13 +140,47 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		            } else {
 		                // Si no es HTTP_CREATED, imprime la respuesta para depurar
 		                System.out.println("Respuesta del servidor: " + connection.getResponseCode() + " " + connection.getResponseMessage());
-		                return false;
-		            }							   
+		            }
+		            
+		            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
+		            try {
+						Properties seguridad = new Properties();
+						seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
+						//Aqui tiene que ir el buscar el usuario por el correo
+						//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+						
+						//Aqui generas la fecha limite con un tiempo de 10 minutos
+						//Aqui una vez encuentre el usuario insertas el token generado arriba y 
+						//lo inserta con la fecha limite, id_Usuario
+						
+						UUID uuid = UUID.randomUUID();
+						String token = uuid.toString();
+						//Fecha Limite
+						Calendar fechaLimite=Calendar.getInstance();
+						fechaLimite.add(Calendar.MINUTE, 10);
+						
+						//Creo token
+						TokenDTO tk= new TokenDTO(token,fechaLimite,usuId.getIdUsuario());
+						if(acciones.InsertarToken(tk)) {
+							String mensaje=MensajeCorreoAlta(token);
+							 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
+						}
+						else {
+						//Aqui Falla
+						}
+						 
+					}catch(IOException e)
+					{
+						System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
+						return false;
+					}
+					catch(NullPointerException e)
+					{
+						System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
+						return false;
+					}		            
+		            
 			 return true;
-			
-			
-		
-			
 			} catch (JsonProcessingException e) {
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] El objeto UsuarioDto no se pudo convertir a json. |"+e);
 			} catch (IOException e) {
@@ -268,7 +282,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	    return "<div style=\"text-align: center; background-color: #7d2ae8; padding: 20px;\">\r\n"
 	            + "    <p style=\"color: white;\">Bienvenido a nuestra plataforma. Tu cuenta ha sido creada con éxito.</p>\r\n"
 	            + "    <p style=\"color: white;\">Para comenzar a utilizar nuestros servicios, por favor, haz clic en el siguiente enlace:</p>\r\n"
-	            + "    <a href=\"" + direccion + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Activar cuenta</button></a>\r\n"
+	            + "    <a href=\"http://localhost:8081/ProyectoGetPa/altaHecha.jsp?tk=" + direccion + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Activar cuenta</button></a>\r\n"
 	            + "    <p style=\"color: white;\">Gracias por unirte a nosotros.</p>\r\n"
 	            + "</div>";
 	}

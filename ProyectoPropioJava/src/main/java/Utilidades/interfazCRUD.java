@@ -49,7 +49,7 @@ public interface interfazCRUD {
 	
 	public boolean EliminarTrabajo(String url);
 	
-	public boolean ActualizarAcceso(AccesoDTO nuevoAcceso);
+	public boolean EliminarUsuario(String url);
 	
 	public boolean ActualizarIncidencia(IncidenciaDTO nuevaIncidencia);
 	
@@ -57,8 +57,8 @@ public interface interfazCRUD {
 	
 	public boolean ActualizarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo);
 	
-	public boolean ActualizarToken(TokenDTO nuevoToken);
-	
 	public boolean ActualizarTrabajo(TrabajoDTO nuevoTrabajo);
+	
+	public boolean ActualizarUsuario(UsuarioDTO nuevoUsuario);
 	
 }
