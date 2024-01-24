@@ -160,7 +160,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 						fechaLimite.add(Calendar.MINUTE, 10);
 						
 						//Creo token
-						TokenDTO tk= new TokenDTO(token,fechaLimite,usuId.getIdUsuario());
+						TokenDTO tk= new TokenDTO(token,fechaLimite,usuId);
 						if(acciones.InsertarToken(tk)) {
 							String mensaje=MensajeCorreoAlta(token);
 							 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);

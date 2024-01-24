@@ -46,7 +46,7 @@ else if(diferenciaEnMinutos > 10){
 	Alerta.Alerta(request,"Paso el Tiempo de verificacion","error");
 }
 else{
-	UsuarioDTO usuario=acciones.SeleccionarUsuario(String.valueOf(tokenEncontrado.getId_usuario()));
+	UsuarioDTO usuario=acciones.SeleccionarUsuario(String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
 
 	if(usuario.getEmailUsuario().equals("")||usuario.getEmailUsuario()==null){
 		Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");

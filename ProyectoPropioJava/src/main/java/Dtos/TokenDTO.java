@@ -16,8 +16,8 @@ public class TokenDTO {
 	@JsonProperty("fch_limite")
 	private Calendar fch_limite;
 	
-	@JsonProperty("id_usuario")
-	private long id_usuario;
+	@JsonProperty("usuario")
+	private UsuarioDTO usuario;
 	
 	public int getIdToken() {
 		return idToken;
@@ -43,31 +43,31 @@ public class TokenDTO {
 		this.fch_limite = fch_limite;
 	}
 
-	public long getId_usuario() {
-		return id_usuario;
+	public UsuarioDTO getId_usuario() {
+		return usuario;
 	}
 
-	public void setId_usuario(long id_usuario) {
-		this.id_usuario = id_usuario;
+	public void setId_usuario(UsuarioDTO id_usuario) {
+		this.usuario = id_usuario;
 	}
 	
-	public TokenDTO(int idToken, String token, Calendar fch_limite, long id_usuario) {
+	public TokenDTO(int idToken, String token, Calendar fch_limite, UsuarioDTO id_usuario) {
 		super();
 		this.idToken = idToken;
 		this.token = token;
 		this.fch_limite = fch_limite;
-		this.id_usuario = id_usuario;
+		this.usuario = id_usuario;
 	}
 	public TokenDTO() {
 		super();
 		
 	}
 
-	public TokenDTO(String token, Calendar fch_limite, long id_usuario) {
+	public TokenDTO(String token, Calendar fch_limite, UsuarioDTO id_usuario) {
 		super();
 		this.token = token;
 		this.fch_limite = fch_limite;
-		this.id_usuario = id_usuario;
+		this.usuario = id_usuario;
 	}
 	
 	
