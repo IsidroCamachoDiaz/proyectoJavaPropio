@@ -20,7 +20,7 @@ public interface InterfaceIntereccionUsuario {
 	 * @param UsuarioDTO Objetos usu
 	 * @param ASMP-17/11/23
 	 */
-	public boolean RegistrarUsuario(UsuarioDTO usu);
+	public boolean RegistrarUsuario(UsuarioDTO usu,HttpServletRequest request);
 	/**
 	 * Metodo para registrar a los usuarios
 	 * @param String correo

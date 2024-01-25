@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="Dtos.UsuarioDTO" %>
+<%@ page import="java.awt.image.BufferedImage" %>
+<%@ page import="java.io.ByteArrayInputStream" %>
+<%@ page import="javax.imageio.ImageIO" %>
+<%@ page import="java.util.Base64" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +24,14 @@ https://templatemo.com/tm-556-catalog-z
 -->
 </head>
 <body>
+<%
+UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
+String base64Image = Base64.getEncoder().encodeToString(user.getFoto());
+
+//Coloca la cadena Base64 en el alcance de la solicitud
+request.setAttribute("base64Image", base64Image);
+session.setAttribute("imagen", base64Image);
+%>
     <!-- Page Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -44,7 +57,7 @@ https://templatemo.com/tm-556-catalog-z
                     <li class="nav-item">
                         <a class="nav-link nav-link-2" href="modificarPerfil.jsp">
                             <div class="user-info-container d-flex align-items-center">
-                                <img class="rounded-circle user-avatar" src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Imagen de Usuario">
+                                <img class="rounded-circle user-avatar" src="data:image/jpeg;base64,${base64Image}" alt="Imagen de Usuario">
                                 <span class="ml-2 text-white">Perfil</span>
                             </div>
                         </a>
@@ -57,12 +70,14 @@ https://templatemo.com/tm-556-catalog-z
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
             <div class="user-info-container2 d-flex align-items-center">
-                <img class="rounded-circle user-avatar2" src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Imagen de Usuario">
-                <h2 class="text-white">Bienvenido Nombre Usuario</h2>
+                <img class="rounded-circle user-avatar2" src="data:image/jpeg;base64,${base64Image}" alt="Imagen de Usuario">
+                <h2 class="text-white">Bienvenido <%=user.getNombreUsuario() %></h2>
             </div>
         </form>
     </div>
-
+	<%
+	String acceso=user.getAcceso().getCodigoAcceso();
+	%>
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary text-white">
@@ -72,7 +87,9 @@ https://templatemo.com/tm-556-catalog-z
                 
             </div>
         </div>
+        
         <div class="row tm-mb-90 tm-gallery">
+        <%if(acceso.equals("Usuario")){ %>
         	<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure class="effect-ming tm-video-item">
                     <img src="img/img-03.jpg" alt="Image" class="img-fluid">
@@ -82,6 +99,8 @@ https://templatemo.com/tm-556-catalog-z
                     </figcaption>                    
                 </figure>
             </div>
+            <%}
+        	else{ %>
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure class="effect-ming tm-video-item">
                     <img src="img/img-04.jpg" alt="Image" class="img-fluid">
@@ -91,6 +110,7 @@ https://templatemo.com/tm-556-catalog-z
                     </figcaption>                    
                 </figure>
             </div>
+
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure class="effect-ming tm-video-item">
                     <img src="img/img-05.jpg" alt="Image" class="img-fluid">
@@ -109,7 +129,8 @@ https://templatemo.com/tm-556-catalog-z
                     </figcaption>                    
                 </figure>
             </div>
-            
+            <%
+            if(acceso.equals("Administrador")){%>
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure class="effect-ming tm-video-item">
                     <img src="img/img-01.jpg" alt="Image" class="img-fluid">
@@ -119,6 +140,8 @@ https://templatemo.com/tm-556-catalog-z
                     </figcaption>                    
                 </figure>
             </div>
+            <%} 
+            }%>
                     
         </div> <!-- row -->
         

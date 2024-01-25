@@ -34,23 +34,19 @@ public class ControladorLogin extends HttpServlet{
 		 Encriptado nc = new Encriptado();
 			//Crearmos el DTO con los paraemos pasados y usando el metodos de encriptar
 			UsuarioDTO usuario = new UsuarioDTO(
-					request.getParameter("dniUsuario"),nc.EncriptarContra(request.getParameter("password")));	
+					request.getParameter("correoUsuario"),nc.EncriptarContra(request.getParameter("contraseniaUsuario")));	
 			//USamos la implementacion
 			ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
-			request.setAttribute("dni", request.getParameter("dniUsuario"));
 			// Redirigir a la vista JSP
-			
 			
 				try {
 					
 					//Comprobamos si esta bien el usuario
 					if(cosa.IniciarSesion(usuario,request)) {
-
 						response.sendRedirect("vistas/home.jsp");							
 					}
 					else {
-						Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
-						response.sendRedirect("login.jsp");
+						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {
 					Alerta.Alerta(request,"Hubo Un Error Intentalo Mas Tarde","error");

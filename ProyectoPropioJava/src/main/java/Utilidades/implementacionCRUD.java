@@ -48,7 +48,7 @@ public class implementacionCRUD implements interfazCRUD {
 	
 	@Override
     public TokenDTO SeleccionarToken(String queDar) {
-        return hacerGet("tokenSelect/" + queDar, TokenDTO.class);
+        return hacerGet("token/Select/" + queDar, TokenDTO.class);
     }
 	
 	@Override

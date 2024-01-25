@@ -24,6 +24,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
 <body>
+	<!-- Lógica de JavaScript para mostrar la alerta -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+//Obtiene los atributos desde la sesión
+var mensaje = '<%= session.getAttribute("mensajeAlerta") %>';
+var tipo = '<%= session.getAttribute("tipoAlerta") %>';
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lógica para mostrar la alerta con SweetAlert2
+        if (mensaje !== null && tipo !== null && mensaje !== 'null' && tipo !== 'null') {
+        	console.log('Mensaje:', mensaje, 'Tipo:', tipo);
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
 <%
 implementacionCRUD acciones = new implementacionCRUD();
 String token = request.getParameter("tk");
@@ -34,6 +52,7 @@ Calendar ahora = Calendar.getInstance();
 
 // Simular una fecha anterior (puedes ajustar según tus necesidades)
 Calendar fechaAnterior = tokenEncontrado.getFch_limite();
+fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
 
 long diferenciaEnMillis = ahora.getTimeInMillis() - fechaAnterior.getTimeInMillis();
 long diferenciaEnMinutos = diferenciaEnMillis / (60 * 1000); // Convertir a minutos
@@ -42,18 +61,18 @@ try{
 if(tokenEncontrado.getToken().equals("")||tokenEncontrado.getToken()==null){
 	Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 }
-else if(diferenciaEnMinutos > 10){
+else if(ahora.after(fechaAnterior)){
 	Alerta.Alerta(request,"Paso el Tiempo de verificacion","error");
 }
 else{
-	UsuarioDTO usuario=acciones.SeleccionarUsuario(String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
+	UsuarioDTO usuario=acciones.SeleccionarUsuario("Select/"+String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
 
 	if(usuario.getEmailUsuario().equals("")||usuario.getEmailUsuario()==null){
 		Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 	}
 	else{
 
-		AccesoDTO accesoDar=acciones.SeleccionarAcceso("3");
+		AccesoDTO accesoDar=acciones.SeleccionarAcceso("Select/3");
 		usuario.setAcceso(accesoDar);
 		if(acciones.ActualizarUsuario(usuario)){
 			Alerta.Alerta(request,"Felicidades Has dado de alta la cuenta","success");

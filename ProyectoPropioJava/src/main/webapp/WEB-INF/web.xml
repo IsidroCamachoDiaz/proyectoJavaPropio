@@ -41,10 +41,22 @@
 		<servlet-name>ControladorOlvidar</servlet-name>
 		<servlet-class>Controladores.ControladorOlvidar</servlet-class>
 	</servlet>
-	<servlet-mapping>
+		<servlet-mapping>
 		<servlet-name>ControladorOlvidar</servlet-name>
 		<url-pattern>/ControladorOlvidar</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorPerfil</display-name>
+		<servlet-name>ControladorPerfil</servlet-name>
+		<servlet-class>Controladores.ControladorPerfil</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorPerfil</servlet-name>
+		<url-pattern>/ControladorPerfil</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

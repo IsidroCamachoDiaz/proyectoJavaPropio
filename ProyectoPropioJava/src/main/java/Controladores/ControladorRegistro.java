@@ -57,7 +57,7 @@ public class ControladorRegistro extends HttpServlet {
 				
 				try {
 					//Comprobamos si esta bien el usuario
-					if(cosa.RegistrarUsuario(usuario)) {
+					if(cosa.RegistrarUsuario(usuario,request)) {
 
 						//response.sendRedirect("vistas/home.jsp");
 						session.setAttribute("usuario",usuario);
@@ -66,7 +66,6 @@ public class ControladorRegistro extends HttpServlet {
 						response.sendRedirect("index.jsp");
 					}
 					else {
-						Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
 						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="Dtos.UsuarioDTO" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +19,10 @@ https://templatemo.com/tm-556-catalog-z
 -->
 </head>
 <body>
+<%
+UsuarioDTO usuario =(UsuarioDTO) session.getAttribute("usuario");
+request.setAttribute("base64Image", session.getAttribute("imagen"));
+%>
     <!-- Page Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -30,7 +35,7 @@ https://templatemo.com/tm-556-catalog-z
         <div class="container-fluid">
             <a class="navbar-brand" href="home.jsp">
                 <img class="logo" src="img/logo.png" alt="Imagen de Usuario">
-                <span class="text-white">Menu</span>
+                <span class="text-white">SystemRevive</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -41,9 +46,9 @@ https://templatemo.com/tm-556-catalog-z
                     <a class="nav-link nav-link-1" aria-current="page" href="home.jsp">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 active" href="videos.html">
+                    <a class="nav-link nav-link-2 active" href="modificarPerfil.jsp">
                         <div class="user-info-container d-flex align-items-center">
-                            <img class="rounded-circle user-avatar" src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Imagen de Usuario">
+                            <img class="rounded-circle user-avatar" src="data:image/jpeg;base64,${base64Image}" alt="Imagen de Usuario">
                             <span class="ml-2 text-white">Perfil</span>
                         </div>
                     </a>
@@ -62,41 +67,38 @@ https://templatemo.com/tm-556-catalog-z
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary text-white">
-                Seleccione Una Opcion
+                Modifique lo que quiera de su usuario
             </h2>
         </div>
        <div class="row tm-mb-90">            
     <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 text-center">
-        <img src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Image" class="img-fluid rounded">
+        <img src="data:image/jpeg;base64,${base64Image}" alt="Image" class="img-fluid rounded">
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
+        <form action="../ControladorPerfil" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuario.getNombreUsuario() %>" >
             </div>
 
             <!-- Campo de Número de Teléfono -->
             <div class="form-group">
                 <label for="telefono">Número de Teléfono:</label>
-                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" required>
-            </div>
-
-            <!-- Campo de Correo Electrónico -->
-            <div class="form-group">
-                <label for="correo">Correo Electrónico:</label>
-                <input type="email" class="form-control" id="correo" name="correo" required>
+                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuario.getTlfUsuario() %>">
             </div>
 
             <!-- Campo de Subir Archivo (Imagen) -->
             <div class="form-group">
                 <label for="imagen">Imagen de Perfil:</label>
-                <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" required>
-            </div>   
+                <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*">
+            </div>
+            <input type="text" name="id" value="<%=usuario.getIdUsuario() %>" style="display: none;" >
 
             <div class="mb-4 text-center">
-                <a href="#" class="btn btn-primary tm-btn-big">Modificar Perfil</a>
+                <button class="btn btn-primary tm-btn-big" type="submit" >Modificar Perfil</button>
             </div>
+          </form>
         </div>
     </div>
 </div>

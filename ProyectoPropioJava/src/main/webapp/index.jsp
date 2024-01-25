@@ -27,6 +27,8 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 title: mensaje,
                 confirmButtonText: 'OK'
             });
+            <%session.setAttribute("mensajeAlerta","null");
+            session.setAttribute("tipoAlerta","null"); %>
         }
     });
 </script>
@@ -52,15 +54,15 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         <div class="form-content">
           <div class="login-form">
             <div class="title">Iniciar Sesion</div>
-          <form action="#">
+          <form action="./ControladorLogin" method="post" >
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Introduzca Su Email" required>
+                <input type="text" placeholder="Introduzca Su Email" required name="correoUsuario">
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Introduzca Su Contraseña" required>
+                <input type="password" placeholder="Introduzca Su Contraseña" required name="contraseniaUsuario">
               </div>
               <div class="text"><a href="Contrasenia.html">Olvidaste La Contraseña?</a></div>
               <div class="button input-box">
@@ -92,7 +94,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
               </div>
               <div class="input-box">
                 <i class="fas fa-images"></i>
-                <input type="file" placeholder="Introduzca Una Contraseña" required name="imagenUsuario">
+                <input type="file" placeholder="Foto de Perfil" accept=".png, .jpg, .jpeg" required name="imagenUsuario">
               </div>
               <div class="button input-box">
                 <input type="submit" value="Registrarse">

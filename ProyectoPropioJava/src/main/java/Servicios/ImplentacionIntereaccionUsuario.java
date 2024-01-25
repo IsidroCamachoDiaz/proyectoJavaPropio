@@ -54,132 +54,118 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		
 		try {
 			//Se le pasa la url
-				URL url = new URL("http://localhost:8080/usuarioApi/usuarioSelect/usuarioDni/"+user.getEmailUsuario());
-		        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				
 		        
 		        HttpSession session = request.getSession();
+		        implementacionCRUD acciones = new implementacionCRUD();
 		        
-		        //Se le indica el metodo
-		        connection.setRequestMethod("GET");
-		        connection.setRequestProperty("Content-Type", "application/json");
-		        connection.setDoOutput(true);
-		        
-		        UsuarioDTO usuarioBD;
-		        
-		        //Comprobamos si esta correcto la url
-				
-				if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					//Creamos el lectpr
-		            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		            String linea;
-		            StringBuilder response = new StringBuilder();
-		            
-		            // Crear un ObjectMapper (Jackson)
-		            ObjectMapper objectMapper = new ObjectMapper();
-		            
-		            //Pasamos el json
-		            linea = reader.readLine();
-		            reader.close();          
-		            if(linea.isEmpty())
-		            	return false;
-		            
-		            	// Convertir el JSON a un objeto MiObjeto
-		            System.out.println("JSON recibido: " + linea);
-		            //Lo convertimos a DTO
-		            
-		                usuarioBD=objectMapper.readValue(linea, UsuarioDTO.class);
-
-		            if(user.getClaveUsuario().equals(usuarioBD.getClaveUsuario())) {
+		        //Cogemos el usuario de la base de datos
+				UsuarioDTO usuarioBD =acciones.SeleccionarUsuario("SelectCorreo/"+user.getEmailUsuario());
+				//Si no es igual lo manda al login con aviso
+	            if(user.getClaveUsuario().equals(usuarioBD.getClaveUsuario())) {
+	            	//Comprobamos is verifico la cuenta
+	            	if(usuarioBD.getAcceso().getCodigoAcceso().equals("Pendiente")) {
+	            		Alerta.Alerta(request,"El usuario no esta dado de alta en la web", "error");
+	            		return false;
+	            	}else {
+	            		//Asignamos el usuario y el control de acceso de vada usuario
 	                	session.setAttribute("usuario",usuarioBD);
-		                if(usuarioBD.getAcceso().getCodigoAcceso().equals("Administrador")) {
-
-							session.setAttribute("acceso","2");
-						}
-						else {
-							session.setAttribute("acceso","1");
-						}
-		            	return true;
-		            }
-		            else
-		            	return false;
-		        } else {
-		            System.out.println("La solicitud GET no fue exitosa. Código de respuesta: " + connection);
-		        }
+	            		if(usuarioBD.getAcceso().getCodigoAcceso().equals("Usuario")) {
+	            			session.setAttribute("acceso","1");
+	            		}
+	            		else if(usuarioBD.getAcceso().getCodigoAcceso().equals("Empleado")) {
+	            			session.setAttribute("acceso","2");
+	            		}
+	            		else {
+	            			session.setAttribute("acceso","3");
+	            		}
+	            		return true;
+	            	}
+	            }
+	            else {
+					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
+	            	return false;
+	            }
 		}catch(Exception e) {
+			Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
 			System.out.println(e.getLocalizedMessage());
 			return false;
 		}
-		return false;
-			}
+	}
 	
 	@Override
-	public boolean RegistrarUsuario(UsuarioDTO usu) {
+	public boolean RegistrarUsuario(UsuarioDTO usu,HttpServletRequest request) {
 		
 		try{
 			implementacionCRUD acciones = new implementacionCRUD();
 			boolean ok=false;
-				
+			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
+			if(usuarioSiHay!=null) {
+				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
+				return false;
+			}
+			else {
 				ObjectMapper objectMapper = new ObjectMapper();
 
-					String usuarioJson = objectMapper.writeValueAsString(usu);
-		            URL url = new URL("http://localhost:8080/usuario/Insertar");
+				String usuarioJson = objectMapper.writeValueAsString(usu);
+	            URL url = new URL("http://localhost:8080/usuario/Insertar");
 
-		            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		            
-		            connection.setRequestMethod("POST");
-		            connection.setRequestProperty("Content-Type", "application/json");
-		            connection.setDoOutput(true);
+	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	            
+	            connection.setRequestMethod("POST");
+	            connection.setRequestProperty("Content-Type", "application/json");
+	            connection.setDoOutput(true);
 
-		            try (OutputStream os = connection.getOutputStream()) {
-		    		    byte[] input = usuarioJson.getBytes("utf-8");
-		    		    os.write(input, 0, input.length);
-		    		}
-		            if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
-		                // Si la respuesta es HTTP_CREATED (201), se ha creado correctamente
-		                System.out.println("Usuario creado exitosamente");
-		            } else {
-		                // Si no es HTTP_CREATED, imprime la respuesta para depurar
-		                System.out.println("Respuesta del servidor: " + connection.getResponseCode() + " " + connection.getResponseMessage());
-		            }
-		            
-		            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
-		            try {
-						Properties seguridad = new Properties();
-						seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
-						//Aqui tiene que ir el buscar el usuario por el correo
-						//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
-						
-						//Aqui generas la fecha limite con un tiempo de 10 minutos
-						//Aqui una vez encuentre el usuario insertas el token generado arriba y 
-						//lo inserta con la fecha limite, id_Usuario
-						
-						UUID uuid = UUID.randomUUID();
-						String token = uuid.toString();
-						//Fecha Limite
-						Calendar fechaLimite=Calendar.getInstance();
-						fechaLimite.add(Calendar.MINUTE, 10);
-						
-						//Creo token
-						TokenDTO tk= new TokenDTO(token,fechaLimite,usuId);
-						if(acciones.InsertarToken(tk)) {
-							String mensaje=MensajeCorreoAlta(token);
-							 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
-						}
-						else {
-						//Aqui Falla
-						}
-						 
-					}catch(IOException e)
-					{
-						System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
-						return false;
+	            try (OutputStream os = connection.getOutputStream()) {
+	    		    byte[] input = usuarioJson.getBytes("utf-8");
+	    		    os.write(input, 0, input.length);
+	    		}
+	            if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+	                // Si la respuesta es HTTP_CREATED (201), se ha creado correctamente
+	                System.out.println("Usuario creado exitosamente");
+	            } else {
+	                // Si no es HTTP_CREATED, imprime la respuesta para depurar
+	                System.out.println("Respuesta del servidor: " + connection.getResponseCode() + " " + connection.getResponseMessage());
+	            }
+	            
+	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
+	            try {
+					Properties seguridad = new Properties();
+					seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
+					//Aqui tiene que ir el buscar el usuario por el correo
+					//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+					
+					//Aqui generas la fecha limite con un tiempo de 10 minutos
+					//Aqui una vez encuentre el usuario insertas el token generado arriba y 
+					//lo inserta con la fecha limite, id_Usuario
+					
+					UUID uuid = UUID.randomUUID();
+					String token = uuid.toString();
+					//Fecha Limite
+					Calendar fechaLimite=Calendar.getInstance();
+					fechaLimite.add(Calendar.MINUTE, 10);
+					
+					//Creo token
+					TokenDTO tk= new TokenDTO(token,fechaLimite,usuId);
+					if(acciones.InsertarToken(tk)) {
+						String mensaje=MensajeCorreoAlta(token);
+						 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
 					}
-					catch(NullPointerException e)
-					{
-						System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
-						return false;
-					}		            
-		            
+					else {
+					//Aqui Falla
+					}
+					 
+				}catch(IOException e)
+				{
+					System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
+					return false;
+				}
+				catch(NullPointerException e)
+				{
+					System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
+					return false;
+				}		  
+			}	            
 			 return true;
 			} catch (JsonProcessingException e) {
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] El objeto UsuarioDto no se pudo convertir a json. |"+e);
