@@ -49,7 +49,6 @@ public class ControladorLogin extends HttpServlet{
 						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {
-					Alerta.Alerta(request,"Hubo Un Error Intentalo Mas Tarde","error");
 					e.printStackTrace();
 				}
 	 }

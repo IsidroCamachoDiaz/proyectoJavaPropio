@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
 import Utilidades.Alerta;
+import Utilidades.Correo;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -55,12 +56,20 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		try {
 			//Se le pasa la url
 				
-		        
+				UsuarioDTO usuarioBD;
 		        HttpSession session = request.getSession();
 		        implementacionCRUD acciones = new implementacionCRUD();
 		        
 		        //Cogemos el usuario de la base de datos
-				UsuarioDTO usuarioBD =acciones.SeleccionarUsuario("SelectCorreo/"+user.getEmailUsuario());
+		        try {
+				usuarioBD =acciones.SeleccionarUsuario("SelectCorreo/"+user.getEmailUsuario());
+				if(usuarioBD==null) {
+					throw new RuntimeException();
+				}
+		        }catch(RuntimeException e) {
+		        	Alerta.Alerta(request,"El Correo y/o contraseña es incorrecto", "error");
+		        	return false;
+		        }
 				//Si no es igual lo manda al login con aviso
 	            if(user.getClaveUsuario().equals(usuarioBD.getClaveUsuario())) {
 	            	//Comprobamos is verifico la cuenta
@@ -98,79 +107,23 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		
 		try{
 			implementacionCRUD acciones = new implementacionCRUD();
-			boolean ok=false;
 			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
 			if(usuarioSiHay!=null) {
 				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
 				return false;
 			}
 			else {
-				ObjectMapper objectMapper = new ObjectMapper();
-
-				String usuarioJson = objectMapper.writeValueAsString(usu);
-	            URL url = new URL("http://localhost:8080/usuario/Insertar");
-
-	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	            
-	            connection.setRequestMethod("POST");
-	            connection.setRequestProperty("Content-Type", "application/json");
-	            connection.setDoOutput(true);
-
-	            try (OutputStream os = connection.getOutputStream()) {
-	    		    byte[] input = usuarioJson.getBytes("utf-8");
-	    		    os.write(input, 0, input.length);
-	    		}
-	            if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
-	                // Si la respuesta es HTTP_CREATED (201), se ha creado correctamente
-	                System.out.println("Usuario creado exitosamente");
-	            } else {
-	                // Si no es HTTP_CREATED, imprime la respuesta para depurar
-	                System.out.println("Respuesta del servidor: " + connection.getResponseCode() + " " + connection.getResponseMessage());
-	            }
+				acciones.InsertarUsuario(usu);
 	            
 	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
-	            try {
-					Properties seguridad = new Properties();
-					seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
-					//Aqui tiene que ir el buscar el usuario por el correo
-					//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
-					
-					//Aqui generas la fecha limite con un tiempo de 10 minutos
-					//Aqui una vez encuentre el usuario insertas el token generado arriba y 
-					//lo inserta con la fecha limite, id_Usuario
-					
-					UUID uuid = UUID.randomUUID();
-					String token = uuid.toString();
-					//Fecha Limite
-					Calendar fechaLimite=Calendar.getInstance();
-					fechaLimite.add(Calendar.MINUTE, 10);
-					
-					//Creo token
-					TokenDTO tk= new TokenDTO(token,fechaLimite,usuId);
-					if(acciones.InsertarToken(tk)) {
-						String mensaje=MensajeCorreoAlta(token);
-						 ok=EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Solicitud De Alta",seguridad.getProperty("correo"),true);
-					}
-					else {
-					//Aqui Falla
-					}
-					 
-				}catch(IOException e)
-				{
-					System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
-					return false;
-				}
-				catch(NullPointerException e)
-				{
-					System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
-					return false;
-				}		  
+	            Correo correo=new Correo();
+	            if(correo.EnviarCorreoToken(usuId)) {
+	            	return true;
+	            }
+	            else {
+	            	return false;
+	            }
 			}	            
-			 return true;
-			} catch (JsonProcessingException e) {
-				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] El objeto UsuarioDto no se pudo convertir a json. |"+e);
-			} catch (IOException e) {
-				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Se produjo un error al crear el flujo de salida. |"+e);
 			}catch (IllegalStateException e) {
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Ya esta uso el metodo para insertar el usuario. |"+e);
 			}catch (NullPointerException e) {
@@ -204,8 +157,9 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			tokenMandarBD.setToken(token);
 			//Aqui una vez encuentre el usuario insertas el token generado arriba y 
 			//lo inserta con la fecha limite, id_Usuario
-			 String mensaje=MensajeCorreo(token,seguridad.getProperty("direccion"));
-			 ok=EnviarMensaje(mensaje,correo,true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
+			Correo correo2= new Correo();
+			 String mensaje=correo2.MensajeCorreo(token,seguridad.getProperty("direccion"));
+			 ok=correo2.EnviarMensaje(mensaje,correo,true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
 		}catch(IOException e)
 		{
 			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
@@ -249,138 +203,6 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		
 		return null;
 	}
-	/**
-	 * Metodo donde crea el cuerpo del correo
-	 * @param token
-	 * @param direccion
-	 * @return String
-	 */
-	private String MensajeCorreo(String token, String direccion) {
-	    return "<div style=\"text-align: center; background-color: #7d2ae8; padding: 20px;\">\r\n"
-	            + "    <p style=\"color: white;\">Se ha enviado una solicitud para restablecer la contraseña. Si no has solicitado esto, cambia tu contraseña de inmediato.</p>\r\n"
-	            + "    <p style=\"color: white;\">Si has solicitado el restablecimiento de contraseña, por favor haz clic en el siguiente enlace:</p>\r\n"
-	            + "    <a href=\"" + direccion + "?tk=" + token + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Restablecer contraseña</button></a>\r\n"
-	            + "    <p style=\"color: white;\">Gracias por confiar en nosotros.</p>\r\n"
-	            + "</div>";
-	}
-	
-	private String MensajeCorreoAlta(String direccion) {
-	    return "<div style=\"text-align: center; background-color: #7d2ae8; padding: 20px;\">\r\n"
-	            + "    <p style=\"color: white;\">Bienvenido a nuestra plataforma. Tu cuenta ha sido creada con éxito.</p>\r\n"
-	            + "    <p style=\"color: white;\">Para comenzar a utilizar nuestros servicios, por favor, haz clic en el siguiente enlace:</p>\r\n"
-	            + "    <a href=\"http://localhost:8081/ProyectoGetPa/altaHecha.jsp?tk=" + direccion + "\"><button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">Activar cuenta</button></a>\r\n"
-	            + "    <p style=\"color: white;\">Gracias por unirte a nosotros.</p>\r\n"
-	            + "</div>";
-	}
-	/**
-	 * Metodo para enviar correo al usuario introducido
-	 * @param body
-	 * @param to
-	 * @param html
-	 * @param subject
-	 * @param frommail
-	 * @param cco
-	 * @return boolean
-	 */
-	private boolean EnviarMensaje(String body, String to, boolean html, String subject,String frommail, boolean cco)  {
-		boolean resultado = true;
-		Transport tp = null;
-		try {
-			Properties seguridad = new Properties();
-			seguridad.load(
-					ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
-
-			// Parametros de coneccion con un correo de ionos
-			String host = "smtp.ionos.es";
-			String miLogin = seguridad.getProperty("usuarioCorreo");
-			String miPassword = seguridad.getProperty("contraCorreo");
-			InternetAddress addressFrom;
-			InternetAddress[] addressReply = new InternetAddress[1];
-
-			// Obtener propiedades del sistema
-			Properties properties = System.getProperties();
-
-			// Configurar servidor de correo
-			properties.setProperty("mail.smtp.host", host);
-			properties.setProperty("mail.smtp.starttls.enable", "true");
-			properties.setProperty("mail.smtp.port", "587");
-			properties.setProperty("mail.smtp.user", miLogin);
-			properties.setProperty("mail.smtp.auth", "true");
-
-			// Obtenga el objeto de sesión predeterminado.
-			Session session2 = Session.getInstance(properties);
-			
-			//Configura los parametros para conectarse
-			Message msg = new MimeMessage(session2);
-			
-			//La direccion de quien lo envia
-			addressFrom = new InternetAddress("'SystemRevive' <" + seguridad.getProperty("correo") + ">");
-			msg.setFrom(addressFrom);
-			
-			//A quien envia el correo
-			addressReply[0] = new InternetAddress(frommail);
-			msg.setReplyTo(addressReply);
-			InternetAddress addressTo = new InternetAddress();
-			addressTo = new InternetAddress(to);
-
-			InternetAddress[] addressToOK = new InternetAddress[1];
-			addressToOK[0] = addressTo;
-			//Establece la dirreccion a quien lo envia
-			msg.setRecipients(RecipientType.TO, addressToOK);
-			if (cco)
-				msg.addRecipients(RecipientType.BCC, addressReply);
-			//Establece el asunto de este mensaje.
-			msg.setSubject(subject);
-			//Construye el body
-			if (html) {
-				body = body;
-				msg.setContent(body, "text/html; charset=ISO-8859-1");
-			} else {
-				msg.setContent(body, "text/plain; charset=ISO-8859-1");
-			}
-			//Envia el mensaje
-			tp = session2.getTransport("smtp");
-			tp.connect((String) properties.get("mail.smtp.user"), miPassword);
-			tp.sendMessage(msg, msg.getAllRecipients());
-
-		} catch (AddressException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-EnviarMensaje]  Falló en el análisis. |" + e);
-			resultado = false;
-		} catch (SecurityException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-EnviarMensaje] No se permite el acceso a la propiedad. |"+ e);
-
-		} catch (NullPointerException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-EnviarMensaje] El .properties es nulo. |" + e);
-			resultado = false;
-		} catch (SendFailedException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] La direccion es no valida|" + e);
-			resultado = false;
-		} catch (IllegalWriteException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se admite la modificación de los valores existentes en la implementación subyacente. |"+ e);
-			resultado = false;
-		} catch (IllegalStateException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El mensaje se intenta optener de una carpeta READ_ONLY. |"+ e);
-			resultado = false;
-		} catch (NoSuchProviderException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se encuentra el proveedor para el protocolo dado. |"+ e);
-			resultado = false;
-		} catch (IOException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+ e);
-			resultado = false;
-		}catch (MessagingException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] Se produjo un fallo. |" + e);
-			resultado = false;
-		} finally {
-			try {
-				tp.close();
-			} catch (MessagingException e) {
-				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] Error al cerrar. |" + e);
-				resultado = false;
-			}
-		}
-		return resultado;
-	}
-	
 	/**
 	 * Metodo para hacer update a usuario
 	 * @param usuario

@@ -62,7 +62,10 @@ if(tokenEncontrado.getToken().equals("")||tokenEncontrado.getToken()==null){
 	Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 }
 else if(ahora.after(fechaAnterior)){
-	Alerta.Alerta(request,"Paso el Tiempo de verificacion","error");
+	UsuarioDTO usuario=acciones.SeleccionarUsuario("Select/"+String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
+	acciones.EliminarToken(String.valueOf(tokenEncontrado.getIdToken()));
+	acciones.EliminarUsuario(String.valueOf(usuario.getIdUsuario()));
+	Alerta.Alerta(request,"Paso el Tiempo de verificacion se elimino el usuario","error");
 }
 else{
 	UsuarioDTO usuario=acciones.SeleccionarUsuario("Select/"+String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));

@@ -5,6 +5,8 @@
 <%@ page import="java.io.ByteArrayInputStream" %>
 <%@ page import="javax.imageio.ImageIO" %>
 <%@ page import="java.util.Base64" %>
+<%@ page import="Utilidades.implementacionCRUD" %>
+<%@ page import="Utilidades.Alerta" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,22 +17,38 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/templatemo-style.css">
-<!--
-    
-TemplateMo 556 Catalog-Z
 
-https://templatemo.com/tm-556-catalog-z
-
--->
 </head>
 <body>
 <%
-UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
+String accesoSesion = "0";
+try {
+    accesoSesion = session.getAttribute("acceso").toString();
+
+    if (!accesoSesion.equals("1") && !accesoSesion.equals("2") && !accesoSesion.equals("3")) {
+        throw new IllegalStateException("Acceso inválido");
+    }
+    if(accesoSesion.equals("0")||accesoSesion==null){
+    	throw new IllegalStateException("Acceso inválido");
+    }
+
+} catch (Exception e) {
+    Alerta.Alerta(request, "No ha iniciado Sesión en la web", "error");
+    response.sendRedirect("index.jsp");
+}
+System.out.println(accesoSesion);
+implementacionCRUD acciones=new implementacionCRUD();
+//Si modifico el usuario que se actualice
+UsuarioDTO usuarioAntiguo =(UsuarioDTO) session.getAttribute("usuario");
+//Selecciono el nuevi
+UsuarioDTO user = acciones.SeleccionarUsuario("Select/"+usuarioAntiguo.getIdUsuario());
+//Convierto la imagen
 String base64Image = Base64.getEncoder().encodeToString(user.getFoto());
 
 //Coloca la cadena Base64 en el alcance de la solicitud
 request.setAttribute("base64Image", base64Image);
 session.setAttribute("imagen", base64Image);
+
 %>
     <!-- Page Loader -->
     <div id="loader-wrapper">

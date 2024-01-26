@@ -58,10 +58,6 @@ public class ControladorRegistro extends HttpServlet {
 				try {
 					//Comprobamos si esta bien el usuario
 					if(cosa.RegistrarUsuario(usuario,request)) {
-
-						//response.sendRedirect("vistas/home.jsp");
-						session.setAttribute("usuario",usuario);
-						session.setAttribute("acceso","1");
 						Alerta.Alerta(request,"Se ha creado el Usuario Correctamente se le ha enviando un correo para activar la cuenta","success");
 						response.sendRedirect("index.jsp");
 					}
