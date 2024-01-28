@@ -12,6 +12,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
 <body>
+	<!-- Lógica de JavaScript para mostrar la alerta -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+//Obtiene los atributos desde la sesión
+var mensaje = '<%= session.getAttribute("mensajeAlerta") %>';
+var tipo = '<%= session.getAttribute("tipoAlerta") %>';
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lógica para mostrar la alerta con SweetAlert2
+        if (mensaje !== null && tipo !== null && mensaje !== 'null' && tipo !== 'null') {
+        	console.log('Mensaje:', mensaje, 'Tipo:', tipo);
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'OK'
+            });
+            <%session.setAttribute("mensajeAlerta","null");
+            session.setAttribute("tipoAlerta","null"); %>
+        }
+    });
+</script>
   <div class="container">
     <input type="checkbox" id="flip">
     <div class="cover">
@@ -34,16 +54,16 @@
         <div class="form-content">
           <div class="login-form">
             <div class="title">Olvide La Contraseña</div>
-          <form action="#">
+          <form action="./ControladorOlvidar" method="post" >
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Introduzca Su Email" required>
+                <input type="text" placeholder="Introduzca Su Email" required name="correo">
               </div>
               <div class="button input-box">
                 <input type="submit" value="Enviar Correo">
               </div>
-              <div class="text sign-up-text">Te Acordaste De La Contraseña? <label><a href="index.html">Iniciar Sesion</a></label></div>
+              <div class="text sign-up-text">Te Acordaste De La Contraseña? <label><a href="index.jsp">Iniciar Sesion</a></label></div>
             </div>
         </form> 
       </div>

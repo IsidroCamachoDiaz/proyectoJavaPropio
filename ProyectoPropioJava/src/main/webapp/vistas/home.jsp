@@ -50,6 +50,7 @@ request.setAttribute("base64Image", base64Image);
 session.setAttribute("imagen", base64Image);
 
 %>
+
     <!-- Page Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -159,7 +160,8 @@ session.setAttribute("imagen", base64Image);
                 </figure>
             </div>
             <%} 
-            }%>
+            }
+            %>
                     
         </div> <!-- row -->
         

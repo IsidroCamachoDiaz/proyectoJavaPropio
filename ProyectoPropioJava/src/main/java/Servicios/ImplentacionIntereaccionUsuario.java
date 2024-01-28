@@ -137,17 +137,22 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	return false;
 	}
 	@Override
-	public boolean OlvidarClaveUsuario(String correo) {
+	public boolean OlvidarClaveUsuario(HttpServletRequest request,String correo) {
 		boolean ok=false;
 		try {
+			//Se crea un objeto properties para coger los valores
 			Properties seguridad = new Properties();
+			implementacionCRUD acciones = new implementacionCRUD();
+			//Se cargar los valores 
 			seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
 			//Aqui tiene que ir el buscar el usuario por el correo
-			UsuarioDTO usuarioCorreo=HacerGets("SelectCorreo/"+correo);
-			if(usuarioCorreo.getNombreUsuario()==null||usuarioCorreo.getNombreUsuario().equals("")) {
+			UsuarioDTO usuarioCorreo=acciones.SeleccionarUsuario("SelectCorreo/"+correo);
+			//Se comprueba si encontro el usuario
+			if(usuarioCorreo.getNombreUsuario()==null||usuarioCorreo.getNombreUsuario().equals("")||usuarioCorreo.getClaveUsuario()==null) {
+				Alerta.Alerta(null, "Este correo no esta asociado a niguna cuenta", "error");
 				return false;
 			}
-			//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+			//Se crea el token 
 			UUID uuid = UUID.randomUUID();
 			String token = uuid.toString();
 			//Aqui generas la fecha limite con un tiempo de 10 minutos
@@ -155,112 +160,66 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			tokenMandarBD.setFch_limite(new GregorianCalendar());
 			tokenMandarBD.getFch_limite().add(Calendar.MINUTE, 10);
 			tokenMandarBD.setToken(token);
+			tokenMandarBD.setId_usuario(usuarioCorreo);
 			//Aqui una vez encuentre el usuario insertas el token generado arriba y 
 			//lo inserta con la fecha limite, id_Usuario
 			Correo correo2= new Correo();
-			 String mensaje=correo2.MensajeCorreo(token,seguridad.getProperty("direccion"));
+			 String mensaje=correo2.MensajeCorreo(token);
 			 ok=correo2.EnviarMensaje(mensaje,correo,true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
+			//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+			 if(ok) {
+				 acciones.InsertarToken(tokenMandarBD);
+				 return true;
+			 }
+			 else {
+				 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
+				 return false;
+			 }
 		}catch(IOException e)
 		{
+			 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
 			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] No se pudo leer el .properties. |"+e);
 			return false;
 		}
 		catch(NullPointerException e)
 		{
+			 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
 			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
 			return false;
 		}
-		return ok;
 	}
 	
-	/**
-	 * Metodo para hacer consultas
-	 * @param queDar
-	 * @return UsuarioDTO devuelve un objeto usuario
-	 */
-	private UsuarioDTO HacerGets(String queDar)
-	{
-		try{
-			
-			URL url = new URL("http://localhost:8080/usuario/"+queDar);
-	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setRequestMethod("GET");
-
-	        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        String line;
-	        UsuarioDTO usuarios = null;
-	        while ((line = reader.readLine()) != null) {
-	        	usuarios = objectMapper.readValue(line, new TypeReference<UsuarioDTO>() {});
-	        }
-	        
-	        return usuarios;
-		} catch (JsonProcessingException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-HacerGets] El objeto UsuarioDto no se pudo convertir a json. |"+e);
-		} catch (IOException e) {
-			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-HacerGets] Se produjo un error al crear el flujo de salida. |"+e);
-		}
-		
-		return null;
-	}
-	/**
-	 * Metodo para hacer update a usuario
-	 * @param usuario
-	 * @return
-	 */
-	    private boolean hacerUpdate(UsuarioDTO usuario) {
-	        try {
-	            // Construir la URL para la solicitud PUT
-	            URL url = new URL("http://localhost:8080/usuarioApi/" + usuario.getEmailUsuario());
-	            
-	            // Abrir la conexión HTTP
-	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	            connection.setRequestMethod("PUT");
-	            connection.setRequestProperty("Content-Type", "application/json");
-	            connection.setDoOutput(true);
-
-	            // Convertir el objeto UsuarioDTO a JSON
-	            ObjectMapper objectMapper = new ObjectMapper();
-	            String jsonInputString = objectMapper.writeValueAsString(usuario);
-
-	            // Escribir el JSON en la solicitud
-	            try (OutputStream outputStream = connection.getOutputStream()) {
-	                byte[] input = jsonInputString.getBytes("utf-8");
-	                outputStream.write(input, 0, input.length);
-	            }
-
-	            // Verificar el código de respuesta
-	            int responseCode = connection.getResponseCode();
-	            return responseCode == HttpURLConnection.HTTP_OK;
-
-	        } catch (IOException e) {
-	            // Manejar cualquier excepción de IO
-	            e.printStackTrace();
-	            return false;
-	        }
-	    }
 	@Override
-	public boolean actualizarContrasena(String token, String clave1) {
+	public boolean actualizarContrasena(HttpServletRequest request,TokenDTO token, String clave1) {
 		 try {
-       	  
+       	  		implementacionCRUD acciones= new implementacionCRUD();
 	            // Obtener el usuario actual
-	            UsuarioDTO usuarioActual = HacerGets(String.valueOf(token));
-
+	            UsuarioDTO usuarioActual =acciones.SeleccionarUsuario("Select/"+token.getId_usuario().getIdUsuario());
+	            //Cogemos la fecha actual
+	            Calendar actual = new GregorianCalendar();
+	            //Cogeos la fecha limite
+	            Calendar fechaAnterior = token.getFch_limite();
+	            //LE añado uno hora del UTC
+	            fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
+	            if(actual.after(fechaAnterior)) {
+	            	Alerta.Alerta(request,"Paso el Tiempo de cambiar contraseña","error");
+	            }
 	            // Verificar si se obtuvo el usuario
 	            if (usuarioActual != null) {
 	                // Actualizar la contraseña en el objeto UsuarioDTO
 	                usuarioActual.setClaveUsuario(clave1);
-
 	                // Realizar la actualización en el sistema externo
-	                return hacerUpdate(usuarioActual);
+	                return acciones.ActualizarUsuario(usuarioActual);
 	            } else {
 	                System.out.println("No se pudo obtener el usuario para actualizar la contraseña.");
+	                Alerta.Alerta(request,"No se pudo obtener el usuario para actualizar la contraseña. ","error");
 	                return false;
 	            }
 
 	        } catch (Exception e) {
 	            // Manejar cualquier excepción
 	            e.printStackTrace();
+	            Alerta.Alerta(request,"Hubo un erro intenlo de nuevo mas tarde","error");
 	            return false;
 	        }
 	}

@@ -1,7 +1,12 @@
 package Controladores;
 
+import java.io.IOException;
+
+import Dtos.TokenDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
+import Utilidades.Alerta;
 import Utilidades.Encriptado;
+import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,20 +33,32 @@ public class ControladorRestablecer extends HttpServlet{
      
         
     	Encriptado nc = new Encriptado();
+        ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
+        implementacionCRUD acciones= new implementacionCRUD();
+        
+    	//Cogemos los valores
         String token=request.getParameter("tk");
+        TokenDTO tokenBD= acciones.SeleccionarToken(token);
         String clave1=nc.EncriptarContra(request.getParameter("clave1"));
         String clave2=nc.EncriptarContra(request.getParameter("clave2"));
-        ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
         
-    	if(token != null && clave1.equals(clave2)) {
-       		cosa.actualizarContrasena( token, clave1);
+        //Se comprueba que encuentre el token y las clvaes sean igual
+    	if(tokenBD != null && clave1.equals(clave2)) {
+    		if(cosa.actualizarContrasena(request,tokenBD ,clave1)) {
+    			Alerta.Alerta(request, "Se modifco la clave correctamente", "success");
+    		}
+    		else {
+    			Alerta.Alerta(request, "Hubo un error intentelo mas tarde", "error");
+    		}
        	}
-        	
-        
-       
-        
-
-           
-        
+		//Si no lo es se avisa al usuario
+    	else {
+    		Alerta.Alerta(request, "No se encontro a su usuario vuelva a pedir cambio de contraseña", "error");
+    	}       
+		try {
+			response.sendRedirect("index.jsp");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

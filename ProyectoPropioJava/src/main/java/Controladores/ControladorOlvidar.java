@@ -1,5 +1,7 @@
 package Controladores;
 
+import java.io.IOException;
+
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
 import Utilidades.Encriptado;
@@ -16,12 +18,18 @@ public class ControladorOlvidar extends HttpServlet{
         
         ImplentacionIntereaccionUsuario inter = new ImplentacionIntereaccionUsuario();
         
-        if(inter.OlvidarClaveUsuario(correo)) {
+        if(inter.OlvidarClaveUsuario(request,correo)) {
         	Alerta.Alerta(request, "Se le mando un correo de restablecer contraseña", "success");
         }
         else {
         	Alerta.Alerta(request, "Hubo Un error intentelo de nuevo mas tarde", "error");
         }
+        
+		try {
+			response.sendRedirect("contrasenia.jsp");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         	    
     }
 

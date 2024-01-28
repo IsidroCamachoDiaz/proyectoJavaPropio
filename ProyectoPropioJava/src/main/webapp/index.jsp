@@ -65,7 +65,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 <i class="fas fa-lock"></i>
                 <input type="password" placeholder="Introduzca Su Contraseña" required name="contraseniaUsuario">
               </div>
-              <div class="text"><a href="Contrasenia.html">Olvidaste La Contraseña?</a></div>
+              <div class="text"><a href="contrasenia.jsp">Olvidaste La Contraseña?</a></div>
               <div class="button input-box">
                 <input type="submit" value="Iniciar Sesion">
               </div>
