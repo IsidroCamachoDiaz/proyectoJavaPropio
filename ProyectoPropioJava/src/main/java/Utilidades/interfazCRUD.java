@@ -7,6 +7,7 @@ import Dtos.TipoTrabajoDTO;
 import Dtos.TokenDTO;
 import Dtos.TrabajoDTO;
 import Dtos.UsuarioDTO;
+import java.util.List;
 
 public interface interfazCRUD {
 	public UsuarioDTO SeleccionarUsuario(String url);
@@ -60,5 +61,17 @@ public interface interfazCRUD {
 	public boolean ActualizarTrabajo(TrabajoDTO nuevoTrabajo);
 	
 	public boolean ActualizarUsuario(UsuarioDTO nuevoUsuario);
+	
+	public List<UsuarioDTO> SeleccionarTodosUsuarios();
+	
+	public List<IncidenciaDTO> SeleccionarTodasIncidencias();
+	
+	public List<SolicitudDTO> SeleccionarTodasSolicitudes();
+
+	public List<TipoTrabajoDTO> SeleccionarTodosTiposDeTrabajo();
+	
+	public List<TrabajoDTO> SeleccionarTodosTrabajos();
+	
+	
 	
 }

@@ -17,6 +17,8 @@ import Dtos.TipoTrabajoDTO;
 import Dtos.TokenDTO;
 import Dtos.TrabajoDTO;
 import Dtos.UsuarioDTO;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Implementación de la interfaz CRUD que proporciona operaciones de consulta, inserción, actualización y eliminación
@@ -28,6 +30,92 @@ public class implementacionCRUD implements interfazCRUD {
 	// URL base de la API REST
     private static final String BASE_URL = "http://localhost:8080/";
 
+    
+    /**
+     * Realiza una solicitud GET para seleccionar todos los usuarios.
+     *
+     * @return Lista de objetos UsuarioDTO.
+     */
+    @Override
+    public List<UsuarioDTO> SeleccionarTodosUsuarios() {
+        return hacerGetLista("usuario/Select", UsuarioDTO.class);
+    }
+
+
+    /**
+     * Realiza una solicitud GET para seleccionar todas las incidencias.
+     *
+     * @return Lista de objetos IncidenciaDTO.
+     */
+    @Override
+    public List<IncidenciaDTO> SeleccionarTodasIncidencias() {
+        return hacerGetLista("incidencia/Select", IncidenciaDTO.class);
+    }
+
+    /**
+     * Realiza una solicitud GET para seleccionar todas las solicitudes.
+     *
+     * @return Lista de objetos SolicitudDTO.
+     */
+    @Override
+    public List<SolicitudDTO> SeleccionarTodasSolicitudes() {
+        return hacerGetLista("solicitud/Select", SolicitudDTO.class);
+    }
+
+    /**
+     * Realiza una solicitud GET para seleccionar todos los tipos de trabajo.
+     *
+     * @return Lista de objetos TipoTrabajoDTO.
+     */
+    @Override
+    public List<TipoTrabajoDTO> SeleccionarTodosTiposDeTrabajo() {
+        return hacerGetLista("tipo_incidencia/Select", TipoTrabajoDTO.class);
+    }
+
+
+    /**
+     * Realiza una solicitud GET para seleccionar todos los trabajos.
+     *
+     * @return Lista de objetos TrabajoDTO.
+     */
+    @Override
+    public List<TrabajoDTO> SeleccionarTodosTrabajos() {
+        return hacerGetLista("trabajo/Select", TrabajoDTO.class);
+    }
+
+    /**
+     * Método privado para realizar solicitudes GET genéricas a la API REST y obtener una lista.
+     *
+     * @param endpoint     Ruta específica del recurso a consultar.
+     * @param responseType Clase del objeto que se espera recibir como respuesta.
+     * @param <T>          Tipo genérico que representa el tipo de objeto de respuesta.
+     * @return Lista de objetos de tipo T obtenida como respuesta de la solicitud GET.
+     */
+    private <T> List<T> hacerGetLista(String endpoint, Class<T> responseType) {
+        try {
+            URL url = new URL(BASE_URL + endpoint);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Utiliza TypeFactory para construir el TypeReference
+            List<T> listaEntidades = objectMapper.readValue(reader, 
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, responseType));
+
+            return listaEntidades;
+        } catch (JsonProcessingException e) {
+            System.err.println("[ERROR-InteraccionEntidad-hacerGetLista] Error al convertir el objeto a JSON. | " + e);
+        } catch (IOException e) {
+            System.err.println("[ERROR-InteraccionEntidad-hacerGetLista] Se produjo un error al realizar la solicitud GET. | " + e);
+        }
+
+        return new ArrayList<>(); // Devolver una lista vacía en caso de error.
+    }
+
+
+    
     /**
      * Realiza una solicitud GET para seleccionar un usuario por su identificador.
      *
