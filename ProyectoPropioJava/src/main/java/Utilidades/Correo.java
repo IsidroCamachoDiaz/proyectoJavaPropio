@@ -55,7 +55,7 @@ public class Correo {
             // Insertar el token en la base de datos
             if (acciones.InsertarToken(tk)) {
                 // Crear mensaje de correo
-                String mensaje = MensajeCorreo(token);
+                String mensaje = MensajeCorreoAlta(token);
                 // Enviar el mensaje al correo del usuario
                 EnviarMensaje(mensaje, usuario.getEmailUsuario(), true, "Solicitud De Alta", seguridad.getProperty("correo"), true);
                 return true;

@@ -74,9 +74,7 @@ else{
 		Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 	}
 	else{
-
-		AccesoDTO accesoDar=acciones.SeleccionarAcceso("Select/3");
-		usuario.setAcceso(accesoDar);
+		usuario.setAlta(true);
 		if(acciones.ActualizarUsuario(usuario)){
 			Alerta.Alerta(request,"Felicidades Has dado de alta la cuenta","success");
 		}

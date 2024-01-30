@@ -59,7 +59,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Introduzca Su Email" required name="correoUsuario">
+                <input type="email" placeholder="Introduzca Su Email" required name="correoUsuario">
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>
@@ -83,7 +83,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
               </div>
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Introduzca Un Email" required name="correoUsuario">
+                <input type="email" placeholder="Introduzca Un Email" required name="correoUsuario">
               </div>
               <div class="input-box">
                 <i class="fas fa-phone"></i>
@@ -95,7 +95,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
               </div>
               <div class="input-box">
                 <i class="fas fa-images"></i>
-                <input type="file" placeholder="Foto de Perfil" accept=".png, .jpg, .jpeg" required name="imagenUsuario">
+                <input type="file" placeholder="Foto de Perfil" accept=".png, .jpg, .jpeg" name="imagenUsuario">
               </div>
               <div class="button input-box">
                 <input type="submit" value="Registrarse">

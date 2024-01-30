@@ -24,24 +24,21 @@
 String accesoSesion = "0";
 try {
     accesoSesion = session.getAttribute("acceso").toString();
-
     if (!accesoSesion.equals("1") && !accesoSesion.equals("2") && !accesoSesion.equals("3")) {
         throw new IllegalStateException("Acceso inválido");
-    }
-    if(accesoSesion.equals("0")||accesoSesion==null){
-    	throw new IllegalStateException("Acceso inválido");
     }
 
 } catch (Exception e) {
     Alerta.Alerta(request, "No ha iniciado Sesión en la web", "error");
-    response.sendRedirect("index.jsp");
+    response.sendRedirect("../index.jsp");
+    return;
 }
 System.out.println(accesoSesion);
 implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
-UsuarioDTO usuarioAntiguo =(UsuarioDTO) session.getAttribute("usuario");
+UsuarioDTO user =(UsuarioDTO) session.getAttribute("usuario");
 //Selecciono el nuevi
-UsuarioDTO user = acciones.SeleccionarUsuario("Select/"+usuarioAntiguo.getIdUsuario());
+user = acciones.SeleccionarUsuario("Select/"+user.getIdUsuario());
 //Convierto la imagen
 String base64Image = Base64.getEncoder().encodeToString(user.getFoto());
 

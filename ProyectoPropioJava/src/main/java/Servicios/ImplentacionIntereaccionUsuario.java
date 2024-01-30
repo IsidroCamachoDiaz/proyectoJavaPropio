@@ -73,7 +73,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 				//Si no es igual lo manda al login con aviso
 	            if(user.getClaveUsuario().equals(usuarioBD.getClaveUsuario())) {
 	            	//Comprobamos is verifico la cuenta
-	            	if(usuarioBD.getAcceso().getCodigoAcceso().equals("Pendiente")) {
+	            	if(!usuarioBD.isAlta()) {
 	            		Alerta.Alerta(request,"El usuario no esta dado de alta en la web", "error");
 	            		return false;
 	            	}else {

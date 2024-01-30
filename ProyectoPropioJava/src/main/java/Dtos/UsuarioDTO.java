@@ -43,6 +43,9 @@ public class UsuarioDTO {
 	
 	@JsonProperty("foto")
 	private byte[] foto;
+	
+	@JsonProperty("alta")
+	private boolean alta;
 
 	@JsonProperty("acceso")
 	private AccesoDTO acceso;
@@ -69,13 +72,14 @@ public class UsuarioDTO {
 	 * @param emailUsuario   Dirección de correo electrónico del usuario.
 	 * @param claveUsuario   Clave o contraseña del usuario.
 	 */
-	public UsuarioDTO(int idUsuario, String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario) {
+	public UsuarioDTO(int idUsuario, String nombreUsuario, String tlfUsuario, String emailUsuario, String claveUsuario,boolean alta) {
 	    super();
 	    this.idUsuario = idUsuario;
 	    this.nombreUsuario = nombreUsuario;
 	    this.tlfUsuario = tlfUsuario;
 	    this.emailUsuario = emailUsuario;
 	    this.claveUsuario = claveUsuario;
+	    this.alta=alta;
 	}
 
 	/**
@@ -218,6 +222,17 @@ public class UsuarioDTO {
 
 	public void setAcceso(AccesoDTO acceso) {
 		this.acceso = acceso;
+	}
+
+	
+
+	public boolean isAlta() {
+		return alta;
+	}
+
+
+	public void setAlta(boolean alta) {
+		this.alta = alta;
 	}
 
 

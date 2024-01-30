@@ -8,6 +8,7 @@ import Dtos.UsuarioDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
 import Utilidades.Correo;
+import Utilidades.Encriptado;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -25,12 +26,14 @@ public class ControladorPerfil extends HttpServlet{
 	
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 		 	implementacionCRUD acciones = new implementacionCRUD ();
+		 	Encriptado nc = new Encriptado();
 	     	//Cogemos los valores del formulario
 
 		 	String id=request.getParameter("id");
 		 	String nombre=request.getParameter("nombre");
 		 	String telefono=request.getParameter("telefono");
 		 	String correo =request.getParameter("correo");
+		 	String contrasenia =request.getParameter("contrasenia");
 		 	//Creo una variable para  ver si ha modificado algun campo
 		 	boolean cambio=false;
 		 	//Busco al usuario para modificarle los campos
@@ -42,6 +45,11 @@ public class ControladorPerfil extends HttpServlet{
 	        }
 	        if(!usuarioCambio.getTlfUsuario().equals(telefono)) {
 	        	usuarioCambio.setTlfUsuario(telefono);
+	        	cambio=true;
+	        }
+	        
+	        if(!contrasenia.equals("")) {
+	        	usuarioCambio.setClaveUsuario(nc.EncriptarContra(contrasenia));
 	        	cambio=true;
 	        }
 
@@ -64,10 +72,8 @@ public class ControladorPerfil extends HttpServlet{
 			if(!usuarioCambio.getEmailUsuario().equals(correo)) {
 				Correo correoAccion = new Correo();
 				usuarioCambio.setEmailUsuario(correo);
-				//Cojo el acceso para que verifique
-				AccesoDTO accesoNuevo =acciones.SeleccionarAcceso("Select/1");
 				//Pongo nuevo acceso
-				usuarioCambio.setAcceso(accesoNuevo);
+				usuarioCambio.setAlta(false);
 				//Envio el correo con el nuevo token
 				correoAccion.EnviarCorreoToken(usuarioCambio);
 				//Actualizamos

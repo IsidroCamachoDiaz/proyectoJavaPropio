@@ -50,6 +50,21 @@ public class ControladorRegistro extends HttpServlet {
 				        // Convertir InputStream a byte[]
 				        usuario.setFoto(fileContent.readAllBytes());
 				  }
+				  else {
+					    // El usuario no subió un archivo, proporcionar un archivo predefinido
+					    try (InputStream defaultImageStream = getClass().getResourceAsStream("../../resources/user.png")) {
+					        if (defaultImageStream != null) {
+					            // Convertir InputStream a byte[]
+					            usuario.setFoto(defaultImageStream.readAllBytes());
+					        } else {
+					            // Manejar el caso de que el archivo predefinido no se encuentre
+					            // Puedes lanzar una excepción, establecer un valor predeterminado, etc.
+					        }
+					    } catch (IOException e) {
+					        // Manejar la excepción de entrada/salida si es necesario
+					        e.printStackTrace();
+					    }
+					}
 			
 				ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
 				
@@ -73,6 +88,5 @@ public class ControladorRegistro extends HttpServlet {
 			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
 			}
 		 	
-
 		}
 }

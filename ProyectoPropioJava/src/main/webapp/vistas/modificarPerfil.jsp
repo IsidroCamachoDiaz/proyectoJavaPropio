@@ -121,7 +121,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 <label for="correo">Correo Propio:</label>
                 <input type="email" class="form-control" id="correo" name="correo" value="<%=usuario.getEmailUsuario() %>" oninput="setFormModified(true)">
             </div>
-
+            
+			<!-- Campo contraseña -->
+			<div class="form-group">
+                <label for="contrasenia">Contraseña:</label>
+                <input type="password" class="form-control" id="contrasenia" name="contrasenia" value="" >
+            </div>
+			
             <!-- Campo de Subir Archivo (Imagen) -->
             <div class="form-group">
                 <label for="imagen">Imagen de Perfil:</label>
