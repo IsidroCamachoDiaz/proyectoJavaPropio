@@ -5,6 +5,7 @@
 <%@ page import="java.io.ByteArrayInputStream" %>
 <%@ page import="javax.imageio.ImageIO" %>
 <%@ page import="java.util.Base64" %>
+<%@ page import="java.util.List" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Alerta" %>
 <!DOCTYPE html>
@@ -17,16 +18,17 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/templatemo-style.css">
-    
-
+	<link rel="stylesheet" href="css/tabla.css">
 </head>
 <body>
 <%
 String accesoSesion = "0";
 try {
     accesoSesion = session.getAttribute("acceso").toString();
-    if (!accesoSesion.equals("1") && !accesoSesion.equals("2") && !accesoSesion.equals("3")) {
-        throw new IllegalStateException("Acceso inválido");
+    if (accesoSesion.equals("1") || accesoSesion.equals("2")) {
+    	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
+    	response.sendRedirect("home.jsp");
+    	return;
     }
 
 } catch (Exception e) {
@@ -69,7 +71,7 @@ session.setAttribute("imagen", base64Image);
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-1 active" aria-current="page" href="home.jsp">Menu</a>
+                        <a class="nav-link nav-link-1" aria-current="page" href="home.jsp">Menu</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-2" href="modificarPerfil.jsp">
@@ -93,77 +95,53 @@ session.setAttribute("imagen", base64Image);
         </form>
     </div>
 	<%
-	String acceso=user.getAcceso().getCodigoAcceso();
+	
+	List <UsuarioDTO> usuarios=acciones.SeleccionarTodosUsuarios();
 	%>
-    <div class="container-fluid tm-container-content tm-mt-60">
-        <div class="row mb-4">
-            <h2 class="col-6 tm-text-primary text-white">
-                Seleccione Una Opcion
-            </h2>
-            <div class="col-6 d-flex justify-content-end align-items-center">
-                
-            </div>
-        </div>
-        
-        <div class="row tm-mb-90 tm-gallery">
-        <%if(acceso.equals("Usuario")){ %>
-        	<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/img-03.jpg" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Solicitudes</h2>
-                        <a href="photo-detail.html"></a>
-                    </figcaption>                    
-                </figure>
-            </div>
-            <%}
-        	else{ %>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/img-04.jpg" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Incidencias</h2>
-                        <a href="photo-detail.html"></a>
-                    </figcaption>                    
-                </figure>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/img-05.jpg" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Trabajos</h2>
-                        <a href="photo-detail.html"></a>
-                    </figcaption>                    
-                </figure>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/img-06.jpg" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Tipos De Incidencias</h2>
-                        <a href="photo-detail.html"></a>
-                    </figcaption>                    
-                </figure>
-            </div>
-            <%
-            if(acceso.equals("Administrador")){%>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/img-01.jpg" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Gestion de Usuarios</h2>
-                        <a href="gestionUsuarios.jsp"></a>
-                    </figcaption>                    
-                </figure>
-            </div>
-            <%} 
-            }
-            %>
-                    
-        </div> <!-- row -->
-        
-    </div> <!-- container-fluid, tm-container-content -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12 table-container">
+				<table>
+				    <thead>
+				      <tr>
+				      	<th>Foto</th>
+				      	<th>Correo</th>
+				        <th>Nombre de Usuario</th>
+				        <th>Telefono</th>
+				        <th>Nivel de Acceso</th>
+				        <th>Acciones</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				    <%
+				    for(UsuarioDTO usuarioVer : usuarios){
+				    	String foto = Base64.getEncoder().encodeToString(usuarioVer.getFoto());
+				    	request.setAttribute("foto",foto);
+				    %>
+				      <tr>
+				        <td> <img class="rounded-circleVer user-avatarVer" src="data:image/jpeg;base64,${foto}" alt="Imagen de Usuario"></td>
+				        <td><%=usuarioVer.getEmailUsuario() %></td>
+				        <td><%=usuarioVer.getNombreUsuario() %></td>
+				        <td><%=usuarioVer.getTlfUsuario() %></td>
+				        <td><%=usuarioVer.getAcceso().getCodigoAcceso()%></td>
+				         <td>
+				         <form action="/ruta/de/borrado" method="post">
+					        <input type="hidden" name="id" value="<%=usuarioVer.getIdUsuario()%>">
+					      </form>
+					      <button class="boton-redondo boton-rojo" onclick="confirmarBorrado('<%=usuarioVer.getIdUsuario()%>')">Borrar Usuario</button>
+					       <a href="https://www.youtube.com/" target="_blank">
+					        	<button class="boton-redondo boton-verde" type="button">Modificar Usuario</button>
+					      	</a>				        			        
+				         </td>
+				      </tr>
+					<%
+				    }
+					%>
+				    </tbody>
+		  		</table>
+			</div>
+		</div>
+	</div>
     
     <script src="js/plugins.js"></script>
     <script>
@@ -171,5 +149,24 @@ session.setAttribute("imagen", base64Image);
             $('body').addClass('loaded');
         });
     </script>
+    
+<script>
+  function confirmarBorrado(idUsuario) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar usuario'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma, entonces enviamos el formulario
+        document.getElementById('formBorrarUsuario').submit();
+      }
+    });
+  }
+</script>
 </body>
 </html>
