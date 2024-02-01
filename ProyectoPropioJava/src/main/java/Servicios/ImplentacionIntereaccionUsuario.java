@@ -7,12 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Properties;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownServiceException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.mail.IllegalWriteException;
 import javax.mail.Message;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Dtos.SolicitudDTO;
 import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
 import Utilidades.Alerta;
@@ -76,7 +78,12 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            	if(!usuarioBD.isAlta()) {
 	            		Alerta.Alerta(request,"El usuario no esta dado de alta en la web", "error");
 	            		return false;
-	            	}else {
+	            	}
+	            	else if(usuarioBD.getFechaBaja()!=null) {
+	            		Alerta.Alerta(request,"Su cuenta ha sido dada de baja gracias por confiar en nosotros", "info");
+	            		return false;
+	            	}
+	            	else {
 	            		//Asignamos el usuario y el control de acceso de vada usuario
 	                	session.setAttribute("usuario",usuarioBD);
 	            		if(usuarioBD.getAcceso().getCodigoAcceso().equals("Usuario")) {
@@ -222,6 +229,44 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            Alerta.Alerta(request,"Hubo un erro intenlo de nuevo mas tarde","error");
 	            return false;
 	        }
+	}
+
+	@Override
+	public boolean eliminarUsuario(UsuarioDTO usu, HttpServletRequest request) {
+		implementacionCRUD acciones = new implementacionCRUD();
+		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")) {
+			
+		}
+		else if(usu.getAcceso().getCodigoAcceso().equals("Empleado")) {
+			
+		}
+		else {
+			List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
+			List <TokenDTO> tokens= acciones.SeleccionarTodosTokens();
+			tokens= tokens.stream()
+			        .filter(t -> t.getId_usuario().getIdUsuario() == usu.getIdUsuario())
+			        .collect(Collectors.toList());
+			
+			solicitudes = solicitudes.stream()
+	                .filter(solicitud -> solicitud.getUsuarioSolicitud().getIdUsuario() == usu.getIdUsuario())
+	                .collect(Collectors.toList());
+			if(solicitudes.isEmpty()) {
+				for(int i=0;i<tokens.size();i++) {
+					acciones.EliminarToken(String.valueOf(tokens.get(i).getIdToken()));
+				}
+				
+				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));
+				Alerta.Alerta(request, "Se elimino Totalmente al usuario", "success");
+				return true;
+			}
+			else {
+				usu.setFechaBaja(Calendar.getInstance());
+				acciones.ActualizarUsuario(usu);
+				Alerta.Alerta(request, "Se dio de Baja al Usuario", "success");
+				return true;
+			}
+		}
+		return false;
 	}
 
 

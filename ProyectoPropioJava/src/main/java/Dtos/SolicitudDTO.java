@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SolicitudDTO {
 	
 	 @JsonProperty("id_solicitud")
-	    private long idSolicitud;
+	    private int idSolicitud;
 	 
 	 @JsonProperty("descripcion")
 	 private String descripcion;
@@ -48,7 +48,7 @@ public class SolicitudDTO {
 	  * @param estado                Estado de la solicitud.
 	  * @param fechaSolicitud        Fecha de la solicitud.
 	  */
-	 public SolicitudDTO(long idSolicitud, String descripcion, boolean estado, Calendar fechaSolicitud) {
+	 public SolicitudDTO(int idSolicitud, String descripcion, boolean estado, Calendar fechaSolicitud) {
 	     super();
 	     this.idSolicitud = idSolicitud;
 	     this.descripcion = descripcion;
@@ -68,7 +68,7 @@ public class SolicitudDTO {
 	  * 
 	  * @return Identificador único de la solicitud.
 	  */
-	 public long getIdSolicitud() {
+	 public int getIdSolicitud() {
 	     return idSolicitud;
 	 }
 
@@ -77,7 +77,7 @@ public class SolicitudDTO {
 	  * 
 	  * @param idSolicitud Nuevo identificador único de la solicitud.
 	  */
-	 public void setIdSolicitud(long idSolicitud) {
+	 public void setIdSolicitud(int idSolicitud) {
 	     this.idSolicitud = idSolicitud;
 	 }
 

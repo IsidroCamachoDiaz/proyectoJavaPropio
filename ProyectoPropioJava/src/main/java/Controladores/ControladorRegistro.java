@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
+import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
 import Servicios.ImplentacionIntereaccionUsuario;
 
@@ -43,23 +44,36 @@ public class ControladorRegistro extends HttpServlet {
 						nc.EncriptarContra(request.getParameter("contraseniaUsuario")));
 				
 				 Part filePart = request.getPart("imagenUsuario");
-				 
+				 ComprobacionImagen com=new ComprobacionImagen();
+				 //Comprobamos si ha metido una foto
 				  if (filePart.getSize() > 0) {
-				        InputStream fileContent = filePart.getInputStream();
-
-				        // Convertir InputStream a byte[]
-				        usuario.setFoto(fileContent.readAllBytes());
+					  
+					  if(com.esArchivoImagen(filePart)) {
+						  InputStream fileContent = filePart.getInputStream();
+					        // Convertir InputStream a byte[]
+					        usuario.setFoto(fileContent.readAllBytes());
+					  }
+					  else {
+						  try (InputStream defaultImageStream = getClass().getResourceAsStream("/user.png")) {
+						        if (defaultImageStream != null) {
+						            // Convertir InputStream a byte[]
+						            usuario.setFoto(defaultImageStream.readAllBytes());
+						        } 
+						    } catch (IOException e) {
+						        // Manejar la excepción de entrada/salida si es necesario
+						        e.printStackTrace();
+						    }
+					  }
+				        
 				  }
+				  //Si no lo ha metido se pone una por defcto
 				  else {
 					    // El usuario no subió un archivo, proporcionar un archivo predefinido
-					    try (InputStream defaultImageStream = getClass().getResourceAsStream("../../resources/user.png")) {
+					    try (InputStream defaultImageStream = getClass().getResourceAsStream("/user.png")) {
 					        if (defaultImageStream != null) {
 					            // Convertir InputStream a byte[]
 					            usuario.setFoto(defaultImageStream.readAllBytes());
-					        } else {
-					            // Manejar el caso de que el archivo predefinido no se encuentre
-					            // Puedes lanzar una excepción, establecer un valor predeterminado, etc.
-					        }
+					        } 
 					    } catch (IOException e) {
 					        // Manejar la excepción de entrada/salida si es necesario
 					        e.printStackTrace();

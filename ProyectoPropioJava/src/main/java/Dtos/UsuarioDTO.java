@@ -46,6 +46,9 @@ public class UsuarioDTO {
 	
 	@JsonProperty("alta")
 	private boolean alta;
+	
+	@JsonProperty("fecha_baja")
+	private Calendar fechaBaja;
 
 	@JsonProperty("acceso")
 	private AccesoDTO acceso;
@@ -233,6 +236,16 @@ public class UsuarioDTO {
 
 	public void setAlta(boolean alta) {
 		this.alta = alta;
+	}
+
+
+	public Calendar getFechaBaja() {
+		return fechaBaja;
+	}
+
+
+	public void setFechaBaja(Calendar fechaBaja) {
+		this.fechaBaja = fechaBaja;
 	}
 
 

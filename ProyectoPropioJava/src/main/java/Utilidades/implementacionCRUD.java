@@ -82,6 +82,16 @@ public class implementacionCRUD implements interfazCRUD {
     public List<TrabajoDTO> SeleccionarTodosTrabajos() {
         return hacerGetLista("trabajo/Select", TrabajoDTO.class);
     }
+    
+    /**
+     * Realiza una solicitud GET para seleccionar todos los trabajos.
+     *
+     * @return Lista de objetos TrabajoDTO.
+     */
+    @Override
+    public List<TokenDTO> SeleccionarTodosTokens() {
+        return hacerGetLista("token/Select", TokenDTO.class);
+    }
 
     /**
      * Método privado para realizar solicitudes GET genéricas a la API REST y obtener una lista.

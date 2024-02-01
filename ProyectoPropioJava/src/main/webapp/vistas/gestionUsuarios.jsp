@@ -8,6 +8,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Alerta" %>
+<%@ page import="java.util.stream.Collectors" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +20,7 @@
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/templatemo-style.css">
 	<link rel="stylesheet" href="css/tabla.css">
+	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
 <%
@@ -89,19 +91,24 @@ session.setAttribute("imagen", base64Image);
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
             <div class="user-info-container2 d-flex align-items-center">
-                <img class="rounded-circle user-avatar2" src="data:image/jpeg;base64,${base64Image}" alt="Imagen de Usuario">
-                <h2 class="text-white">Bienvenido <%=user.getNombreUsuario() %></h2>
+                <h2 class="text-white">Administracion De Usuarios</h2>
             </div>
         </form>
     </div>
 	<%
 	
 	List <UsuarioDTO> usuarios=acciones.SeleccionarTodosUsuarios();
+	for(int i=0;i<usuarios.size();i++){
+		if(usuarios.get(i).getIdUsuario()==user.getIdUsuario()){
+			usuarios.remove(i);
+			break;
+		}
+	}
 	%>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12 table-container">
-				<table>
+				<table class="table mt-3"  style="background-color: #A875E8; color: #ffffff;">
 				    <thead>
 				      <tr>
 				      	<th>Foto</th>
@@ -120,23 +127,28 @@ session.setAttribute("imagen", base64Image);
 				    %>
 				      <tr>
 				        <td> <img class="rounded-circleVer user-avatarVer" src="data:image/jpeg;base64,${foto}" alt="Imagen de Usuario"></td>
-				        <td><%=usuarioVer.getEmailUsuario() %></td>
-				        <td><%=usuarioVer.getNombreUsuario() %></td>
-				        <td><%=usuarioVer.getTlfUsuario() %></td>
-				        <td><%=usuarioVer.getAcceso().getCodigoAcceso()%></td>
+				        <td class="text-center"><%=usuarioVer.getEmailUsuario() %></td>
+				        <td class="text-center"><%=usuarioVer.getNombreUsuario() %></td>
+				        <td class="text-center"><%=usuarioVer.getTlfUsuario() %></td>
+				        <td class="text-center"><%=usuarioVer.getAcceso().getCodigoAcceso()%></td>
 				         <td>
-				         <form action="/ruta/de/borrado" method="post">
+				         <form action="./ControladorEliminarUsuario" method="post" id="formBorrarUsuario<%=usuarioVer.getIdUsuario()%>">
 					        <input type="hidden" name="id" value="<%=usuarioVer.getIdUsuario()%>">
 					      </form>
-					      <button class="boton-redondo boton-rojo" onclick="confirmarBorrado('<%=usuarioVer.getIdUsuario()%>')">Borrar Usuario</button>
+					      <button class="btn btn-danger"  onclick="confirmarBorrado('<%=usuarioVer.getIdUsuario()%>')">Borrar Usuario</button>
 					       <a href="https://www.youtube.com/" target="_blank">
-					        	<button class="boton-redondo boton-verde" type="button">Modificar Usuario</button>
+					        	<button  class="btn btn-success" type="button">Modificar Usuario</button>
 					      	</a>				        			        
 				         </td>
 				      </tr>
 					<%
 				    }
 					%>
+					 <tr>
+					 <td colspan="6" class="text-center">
+					 Crear Usuario
+					 </td>
+					 </tr>
 				    </tbody>
 		  		</table>
 			</div>
@@ -152,6 +164,7 @@ session.setAttribute("imagen", base64Image);
     
 <script>
   function confirmarBorrado(idUsuario) {
+	  console.log('formBorrarUsuario'+idUsuario);
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esta acción no se puede deshacer.',
@@ -163,7 +176,7 @@ session.setAttribute("imagen", base64Image);
     }).then((result) => {
       if (result.isConfirmed) {
         // Si el usuario confirma, entonces enviamos el formulario
-        document.getElementById('formBorrarUsuario').submit();
+        document.getElementById('formBorrarUsuario'+idUsuario).submit();
       }
     });
   }

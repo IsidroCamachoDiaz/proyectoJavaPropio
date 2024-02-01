@@ -49,4 +49,7 @@ public interface InterfaceIntereccionUsuario {
      * @since 28/1/24
      */
     public boolean actualizarContrasena(HttpServletRequest request, TokenDTO token, String nuevaContrasena);
+    
+    
+    public boolean eliminarUsuario(UsuarioDTO usu, HttpServletRequest request);
 }
