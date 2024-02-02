@@ -11,6 +11,7 @@
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Dtos.UsuarioDTO" %>
 <%@ page import="Dtos.AccesoDTO" %>
+<%@ page import="Servicios.ImplentacionIntereaccionUsuario" %>
 <%@ page import="java.util.Calendar" %>
 <!DOCTYPE html>
 <!-- Coding by CodingNepal | www.codingnepalweb.com-->
@@ -43,8 +44,11 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     });
 </script>
 <%
+//Declaramos lo que necesitemos
 implementacionCRUD acciones = new implementacionCRUD();
+//Cogemos de la url el token
 String token = request.getParameter("tk");
+//Buscamos el token
 TokenDTO tokenEncontrado=acciones.SeleccionarToken(token);
 
 // Obtener la fecha actual
@@ -54,27 +58,30 @@ Calendar ahora = Calendar.getInstance();
 Calendar fechaAnterior = tokenEncontrado.getFch_limite();
 fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
 
-long diferenciaEnMillis = ahora.getTimeInMillis() - fechaAnterior.getTimeInMillis();
-long diferenciaEnMinutos = diferenciaEnMillis / (60 * 1000); // Convertir a minutos
 
 try{
+	//Comprobamos si se encontro el token
 if(tokenEncontrado.getToken().equals("")||tokenEncontrado.getToken()==null){
 	Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 }
+	//Comprobamos si se paso de la fecha
 else if(ahora.after(fechaAnterior)){
+	ImplentacionIntereaccionUsuario inter = new ImplentacionIntereaccionUsuario();
+	//Buscamos al usuario y lo eliminamos
 	UsuarioDTO usuario=acciones.SeleccionarUsuario("Select/"+String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
-	acciones.EliminarToken(String.valueOf(tokenEncontrado.getIdToken()));
-	acciones.EliminarUsuario(String.valueOf(usuario.getIdUsuario()));
-	Alerta.Alerta(request,"Paso el Tiempo de verificacion se elimino el usuario","error");
+	inter.eliminarUsuario(usuario, request);
 }
 else{
+	//Buscamos el usuario por el id del token
 	UsuarioDTO usuario=acciones.SeleccionarUsuario("Select/"+String.valueOf(tokenEncontrado.getId_usuario().getIdUsuario()));
-
+	//Comprobamos si lo encontri
 	if(usuario.getEmailUsuario().equals("")||usuario.getEmailUsuario()==null){
 		Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
 	}
+	//Su lo encuentra se le da el alta
 	else{
 		usuario.setAlta(true);
+		//Comprobamos si se actualizo correctamente
 		if(acciones.ActualizarUsuario(usuario)){
 			Alerta.Alerta(request,"Felicidades Has dado de alta la cuenta","success");
 		}

@@ -9,6 +9,7 @@
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="Utilidades.Escritura" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +30,7 @@ try {
     accesoSesion = session.getAttribute("acceso").toString();
     if (accesoSesion.equals("1") || accesoSesion.equals("2")) {
     	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
+    	Escritura.EscribirFichero("Un usuario o empleado intento entrar a la administracion");
     	response.sendRedirect("home.jsp");
     	return;
     }
@@ -38,12 +40,11 @@ try {
     response.sendRedirect("../index.jsp");
     return;
 }
+Escritura.EscribirFichero("Se accedio administracion de usuario");
 System.out.println(accesoSesion);
 implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
-UsuarioDTO user =(UsuarioDTO) session.getAttribute("usuario");
-//Selecciono el nuevi
-user = acciones.SeleccionarUsuario("Select/"+user.getIdUsuario());
+UsuarioDTO user =acciones.SeleccionarUsuario("Select/"+session.getAttribute("usuario"));
 //Convierto la imagen
 String base64Image = Base64.getEncoder().encodeToString(user.getFoto());
 
@@ -52,7 +53,26 @@ request.setAttribute("base64Image", base64Image);
 session.setAttribute("imagen", base64Image);
 
 %>
-
+	<!-- Lógica de JavaScript para mostrar la alerta -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+//Obtiene los atributos desde la sesión
+var mensaje = '<%= session.getAttribute("mensajeAlerta") %>';
+var tipo = '<%= session.getAttribute("tipoAlerta") %>';
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lógica para mostrar la alerta con SweetAlert2
+        if (mensaje !== null && tipo !== null && mensaje !== 'null' && tipo !== 'null') {
+        	console.log('Mensaje:', mensaje, 'Tipo:', tipo);
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'OK'
+            });
+            <%session.setAttribute("mensajeAlerta","null");
+            session.setAttribute("tipoAlerta","null"); %>
+        }
+    });
+</script>
     <!-- Page Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -108,7 +128,7 @@ session.setAttribute("imagen", base64Image);
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12 table-container">
-				<table class="table mt-3"  style="background-color: #A875E8; color: #ffffff;">
+				<table class="table"  style="background-color: #A875E8; color: #ffffff;">
 				    <thead>
 				      <tr>
 				      	<th>Foto</th>
@@ -136,7 +156,7 @@ session.setAttribute("imagen", base64Image);
 					        <input type="hidden" name="id" value="<%=usuarioVer.getIdUsuario()%>">
 					      </form>
 					      <button class="btn btn-danger"  onclick="confirmarBorrado('<%=usuarioVer.getIdUsuario()%>')">Borrar Usuario</button>
-					       <a href="https://www.youtube.com/" target="_blank">
+					       <a href="modificarUsuario.jsp?id=<%=usuarioVer.getIdUsuario()%>">
 					        	<button  class="btn btn-success" type="button">Modificar Usuario</button>
 					      	</a>				        			        
 				         </td>
@@ -145,8 +165,10 @@ session.setAttribute("imagen", base64Image);
 				    }
 					%>
 					 <tr>
-					 <td colspan="6" class="text-center">
-					 Crear Usuario
+					 <td colspan="6" class="text-center" >
+					 <a href="crearUsuario.jsp">
+					      <button  class="btn btn-success" type="button">Crear Usuario</button>
+					  </a>	
 					 </td>
 					 </tr>
 				    </tbody>

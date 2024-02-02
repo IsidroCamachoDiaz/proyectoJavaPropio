@@ -36,14 +36,10 @@ import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
 import Utilidades.Alerta;
 import Utilidades.Correo;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-
-
-
-
 
 /**
  * Clase para implentar la interfez de register,login del usuario que implenta de la interfaz
@@ -66,9 +62,11 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		        try {
 				usuarioBD =acciones.SeleccionarUsuario("SelectCorreo/"+user.getEmailUsuario());
 				if(usuarioBD==null) {
+					Escritura.EscribirFichero("No se encontro al usuario");
 					throw new RuntimeException();
 				}
 		        }catch(RuntimeException e) {
+		        	Escritura.EscribirFichero("Se busco a un usuario pero no puso bien los datos");
 		        	Alerta.Alerta(request,"El Correo y/o contraseña es incorrecto", "error");
 		        	return false;
 		        }
@@ -76,16 +74,18 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            if(user.getClaveUsuario().equals(usuarioBD.getClaveUsuario())) {
 	            	//Comprobamos is verifico la cuenta
 	            	if(!usuarioBD.isAlta()) {
+	            		Escritura.EscribirFichero("Un usuario a intentado logearse pero no esta dado de alta");
 	            		Alerta.Alerta(request,"El usuario no esta dado de alta en la web", "error");
 	            		return false;
 	            	}
 	            	else if(usuarioBD.getFechaBaja()!=null) {
+	            		Escritura.EscribirFichero("Un usuario a intentado darse de alta pero suc uenta esta dada de baja");
 	            		Alerta.Alerta(request,"Su cuenta ha sido dada de baja gracias por confiar en nosotros", "info");
 	            		return false;
 	            	}
 	            	else {
 	            		//Asignamos el usuario y el control de acceso de vada usuario
-	                	session.setAttribute("usuario",usuarioBD);
+	                	session.setAttribute("usuario",usuarioBD.getIdUsuario());
 	            		if(usuarioBD.getAcceso().getCodigoAcceso().equals("Usuario")) {
 	            			session.setAttribute("acceso","1");
 	            		}
@@ -95,15 +95,18 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            		else {
 	            			session.setAttribute("acceso","3");
 	            		}
+	            		Escritura.EscribirFichero("Un usuario se logeo bien en la web");
 	            		return true;
 	            	}
 	            }
 	            else {
+	            	Escritura.EscribirFichero("Un usuario intento logearse en la aplicacion pero no puso bien los valores");
 					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
 	            	return false;
 	            }
 		}catch(Exception e) {
 			Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
+			Escritura.EscribirFichero("Hubo un error en el login "+e.getLocalizedMessage());
 			System.out.println(e.getLocalizedMessage());
 			return false;
 		}
@@ -117,6 +120,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
 			if(usuarioSiHay!=null) {
 				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
+				Escritura.EscribirFichero("Una persona intento registarse pero ya hay una cuenta con ese correo");
 				return false;
 			}
 			else {
@@ -125,22 +129,27 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
 	            Correo correo=new Correo();
 	            if(correo.EnviarCorreoToken(usuId)) {
+	            	Escritura.EscribirFichero("Un usuario creo bien una cuenta y se le envio el correo de alta");
 	            	return true;
 	            }
 	            else {
+	            	Escritura.EscribirFichero("Un usuario intento registrase pero no se le pudo enviar el correo");
 	            	return false;
 	            }
 			}	            
 			}catch (IllegalStateException e) {
+				Escritura.EscribirFichero("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Ya esta uso el metodo para insertar el usuario. |"+e);
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Ya esta uso el metodo para insertar el usuario. |"+e);
 			}catch (NullPointerException e) {
+				Escritura.EscribirFichero("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Hay un componente nulo. |"+e);
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Hay un componente nulo. |"+e);
 			}catch (SecurityException e) {
+				Escritura.EscribirFichero("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] El gerente de seguridad para indicar una violación de seguridad. |"+e);
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] El gerente de seguridad para indicar una violación de seguridad. |"+e);
 			}catch (IndexOutOfBoundsException e) {
+				Escritura.EscribirFichero("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Algun tipo (como una matriz, una cadena o un vector) está fuera de rango. |"+e);
 				System.err.println("[ERROR-ImplentacionIntereaccionUsuario-RegistrarUsuario] Algun tipo (como una matriz, una cadena o un vector) está fuera de rango. |"+e);
 			}
-			
 	return false;
 	}
 	@Override
@@ -157,6 +166,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			//Se comprueba si encontro el usuario
 			if(usuarioCorreo.getNombreUsuario()==null||usuarioCorreo.getNombreUsuario().equals("")||usuarioCorreo.getClaveUsuario()==null) {
 				Alerta.Alerta(null, "Este correo no esta asociado a niguna cuenta", "error");
+				Escritura.EscribirFichero("Un usuario olvido la contraseña pero no puso un correo qu no esta asociada a njinguna cuenta");
 				return false;
 			}
 			//Se crea el token 
@@ -176,10 +186,12 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
 			 if(ok) {
 				 acciones.InsertarToken(tokenMandarBD);
+				 Escritura.EscribirFichero("Un usuario olvido la contraseña y se le envio un correo para que la cambie");
 				 return true;
 			 }
 			 else {
 				 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
+				 Escritura.EscribirFichero("Un usuario olvido la contraseña pero no se le pudo mandar el correo");
 				 return false;
 			 }
 		}catch(IOException e)
@@ -192,6 +204,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		{
 			 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
 			System.err.println("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
+			Escritura.EscribirFichero("[ERROR-ImplentacionIntereaccionUsuario-OlvidarClaveUsuario] El .properties es nulo. |"+e);
 			return false;
 		}
 	}
@@ -209,6 +222,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            //LE añado uno hora del UTC
 	            fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
 	            if(actual.after(fechaAnterior)) {
+	            	Escritura.EscribirFichero("Un usuario quiso modificar una contraseña pero se le paso el tiempo para cambiarla");
 	            	Alerta.Alerta(request,"Paso el Tiempo de cambiar contraseña","error");
 	            }
 	            // Verificar si se obtuvo el usuario
@@ -216,10 +230,12 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	                // Actualizar la contraseña en el objeto UsuarioDTO
 	                usuarioActual.setClaveUsuario(clave1);
 	                // Realizar la actualización en el sistema externo
+	                Escritura.EscribirFichero("Un usuario cambio la contraseña correctamente");
 	                return acciones.ActualizarUsuario(usuarioActual);
 	            } else {
 	                System.out.println("No se pudo obtener el usuario para actualizar la contraseña.");
 	                Alerta.Alerta(request,"No se pudo obtener el usuario para actualizar la contraseña. ","error");
+	                Escritura.EscribirFichero("Un usuario intento cambiar la co ntraseña pero no se encontro su usuario");
 	                return false;
 	            }
 
@@ -227,6 +243,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            // Manejar cualquier excepción
 	            e.printStackTrace();
 	            Alerta.Alerta(request,"Hubo un erro intenlo de nuevo mas tarde","error");
+	            Escritura.EscribirFichero("Hubo un error en cambiar la contraseña "+e.getLocalizedMessage());
 	            return false;
 	        }
 	}
@@ -257,12 +274,14 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 				
 				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));
 				Alerta.Alerta(request, "Se elimino Totalmente al usuario", "success");
+				Escritura.EscribirFichero("Se elimino un usuario por completo "+usu.getNombreUsuario());
 				return true;
 			}
 			else {
 				usu.setFechaBaja(Calendar.getInstance());
 				acciones.ActualizarUsuario(usu);
 				Alerta.Alerta(request, "Se dio de Baja al Usuario", "success");
+				Escritura.EscribirFichero("Un usuario se dio de baja en la web "+usu.getNombreUsuario());
 				return true;
 			}
 		}

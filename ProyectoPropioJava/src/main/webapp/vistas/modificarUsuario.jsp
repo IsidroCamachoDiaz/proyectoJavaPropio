@@ -3,6 +3,11 @@
 <%@ page import="Dtos.UsuarioDTO" %>
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
+<%@ page import="java.util.Base64" %>
+<%@ page import="java.util.List" %>
+<%@ page import="Dtos.AccesoDTO" %>
+<%@ page import="Utilidades.Escritura" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,32 +26,38 @@
 	    accesoSesion = session.getAttribute("acceso").toString();
 	    if (accesoSesion.equals("1") || accesoSesion.equals("2")) {
 	    	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
+	    	Escritura.EscribirFichero("Un usuario o empleado intento entrar a la administracion");
 	    	response.sendRedirect("home.jsp");
 	    	return;
 	    }
 
 	} catch (Exception e) {
 	    Alerta.Alerta(request, "No ha iniciado Sesión en la web", "error");
+	    Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
 	    response.sendRedirect("../index.jsp");
 	    return;
 	}
 %>
 <%
-UsuarioDTO usuario =(UsuarioDTO) session.getAttribute("usuario");
-request.setAttribute("base64Image", session.getAttribute("imagen"));
+Escritura.EscribirFichero("Se accedio a modificar un usuario");
+implementacionCRUD acciones=new implementacionCRUD();
 
-//Coger id usuario
+String idUsuario = request.getParameter("id");
 
-implementacionCRUD acciones = new implementacionCRUD();
-String id = request.getParameter("id");
+UsuarioDTO usuarioCambiar = acciones.SeleccionarUsuario("Select/"+idUsuario);
 
-UsuarioDTO usuarioModificar = acciones.SeleccionarUsuario(id);
-
-if(usuarioModificar==null){
+if(usuarioCambiar==null){
 	Alerta.Alerta(request, "No se encontro al usuario", "warning");
 	response.sendRedirect("home.jsp");
 	return;
 }
+
+String fotoUsuario = Base64.getEncoder().encodeToString(usuarioCambiar.getFoto());
+
+UsuarioDTO usuario =acciones.SeleccionarUsuario("Select/"+session.getAttribute("usuario"));
+
+request.setAttribute("foto", fotoUsuario);
+request.setAttribute("base64Image", session.getAttribute("imagen"));
 
 %>
 	<!-- Lógica de JavaScript para mostrar la alerta -->
@@ -106,7 +117,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
-            <h2 class="text-white">Modificar Usuario <%=usuarioModificar.getNombreUsuario() %></h2>
+            <h2 class="text-white">Modificar Usuario <%=usuarioCambiar.getNombreUsuario() %></h2>
         </form>
     </div>
 
@@ -118,32 +129,52 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         </div>
        <div class="row tm-mb-90">            
     <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 text-center">
-        <img src="data:image/jpeg;base64,${base64Image}" alt="Image" class="img-fluid rounded">
+        <img src="data:image/jpeg;base64,${foto}" alt="Image" class="img-fluid rounded">
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
-        <form action="../ControladorPerfil" method="post" enctype="multipart/form-data" id="formulario">
-            <div class="form-group">
+        <form action="../ControladorActualizarUsuario" method="post" enctype="multipart/form-data" id="formulario">
+           
+           <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuarioModificar.getNombreUsuario() %>" >
+                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuarioCambiar.getNombreUsuario() %>" >
             </div>
 
             <!-- Campo de Número de Teléfono -->
             <div class="form-group">
                 <label for="telefono">Número de Teléfono:</label>
-                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuarioModificar.getTlfUsuario() %>">
-            </div>           
+                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuarioCambiar.getTlfUsuario() %>">
+            </div>
+                       
+			<label for="campo_select" class="form-label">Selecciona el acceso del usuario:</label>
+		    <select class="form-select" id="acceso" name="acceso">
+			<%
+			List <AccesoDTO> accesos=acciones.SeleccionarTodosAccesos();		
+			for(int i=0;i<accesos.size();i++){
+				if(accesos.get(i).getIdAcceso()==usuarioCambiar.getAcceso().getIdAcceso()){
+					%>
+					<option value="<%=accesos.get(i).getIdAcceso() %>" selected><%=accesos.get(i).getCodigoAcceso() %></option>
+					<%
+				}
+				else{
+					%><option value="<%=accesos.get(i).getIdAcceso() %>"><%=accesos.get(i).getCodigoAcceso() %></option><%
+				}
+		    }
+		    %>
+		    </select>
 			
             <!-- Campo de Subir Archivo (Imagen) -->
             <div class="form-group">
                 <label for="imagen">Imagen de Perfil:</label>
                 <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*">
             </div>
-            <input type="text" id="id" name="id" value="<%=String.valueOf(usuarioModificar.getIdUsuario()) %>" style="display: none;" >
-          </form>
-             <div class="mb-4 text-center">
-                <button class="btn btn-primary tm-btn-big"  onclick="showConfirmation()" >Modificar Perfil</button>
+            <input type="text" id="id" name="id" value="<%=String.valueOf(usuarioCambiar.getIdUsuario()) %>" style="display: none;" >
+          
+          <div class="mb-4 text-center">
+                <button class="btn btn-primary tm-btn-big"  type="submit" >Modificar Usuario</button>
             </div>
+          </form>
+             
         </div>
     </div>
 </div>
@@ -183,7 +214,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             });
         } else {
             // El formulario no ha sido modificado, no se muestra la alerta
-            document.getElementById("formulario").submit();
+            document.getElementById("formulario2").submit();
         }
     }
 </script>

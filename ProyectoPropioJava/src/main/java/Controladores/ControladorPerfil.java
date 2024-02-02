@@ -99,7 +99,6 @@ public class ControladorPerfil extends HttpServlet{
 			//Si no ha cambiado se le avisa
 			else {
 				Alerta.Alerta(request, "No hizo ninguna modificacion", "warning");
-
 			}	        	             	        	    
 	    }
 }

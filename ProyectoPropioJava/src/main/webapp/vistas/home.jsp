@@ -7,6 +7,7 @@
 <%@ page import="java.util.Base64" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Alerta" %>
+<%@ page import="Utilidades.Escritura" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,15 +32,15 @@ try {
 
 } catch (Exception e) {
     Alerta.Alerta(request, "No ha iniciado Sesión en la web", "error");
+    Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
     response.sendRedirect("../index.jsp");
     return;
 }
-System.out.println(accesoSesion);
+Escritura.EscribirFichero("Se accedio al home");
 implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
-UsuarioDTO user =(UsuarioDTO) session.getAttribute("usuario");
-//Selecciono el nuevi
-user = acciones.SeleccionarUsuario("Select/"+user.getIdUsuario());
+UsuarioDTO user =acciones.SeleccionarUsuario("Select/"+session.getAttribute("usuario"));
+
 //Convierto la imagen
 String base64Image = Base64.getEncoder().encodeToString(user.getFoto());
 
@@ -48,7 +49,26 @@ request.setAttribute("base64Image", base64Image);
 session.setAttribute("imagen", base64Image);
 
 %>
-
+	<!-- Lógica de JavaScript para mostrar la alerta -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+//Obtiene los atributos desde la sesión
+var mensaje = '<%= session.getAttribute("mensajeAlerta") %>';
+var tipo = '<%= session.getAttribute("tipoAlerta") %>';
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lógica para mostrar la alerta con SweetAlert2
+        if (mensaje !== null && tipo !== null && mensaje !== 'null' && tipo !== 'null') {
+        	console.log('Mensaje:', mensaje, 'Tipo:', tipo);
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'OK'
+            });
+            <%session.setAttribute("mensajeAlerta","null");
+            session.setAttribute("tipoAlerta","null"); %>
+        }
+    });
+</script>
     <!-- Page Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>

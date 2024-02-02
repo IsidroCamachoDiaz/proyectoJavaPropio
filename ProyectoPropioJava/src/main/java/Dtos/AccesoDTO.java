@@ -60,7 +60,7 @@ public class AccesoDTO {
 	 * Devuelve el id del Acceso 
 	 * @return devuelve id de Acceso
 	 */
-    public long getIdAcceso() {
+    public int getIdAcceso() {
         return idAccesoDto;
     }
 

@@ -69,6 +69,19 @@
 		<servlet-name>ControladorEliminarUsuario</servlet-name>
 		<url-pattern>/vistas/ControladorEliminarUsuario</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorActualizarUsuario</display-name>
+		<servlet-name>ControladorActualizarUsuario</servlet-name>
+		<servlet-class>Controladores.ControladorActualizarUsuario</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorActualizarUsuario</servlet-name>
+		<url-pattern>/ControladorActualizarUsuario</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

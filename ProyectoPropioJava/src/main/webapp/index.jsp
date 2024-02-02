@@ -87,7 +87,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
               </div>
               <div class="input-box">
                 <i class="fas fa-phone"></i>
-                <input type="text" placeholder="Introduzca Un Numero De Telefono" required name="telefonoUsuario">
+                <input type="tel" placeholder="Introduzca Un Numero De Telefono" required name="telefonoUsuario" pattern="[0-9]{9}">
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>

@@ -40,12 +40,22 @@ public class implementacionCRUD implements interfazCRUD {
     public List<UsuarioDTO> SeleccionarTodosUsuarios() {
         return hacerGetLista("usuario/Select", UsuarioDTO.class);
     }
+    
+    /**
+     * Realiza una solicitud GET para seleccionar todos los usuarios.
+     *
+     * @return Lista de objetos UsuarioDTO.
+     */
+    @Override
+    public List<AccesoDTO> SeleccionarTodosAccesos() {
+        return hacerGetLista("acceso/Select", AccesoDTO.class);
+    }
 
 
     /**
-     * Realiza una solicitud GET para seleccionar todas las incidencias.
+     * Realiza una solicitud GET para seleccionar todas los accesos.
      *
-     * @return Lista de objetos IncidenciaDTO.
+     * @return Lista de objetos AccesoDTO.
      */
     @Override
     public List<IncidenciaDTO> SeleccionarTodasIncidencias() {

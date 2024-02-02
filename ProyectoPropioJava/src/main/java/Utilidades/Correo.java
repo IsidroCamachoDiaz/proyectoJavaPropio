@@ -103,7 +103,20 @@ public class Correo {
                 + "    <p style=\"color: white;\">Gracias por unirte a nosotros.</p>\r\n"
                 + "</div>";
     }
-
+    /**
+     * Crea el cuerpo del correo para el mensaje de activacion de cuenta.
+     *
+     * @param direccion Dirección para activar la cuenta.
+     * @return String que representa el cuerpo del correo.
+     */
+    public String MensajeCorreoConfirmacionAlta(String nombreUsuario) {
+        // Cuerpo del correo en formato HTML
+        return "<div style=\"text-align: center; background-color: #3498db; padding: 20px;\">\r\n"
+                + "    <p style=\"color: white;\">¡Hola " + nombreUsuario + ", tu cuenta ha sido confirmada por uno de nustros administradores!</p>\r\n"
+                + "    <p style=\"color: white;\">Ya puedes comenzar a utilizar nuestros servicios.</p>\r\n"
+                + "    <p style=\"color: white;\">Gracias por ser parte de nuestra plataforma.</p>\r\n"
+                + "</div>";
+    }
     /**
      * Envía un mensaje de correo electrónico.
      *

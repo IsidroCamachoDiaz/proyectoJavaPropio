@@ -30,7 +30,7 @@ if(!acceso.equals("1")&&!acceso.equals("2")&&!acceso.equals("3")){
 	   response.sendRedirect("index.jsp");
 		
    }
- Escritura.EscribirFichero("Se accedio a modificar perfil");
+ Escritura.EscribirFichero("Se accedio a crear Usuario");
 %>
 <%
 implementacionCRUD acciones=new implementacionCRUD();
@@ -94,38 +94,38 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
-            <h2 class="text-white">Modificar Perfil</h2>
+            <h2 class="text-white">Crear Usuario</h2>
         </form>
     </div>
 
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary text-white">
-                Modifique lo que quiera de su usuario
+                Ingrese los datos del usuario que quiere crear
             </h2>
         </div>
        <div class="row tm-mb-90">            
     <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 text-center">
-        <img src="data:image/jpeg;base64,${base64Image}" alt="Image" class="img-fluid rounded">
+        <img src="https://www.equiposytalento.com/upload/talent_noticias/000/796/integracion_nuevos_empleados.jpg" alt="Image" class="img-fluid rounded">
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
         <form action="../ControladorPerfil" method="post" enctype="multipart/form-data" id="formulario">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuario.getNombreUsuario() %>" required>
+                <input type="text" class="form-control" id="nombre" name="nombre"required>
             </div>
 
             <!-- Campo de Número de Teléfono -->
             <div class="form-group">
                 <label for="telefono">Número de Teléfono:</label>
-                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuario.getTlfUsuario() %>" required >
+                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" required >
             </div>
             
             <!-- Campo de Número de Correo -->
             <div class="form-group">
                 <label for="correo">Correo Propio:</label>
-                <input type="email" class="form-control" id="correo" name="correo" value="<%=usuario.getEmailUsuario() %>" oninput="setFormModified(true)" required>
+                <input type="email" class="form-control" id="correo" name="correo"   equired>
             </div>
             
 			<!-- Campo contraseña -->
@@ -139,11 +139,10 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 <label for="imagen">Imagen de Perfil:</label>
                 <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*">
             </div>
-            <input type="text" id="id" name="id" value="<%=String.valueOf(usuario.getIdUsuario()) %>" style="display: none;" >
-          </form>
              <div class="mb-4 text-center">
-                <button class="btn btn-primary tm-btn-big"  onclick="showConfirmation()" >Modificar Perfil</button>
+                <button class="btn btn-primary tm-btn-big"  type="submit">Crear Usuario</button>
             </div>
+          </form>
         </div>
     </div>
 </div>
@@ -157,35 +156,5 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             $('body').addClass('loaded');
         });
     </script>
-<script>
-    var formModified = false;
-
-    function setFormModified(modified) {
-        formModified = modified;
-    }
-
-    function showConfirmation() {
-        if (formModified) {
-            Swal.fire({
-                title: 'Si Modifica el correo tendrá que volver a verificar el correo. ¿Está seguro?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, enviar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Envía el formulario si la confirmación es positiva
-                    document.getElementById("formulario").submit();
-                } else {
-                    // No hace nada si la confirmación es cancelada
-                    Swal.fire('Envío cancelado', '', 'info');
-                }
-            });
-        } else {
-            // El formulario no ha sido modificado, no se muestra la alerta
-            document.getElementById("formulario").submit();
-        }
-    }
-</script>
 </body>
 </html>

@@ -71,8 +71,8 @@ public interface interfazCRUD {
 	public List<TipoTrabajoDTO> SeleccionarTodosTiposDeTrabajo();
 	
 	public List<TrabajoDTO> SeleccionarTodosTrabajos();
+	
 	public List<TokenDTO> SeleccionarTodosTokens();
 	
-	
-	
+	public List<AccesoDTO> SeleccionarTodosAccesos();
 }
