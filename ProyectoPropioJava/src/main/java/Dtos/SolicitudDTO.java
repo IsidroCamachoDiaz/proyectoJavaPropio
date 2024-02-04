@@ -11,7 +11,8 @@ public class SolicitudDTO {
 	 
 	 @JsonProperty("descripcion")
 	 private String descripcion;
-		
+	 
+	 //Si es true es que esta hecho si esta false  es que no esta
 	 @JsonProperty("estado")
 		private boolean estado;
 		

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="Dtos.UsuarioDTO" %>
+<%@ page import="Dtos.SolicitudDTO" %>
 <%@ page import="java.awt.image.BufferedImage" %>
 <%@ page import="java.io.ByteArrayInputStream" %>
 <%@ page import="javax.imageio.ImageIO" %>
@@ -10,6 +11,7 @@
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="Utilidades.Escritura" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,14 +23,14 @@
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/templatemo-style.css">
 	<link rel="stylesheet" href="css/tabla.css">
-
+	
 </head>
 <body>
 <%
 String accesoSesion = "0";
 try {
     accesoSesion = session.getAttribute("acceso").toString();
-    if (accesoSesion.equals("1") || accesoSesion.equals("2")) {
+    if (accesoSesion.equals("2") || accesoSesion.equals("3")) {
     	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
     	Escritura.EscribirFichero("Un usuario o empleado intento entrar a la administracion");
     	response.sendRedirect("home.jsp");
@@ -40,7 +42,7 @@ try {
     response.sendRedirect("../index.jsp");
     return;
 }
-Escritura.EscribirFichero("Se accedio administracion de usuario");
+Escritura.EscribirFichero("Se accedio al panel de mostrar las solicitudes");
 System.out.println(accesoSesion);
 implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
@@ -111,71 +113,98 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
             <div class="user-info-container2 d-flex align-items-center">
-                <h2 class="text-white">Administracion De Usuarios</h2>
+                <h2 class="text-white">Solicitudes De <%=user.getNombreUsuario() %></h2>
             </div>
         </form>
     </div>
 	<%
 	
-	List <UsuarioDTO> usuarios=acciones.SeleccionarTodosUsuarios();
-	for(int i=0;i<usuarios.size();i++){
-		if(usuarios.get(i).getIdUsuario()==user.getIdUsuario()){
-			usuarios.remove(i);
-			break;
+	List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
+	List <SolicitudDTO> pendientes=new ArrayList <SolicitudDTO> ();
+	List <SolicitudDTO> finalizados=new ArrayList <SolicitudDTO> ();;
+	for(int i=0;i<solicitudes.size();i++){
+		if(solicitudes.get(i).getUsuarioSolicitud().getIdUsuario()!=user.getIdUsuario()){
+			solicitudes.remove(i);
+		}
+		else{
+			if(solicitudes.get(i).isEstado()){
+				finalizados.add(solicitudes.get(i));
+			}
+			else{
+				pendientes.add(solicitudes.get(i));
+			}
 		}
 	}
+	
 	%>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-12 table-container">
-				<table class="table"  style="background-color: #A875E8; color: #ffffff;">
-				    <thead>
-				      <tr>
-				      	<th>Foto</th>
-				      	<th>Correo</th>
-				        <th>Nombre de Usuario</th>
-				        <th>Telefono</th>
-				        <th>Nivel de Acceso</th>
-				        <th>Acciones</th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				    <%
-				    for(UsuarioDTO usuarioVer : usuarios){
-				    	String foto = Base64.getEncoder().encodeToString(usuarioVer.getFoto());
-				    	request.setAttribute("foto",foto);
-				    %>
-				      <tr>
-				        <td> <img class="rounded-circleVer user-avatarVer" src="data:image/jpeg;base64,${foto}" alt="Imagen de Usuario"></td>
-				        <td class="text-center"><%=usuarioVer.getEmailUsuario() %></td>
-				        <td class="text-center"><%=usuarioVer.getNombreUsuario() %></td>
-				        <td class="text-center"><%=usuarioVer.getTlfUsuario() %></td>
-				        <td class="text-center"><%=usuarioVer.getAcceso().getCodigoAcceso()%></td>
-				         <td>
-				         <form action="./ControladorEliminarUsuario" method="post" id="formBorrarUsuario<%=usuarioVer.getIdUsuario()%>">
-					        <input type="hidden" name="id" value="<%=usuarioVer.getIdUsuario()%>">
-					      </form>
-					      <button class="btn btn-danger"  onclick="confirmarBorrado('<%=usuarioVer.getIdUsuario()%>')">Borrar Usuario</button>
-					       <a href="modificarUsuario.jsp?id=<%=usuarioVer.getIdUsuario()%>">
-					        	<button  class="btn btn-success" type="button">Modificar Usuario</button>
-					      	</a>				        			        
-				         </td>
-				      </tr>
-					<%
-				    }
-					%>
-					 <tr>
-					 <td colspan="6" class="text-center" >
-					 <a href="crearUsuario.jsp">
-					      <button  class="btn btn-success" type="button">Crear Usuario</button>
-					  </a>	
-					 </td>
-					 </tr>
-				    </tbody>
-		  		</table>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarTabla('tabla1')">Solicitudes Pendientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarTabla('tabla2')">Solicitudes Finalizadas</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 table-container">
+            <table id="tabla1" class="table">
+                <caption class="text-center text-light">Solicitudes Pendientes</caption>
+                <thead>
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Fecha De Solicitud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(SolicitudDTO so:pendientes){ %>
+                        <tr>
+                            <td class="text-center"><%=so.getDescripcion() %></td>
+                            <td class="text-center"><%=so.getFechaSolicitud() %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <table id="tabla2" class="table" style="display: none;">
+                <caption class="text-center text-light">Solicitudes Finalizadas</caption>
+                <thead>
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Fecha De Solicitud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(SolicitudDTO so:finalizados){ %>
+                        <tr>
+                            <td class="text-center"><%=so.getDescripcion() %></td>
+                            <td class="text-center"><%=so.getFechaSolicitud() %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+	function mostrarTabla(tablaId) {
+	 // Oculta todas las tablas
+	 document.querySelectorAll('table').forEach(function(tabla) {
+	  tabla.style.display = 'none';
+	   });
+
+	 // Muestra la tabla seleccionada
+	  document.getElementById(tablaId).style.display = 'table';
+	    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
   function confirmarBorrado(idUsuario) {

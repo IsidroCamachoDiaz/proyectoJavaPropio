@@ -120,7 +120,7 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
  			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
  			if(usuarioSiHay!=null) {
  				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
- 				Escritura.EscribirFichero("Una persona intento registarse pero ya hay una cuenta con ese correo");
+ 				Escritura.EscribirFichero("Un administrador intento crear un usuario pero puso un correo que ya estaba registrado a una cuenta");
  				return false;
  			}
  			else {
@@ -129,13 +129,15 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
  	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
  	            Correo correo=new Correo();
  	            
- 	           String mensaje=correo.MensajeCorreo(usu.getNombreUsuario());
+ 	           String mensaje=correo.MensajeCorreoConfirmacionAlta(usu.getNombreUsuario());
  	           
  				boolean ok=correo.EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Bienvenido",seguridad.getProperty("correo"),true);
  	            if(ok) {
+ 	            	Escritura.EscribirFichero("Un administrador creo un usuario y se le envio un correo de alta en la web");
  	            	return true;
  	            }
  	            else {
+ 	            	Escritura.EscribirFichero("Un administrador creo un usuario pero no se le pudo enviar el correo");
  	            	Alerta.Alerta(request, "No se pudo mandar el correo", "error");
  	            	return false;
  	            }

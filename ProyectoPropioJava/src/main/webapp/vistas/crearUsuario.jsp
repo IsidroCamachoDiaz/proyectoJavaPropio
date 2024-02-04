@@ -110,7 +110,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
-        <form action="../ControladorPerfil" method="post" enctype="multipart/form-data" id="formulario">
+        <form action="../ControladorCrearUsuario" method="post" enctype="multipart/form-data" id="formulario">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
                 <input type="text" class="form-control" id="nombre" name="nombre"required>
@@ -143,6 +143,9 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 <button class="btn btn-primary tm-btn-big"  type="submit">Crear Usuario</button>
             </div>
           </form>
+           <a href="gestionUsuarios.jsp">
+				<button  class="btn btn-primary" type="button">Volver</button>
+			</a>	
         </div>
     </div>
 </div>

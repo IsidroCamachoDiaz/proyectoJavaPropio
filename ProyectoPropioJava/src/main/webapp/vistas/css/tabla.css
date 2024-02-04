@@ -43,3 +43,24 @@ tr:hover {
 	 background-color: #A875E8;
 }
 
+
+
+.navbar {
+            text-align: center; /* Centra los enlaces de navegación */
+        }
+        
+        .navbar a {
+            margin-right: 15px; /* Añade espacio entre los enlaces */
+        }
+        
+        .table-container {
+            margin-top: -80px; /* Añade espacio entre la navegación y las tablas */
+        }
+        
+#tabla1{
+	 margin-top: -400px;
+}
+
+#tabla2{
+	 margin-top: -400px;
+}
