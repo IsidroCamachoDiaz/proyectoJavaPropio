@@ -5,7 +5,9 @@ TemplateMo 556 Catalog-Z
 https://templatemo.com/tm-556-catalog-z
 
 */
-
+.fa-bars{
+	color:white;
+}
 .user-info-container2 {
     margin-right: 15px; /* Ajusta el espacio entre la imagen y el texto según sea necesario */
 }
@@ -610,7 +612,7 @@ select:not([multiple]) {
         position: fixed;
         top: 50px;
         right: 0px;
-        background: white;
+        background: #7d2ae8;
         width: 150px;
         padding: 15px;
     }

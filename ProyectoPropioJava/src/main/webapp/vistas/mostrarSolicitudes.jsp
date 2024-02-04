@@ -143,10 +143,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <div class="container">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="mostrarTabla('tabla1')">Solicitudes Pendientes</a>
+                        <a class="nav-link" onclick="mostrarTabla('tabla1')">Solicitudes Pendientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="mostrarTabla('tabla2')">Solicitudes Finalizadas</a>
+                        <a class="nav-link" onclick="mostrarTabla('tabla2')">Solicitudes Finalizadas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="crearSolicitud.jsp" >Crear Solicitud</a>
                     </li>
                 </ul>
             </div>

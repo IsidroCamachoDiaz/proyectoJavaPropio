@@ -153,4 +153,15 @@ public class IncidenciaDTO {
 			this.fecha_inicio = fecha_inicio;
 			this.fecha_fin = fecha_fin;
 		}
+
+		public IncidenciaDTO(String descripcion_usuario, boolean estado, SolicitudDTO solicitud) {
+			super();
+			this.descripcion_usuario = descripcion_usuario;
+			this.estado = estado;
+			this.solicitud = solicitud;
+		}
+		
+		
+		
+		
 }
