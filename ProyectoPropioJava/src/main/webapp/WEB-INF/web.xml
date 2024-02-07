@@ -95,6 +95,19 @@
 		<servlet-name>ControladorCrearUsuario</servlet-name>
 		<url-pattern>/ControladorCrearUsuario</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorCrearSolicitud</display-name>
+		<servlet-name>ControladorCrearSolicitud</servlet-name>
+		<servlet-class>Controladores.ControladorCrearSolicitud</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorCrearSolicitud</servlet-name>
+		<url-pattern>/ControladorCrearSolicitud</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

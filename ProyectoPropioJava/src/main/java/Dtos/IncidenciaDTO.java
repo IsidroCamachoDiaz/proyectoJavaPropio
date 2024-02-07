@@ -3,6 +3,8 @@ package Dtos;
 import java.util.Calendar;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IncidenciaDTO {
@@ -30,6 +32,7 @@ public class IncidenciaDTO {
 	@JsonProperty("fecha_fin")
 	private Calendar fecha_fin;
 	
+	@JsonBackReference
 	@JsonProperty("id_solicitud")
 	private SolicitudDTO solicitud;
 	

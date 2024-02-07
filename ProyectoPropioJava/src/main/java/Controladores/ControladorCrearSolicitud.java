@@ -50,6 +50,10 @@ public class ControladorCrearSolicitud extends HttpServlet {
 			 	//Creamos la solicitud y la incidencia
 				SolicitudDTO solicitud = new SolicitudDTO(request.getParameter("descripcion"),false,Calendar.getInstance(),user);
 				
+				if(solicitud.getDescripcion().equals(null)||solicitud.getDescripcion().equals("")) {
+					Alerta.Alerta(request,"No introdujo ningun descripcion del problema","info");
+					response.sendRedirect("vistas/crearSolicitud.jsp");
+				}
 				IncidenciaDTO incidencia =new IncidenciaDTO(request.getParameter("descripcion"),false,solicitud);
 				solicitud.setIncidenciaSolicitud(incidencia);
 				
@@ -60,10 +64,11 @@ public class ControladorCrearSolicitud extends HttpServlet {
 					//Comprobamos si se creo bien la incidencia
 					if(impl.CrearIncidencia(solicitud, incidencia, request)) {
 						Alerta.Alerta(request,"Se envio la Solicitud Correctamente","success");
-						response.sendRedirect("vistas/crearUsuario.jsp");
+						response.sendRedirect("vistas/home.jsp");
 					}
 					else {
-						response.sendRedirect("index.jsp");
+						Alerta.Alerta(request,"Hubo un fallo al crear la solicitud","error");
+						response.sendRedirect("vistas/home.jsp");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

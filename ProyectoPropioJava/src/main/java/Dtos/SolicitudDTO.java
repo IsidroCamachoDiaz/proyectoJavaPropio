@@ -2,6 +2,7 @@ package Dtos;
 
 import java.util.Calendar;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SolicitudDTO {
@@ -19,9 +20,10 @@ public class SolicitudDTO {
 	 @JsonProperty("fch_limite")
 		private Calendar fechaSolicitud;
 	 
-	 @JsonProperty("usuario_solicitud")
-	 private UsuarioDTO usuarioSolicitud;
+	 @JsonProperty("cliente")
+	 private UsuarioDTO cliente;
 	 
+	 @JsonManagedReference
 	 @JsonProperty("incidencia")
 	 private IncidenciaDTO incidenciaSolicitud;
 
@@ -38,7 +40,7 @@ public class SolicitudDTO {
 	     this.descripcion = descripcion;
 	     this.estado = estado;
 	     this.fechaSolicitud = fechaSolicitud;
-	     this.usuarioSolicitud = usuario;
+	     this.cliente = usuario;
 	 }
 
 	 /**
@@ -142,7 +144,7 @@ public class SolicitudDTO {
 	  * @return Objeto UsuarioDTO asociado a la solicitud.
 	  */
 	 public UsuarioDTO getUsuarioSolicitud() {
-	     return usuarioSolicitud;
+	     return cliente;
 	 }
 
 	 /**
@@ -151,7 +153,7 @@ public class SolicitudDTO {
 	  * @param usuarioSolicitud Nuevo objeto UsuarioDTO asociado a la solicitud.
 	  */
 	 public void setUsuarioSolicitud(UsuarioDTO usuarioSolicitud) {
-	     this.usuarioSolicitud = usuarioSolicitud;
+	     this.cliente = usuarioSolicitud;
 	 }
 
 	 /**
@@ -180,7 +182,7 @@ public class SolicitudDTO {
 	 @Override
 	 public String toString() {
 	     return "SolicitudDTO [idSolicitud=" + idSolicitud + ", descripcion=" + descripcion + ", estado=" + estado
-	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + usuarioSolicitud
+	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + cliente
 	             + ", incidenciaSolicitud=" + incidenciaSolicitud + "]";
 	 }
 
