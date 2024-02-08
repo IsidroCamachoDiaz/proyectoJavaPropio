@@ -265,7 +265,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			        .collect(Collectors.toList());
 			
 			solicitudes = solicitudes.stream()
-	                .filter(solicitud -> solicitud.getUsuarioSolicitud().getIdUsuario() == usu.getIdUsuario())
+	                .filter(solicitud -> solicitud.getCliente().getIdUsuario() == usu.getIdUsuario())
 	                .collect(Collectors.toList());
 			if(solicitudes.isEmpty()) {
 				for(int i=0;i<tokens.size();i++) {

@@ -124,7 +124,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 	List <SolicitudDTO> pendientes=new ArrayList <SolicitudDTO> ();
 	List <SolicitudDTO> finalizados=new ArrayList <SolicitudDTO> ();
 	for(int i=0;i<solicitudes.size();i++){
-		if(solicitudes.get(i).getUsuarioSolicitud().getIdUsuario()!=user.getIdUsuario()){
+		if(solicitudes.get(i).getCliente().getIdUsuario()!=user.getIdUsuario()){
 			solicitudes.remove(i);
 		}
 		else{

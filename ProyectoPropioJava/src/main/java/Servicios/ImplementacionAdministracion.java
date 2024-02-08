@@ -40,7 +40,7 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
     	 
     	 //Las filtramos por la del usuario
 		 solicitudes = solicitudes.stream()
-	                .filter(solicitud -> solicitud.getUsuarioSolicitud().getIdUsuario() == usuario.getIdUsuario())
+	                .filter(solicitud -> solicitud.getCliente().getIdUsuario() == usuario.getIdUsuario())
 	                .collect(Collectors.toList());
     	 
 		 //Comprobamos que usuario se le va a dar

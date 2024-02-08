@@ -26,7 +26,7 @@ public class SolicitudDTO implements Serializable {
 	private Calendar fechaSolicitud;
 	 
 	 @JsonProperty("cliente")
-	 private UsuarioDTO clienteSolicitud;
+	 private UsuarioDTO cliente;
 	 
 	 @JsonManagedReference
 	 @JsonProperty("incidencia")
@@ -45,7 +45,7 @@ public class SolicitudDTO implements Serializable {
 	     this.descripcion = descripcion;
 	     this.estado = estado;
 	     this.fechaSolicitud = fechaSolicitud;
-	     this.clienteSolicitud = usuario;
+	     this.cliente = usuario;
 	 }
 
 	 /**
@@ -148,8 +148,8 @@ public class SolicitudDTO implements Serializable {
 	  * 
 	  * @return Objeto UsuarioDTO asociado a la solicitud.
 	  */
-	 public UsuarioDTO getUsuarioSolicitud() {
-	     return clienteSolicitud;
+	 public UsuarioDTO getCliente() {
+	     return cliente;
 	 }
 
 	 /**
@@ -158,7 +158,7 @@ public class SolicitudDTO implements Serializable {
 	  * @param usuarioSolicitud Nuevo objeto UsuarioDTO asociado a la solicitud.
 	  */
 	 public void setUsuarioSolicitud(UsuarioDTO usuarioSolicitud) {
-	     this.clienteSolicitud = usuarioSolicitud;
+	     this.cliente = usuarioSolicitud;
 	 }
 
 	 /**
@@ -178,6 +178,10 @@ public class SolicitudDTO implements Serializable {
 	 public void setIncidenciaSolicitud(IncidenciaDTO incidenciaSolicitud) {
 	     this.incidenciaSolicitud = incidenciaSolicitud;
 	 }
+	 
+	public void setCliente(UsuarioDTO cliente) {
+		this.cliente = cliente;
+	}
 
 	 /**
 	  * Representación en cadena del objeto SolicitudDTO.
@@ -187,9 +191,13 @@ public class SolicitudDTO implements Serializable {
 	 @Override
 	 public String toString() {
 	     return "SolicitudDTO [idSolicitud=" + idSolicitud + ", descripcion=" + descripcion + ", estado=" + estado
-	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + clienteSolicitud
+	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + cliente
 	             + ", incidenciaSolicitud=" + incidenciaSolicitud + "]";
 	 }
+
+
+	 
+	 
 
 	
 	 
