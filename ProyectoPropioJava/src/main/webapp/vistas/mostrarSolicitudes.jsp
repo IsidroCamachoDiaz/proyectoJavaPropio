@@ -12,6 +12,7 @@
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="Utilidades.Escritura" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +122,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 	
 	List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
 	List <SolicitudDTO> pendientes=new ArrayList <SolicitudDTO> ();
-	List <SolicitudDTO> finalizados=new ArrayList <SolicitudDTO> ();;
+	List <SolicitudDTO> finalizados=new ArrayList <SolicitudDTO> ();
 	for(int i=0;i<solicitudes.size();i++){
 		if(solicitudes.get(i).getUsuarioSolicitud().getIdUsuario()!=user.getIdUsuario()){
 			solicitudes.remove(i);
@@ -167,10 +168,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(SolicitudDTO so:pendientes){ %>
+                    <% for(SolicitudDTO so:pendientes){ 
+                  	  SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                      String fechaFormateada = sdf.format(so.getFechaSolicitud().getTime());
+                    %>
                         <tr>
                             <td class="text-center"><%=so.getDescripcion() %></td>
-                            <td class="text-center"><%=so.getFechaSolicitud() %></td>
+                            <td class="text-center"><%=fechaFormateada %></td>
                         </tr>
                     <% } %>
                 </tbody>
@@ -185,10 +189,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(SolicitudDTO so:finalizados){ %>
+                    <% for(SolicitudDTO so:finalizados){ 
+                    	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        String fechaFormateada = sdf.format(so.getFechaSolicitud().getTime());
+                    %>
                         <tr>
                             <td class="text-center"><%=so.getDescripcion() %></td>
-                            <td class="text-center"><%=so.getFechaSolicitud() %></td>
+                            <td class="text-center"><%=fechaFormateada %></td>
                         </tr>
                     <% } %>
                 </tbody>

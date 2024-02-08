@@ -17,13 +17,13 @@ public class IncidenciaDTO {
 	@JsonProperty("descripcion_tecnica")
 	private String descripcion_tecnica;
 	
-	@JsonProperty("horas_incidencia")
+	@JsonProperty("horas")
 	private int horas;
 	
-	@JsonProperty("coste_incidencia")
+	@JsonProperty("coste")
 	private float coste;
 	
-	@JsonProperty("estado_incidencia")
+	@JsonProperty("estado")
 	private boolean estado;
 	
 	@JsonProperty("fecha_inicio")
@@ -33,10 +33,10 @@ public class IncidenciaDTO {
 	private Calendar fecha_fin;
 	
 	@JsonBackReference
-	@JsonProperty("id_solicitud")
+	@JsonProperty("solicitud")
 	private SolicitudDTO solicitud;
 	
-	@JsonProperty("id_usuario")
+	@JsonProperty("empleado")
 	private UsuarioDTO empleado;
 	
 	@JsonProperty("incidencia")

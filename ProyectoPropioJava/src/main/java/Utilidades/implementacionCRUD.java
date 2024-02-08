@@ -338,6 +338,7 @@ public class implementacionCRUD implements interfazCRUD {
             connection.setRequestProperty("Content-Type", "application/json");
 
             ObjectMapper objectMapper = new ObjectMapper();
+
             String jsonEntidad = objectMapper.writeValueAsString(entidad);
 
             try (OutputStream os = connection.getOutputStream()) {

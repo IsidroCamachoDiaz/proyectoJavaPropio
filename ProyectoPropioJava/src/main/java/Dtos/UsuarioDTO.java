@@ -1,9 +1,13 @@
 package Dtos;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -24,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param fchBajaUsuarioDto fecha de baja del usuario
  * @param acceso indica el acceso del usuario
  */
-public class UsuarioDTO {
+public class UsuarioDTO implements Serializable {
 	
 	@JsonProperty("id_usuario")
 	private int idUsuario;
@@ -55,6 +59,10 @@ public class UsuarioDTO {
 	
 	@JsonProperty("tokens_usuario")
 	private List<TokenDTO> listaTokensUsuario;
+	
+	@JsonProperty("solicitudes_usuario")
+	private List <SolicitudDTO> solicitudesUsuario;
+	
 
 	//Construtores
    

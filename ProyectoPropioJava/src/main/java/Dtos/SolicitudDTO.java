@@ -1,11 +1,16 @@
 package Dtos;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SolicitudDTO {
+public class SolicitudDTO implements Serializable {
 	
 	 @JsonProperty("id_solicitud")
 	    private int idSolicitud;
@@ -18,10 +23,10 @@ public class SolicitudDTO {
 		private boolean estado;
 		
 	 @JsonProperty("fch_limite")
-		private Calendar fechaSolicitud;
+	private Calendar fechaSolicitud;
 	 
 	 @JsonProperty("cliente")
-	 private UsuarioDTO cliente;
+	 private UsuarioDTO clienteSolicitud;
 	 
 	 @JsonManagedReference
 	 @JsonProperty("incidencia")
@@ -40,7 +45,7 @@ public class SolicitudDTO {
 	     this.descripcion = descripcion;
 	     this.estado = estado;
 	     this.fechaSolicitud = fechaSolicitud;
-	     this.cliente = usuario;
+	     this.clienteSolicitud = usuario;
 	 }
 
 	 /**
@@ -144,7 +149,7 @@ public class SolicitudDTO {
 	  * @return Objeto UsuarioDTO asociado a la solicitud.
 	  */
 	 public UsuarioDTO getUsuarioSolicitud() {
-	     return cliente;
+	     return clienteSolicitud;
 	 }
 
 	 /**
@@ -153,7 +158,7 @@ public class SolicitudDTO {
 	  * @param usuarioSolicitud Nuevo objeto UsuarioDTO asociado a la solicitud.
 	  */
 	 public void setUsuarioSolicitud(UsuarioDTO usuarioSolicitud) {
-	     this.cliente = usuarioSolicitud;
+	     this.clienteSolicitud = usuarioSolicitud;
 	 }
 
 	 /**
@@ -182,7 +187,7 @@ public class SolicitudDTO {
 	 @Override
 	 public String toString() {
 	     return "SolicitudDTO [idSolicitud=" + idSolicitud + ", descripcion=" + descripcion + ", estado=" + estado
-	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + cliente
+	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + clienteSolicitud
 	             + ", incidenciaSolicitud=" + incidenciaSolicitud + "]";
 	 }
 
