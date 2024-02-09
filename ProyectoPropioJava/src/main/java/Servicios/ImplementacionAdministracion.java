@@ -114,28 +114,37 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
  	public boolean CrearUsuario(UsuarioDTO usu,HttpServletRequest request) {
  		
  		try{
+ 			//Declaramos lo que necesitemos
  			Properties seguridad = new Properties();
 				seguridad.load(ImplementacionAdministracion.class.getResourceAsStream("/Utilidades/parametros.properties"));
  			implementacionCRUD acciones = new implementacionCRUD();
+ 			
+ 			//Creamos un usuario paar buscar por el correo para comprobar si alhuna cuenta tiene asociado el correo
  			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
  			if(usuarioSiHay!=null) {
  				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
  				Escritura.EscribirFichero("Un administrador intento crear un usuario pero puso un correo que ya estaba registrado a una cuenta");
  				return false;
  			}
+ 			//Esta disponible el correo
  			else {
+ 				//Se inserta con los datos y se vuelve a coger ya con id
  				acciones.InsertarUsuario(usu);
  	            
  	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
  	            Correo correo=new Correo();
  	            
+ 	            //Creamos el mensaje de comfirmacion de uso de cuenta y se usa un booleano para comprobar el envio del correo
  	           String mensaje=correo.MensajeCorreoConfirmacionAlta(usu.getNombreUsuario());
  	           
  				boolean ok=correo.EnviarMensaje(mensaje,usu.getEmailUsuario(),true,"Bienvenido",seguridad.getProperty("correo"),true);
- 	            if(ok) {
+ 	            
+ 				//Comprobamos si se envio
+ 				if(ok) {
  	            	Escritura.EscribirFichero("Un administrador creo un usuario y se le envio un correo de alta en la web");
  	            	return true;
  	            }
+ 				//Si no se envio el correo se avisa al usuario
  	            else {
  	            	Escritura.EscribirFichero("Un administrador creo un usuario pero no se le pudo enviar el correo");
  	            	Alerta.Alerta(request, "No se pudo mandar el correo", "error");

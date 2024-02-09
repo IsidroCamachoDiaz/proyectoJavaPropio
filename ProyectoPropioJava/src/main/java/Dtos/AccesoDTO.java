@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author El Equipazo de los Lentos
+ * @author Isidro Camacho Diaz
  * 
  * @param idAccesoDto Identificador de Acceso
  * @param codigoAccesoDto El Codigo de Acceso

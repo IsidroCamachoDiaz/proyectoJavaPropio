@@ -52,7 +52,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		
 		
 		try {
-			//Se le pasa la url
+			//Declaramos todo lo que necesitemos
 				
 				UsuarioDTO usuarioBD;
 		        HttpSession session = request.getSession();
@@ -78,11 +78,13 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            		Alerta.Alerta(request,"El usuario no esta dado de alta en la web", "error");
 	            		return false;
 	            	}
+	            	//Comprobamos si esta dado de baja
 	            	else if(usuarioBD.getFechaBaja()!=null) {
 	            		Escritura.EscribirFichero("Un usuario a intentado darse de alta pero suc uenta esta dada de baja");
 	            		Alerta.Alerta(request,"Su cuenta ha sido dada de baja gracias por confiar en nosotros", "info");
 	            		return false;
 	            	}
+	            	//Es un usuario valido
 	            	else {
 	            		//Asignamos el usuario y el control de acceso de vada usuario
 	                	session.setAttribute("usuario",usuarioBD.getIdUsuario());
@@ -95,10 +97,12 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            		else {
 	            			session.setAttribute("acceso","3");
 	            		}
+	            		
 	            		Escritura.EscribirFichero("Un usuario se logeo bien en la web");
 	            		return true;
 	            	}
 	            }
+	            //El usuario no puso bien los datos al logearse
 	            else {
 	            	Escritura.EscribirFichero("Un usuario intento logearse en la aplicacion pero no puso bien los valores");
 					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
@@ -116,22 +120,32 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	public boolean RegistrarUsuario(UsuarioDTO usu,HttpServletRequest request) {
 		
 		try{
+			//Declaramos lo que necesitemos
 			implementacionCRUD acciones = new implementacionCRUD();
+			
+			//Creamos un usuario para buscar si el correo que se regsitre esta asociado a un cuenta
 			UsuarioDTO usuarioSiHay =acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
+			
+			//Si no es nulo existe una cuenta
 			if(usuarioSiHay!=null) {
 				Alerta.Alerta(request, "Ya existe una cuenta con ese correo", "error");
 				Escritura.EscribirFichero("Una persona intento registarse pero ya hay una cuenta con ese correo");
 				return false;
 			}
+			//SI no exite se inserta el usuario con los datos
 			else {
 				acciones.InsertarUsuario(usu);
 	            
+				//Cogemos el usuario por el correo y lo tenemos con el id
 	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
+	            
 	            Correo correo=new Correo();
+	            //Comprobamos si se envia bien el correo de alta
 	            if(correo.EnviarCorreoToken(usuId)) {
 	            	Escritura.EscribirFichero("Un usuario creo bien una cuenta y se le envio el correo de alta");
 	            	return true;
 	            }
+	            //Si no se envia bien se le avisa al usuario
 	            else {
 	            	Escritura.EscribirFichero("Un usuario intento registrase pero no se le pudo enviar el correo");
 	            	return false;
@@ -159,36 +173,45 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			//Se crea un objeto properties para coger los valores
 			Properties seguridad = new Properties();
 			implementacionCRUD acciones = new implementacionCRUD();
+			
 			//Se cargar los valores 
 			seguridad.load(ImplentacionIntereaccionUsuario.class.getResourceAsStream("/Utilidades/parametros.properties"));
+			
 			//Aqui tiene que ir el buscar el usuario por el correo
 			UsuarioDTO usuarioCorreo=acciones.SeleccionarUsuario("SelectCorreo/"+correo);
+			
 			//Se comprueba si encontro el usuario
 			if(usuarioCorreo.getNombreUsuario()==null||usuarioCorreo.getNombreUsuario().equals("")||usuarioCorreo.getClaveUsuario()==null) {
 				Alerta.Alerta(null, "Este correo no esta asociado a niguna cuenta", "error");
 				Escritura.EscribirFichero("Un usuario olvido la contraseña pero no puso un correo qu no esta asociada a njinguna cuenta");
 				return false;
 			}
+			
 			//Se crea el token 
 			UUID uuid = UUID.randomUUID();
 			String token = uuid.toString();
+			
 			//Aqui generas la fecha limite con un tiempo de 10 minutos
 			TokenDTO tokenMandarBD= new TokenDTO();
 			tokenMandarBD.setFch_limite(new GregorianCalendar());
 			tokenMandarBD.getFch_limite().add(Calendar.MINUTE, 10);
 			tokenMandarBD.setToken(token);
 			tokenMandarBD.setId_usuario(usuarioCorreo);
+			
 			//Aqui una vez encuentre el usuario insertas el token generado arriba y 
 			//lo inserta con la fecha limite, id_Usuario
 			Correo correo2= new Correo();
 			 String mensaje=correo2.MensajeCorreo(token);
+			 
 			 ok=correo2.EnviarMensaje(mensaje,correo,true,"Recuperar Contraseña",seguridad.getProperty("correo"),true);
-			//Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
+			
+			 //Meter en un if si el usuario se encontro que haga el resto (tiene que llegar hasta ok=EnviarMensaje...)
 			 if(ok) {
 				 acciones.InsertarToken(tokenMandarBD);
 				 Escritura.EscribirFichero("Un usuario olvido la contraseña y se le envio un correo para que la cambie");
 				 return true;
 			 }
+			 //Si no se manda bien el correo se le avisa al usuario
 			 else {
 				 Alerta.Alerta(request, "Hubo un erroe intentelo mas tarde", "error");
 				 Escritura.EscribirFichero("Un usuario olvido la contraseña pero no se le pudo mandar el correo");
@@ -215,12 +238,17 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
        	  		implementacionCRUD acciones= new implementacionCRUD();
 	            // Obtener el usuario actual
 	            UsuarioDTO usuarioActual =acciones.SeleccionarUsuario("Select/"+token.getId_usuario().getIdUsuario());
+	            
 	            //Cogemos la fecha actual
 	            Calendar actual = new GregorianCalendar();
+	            
 	            //Cogeos la fecha limite
 	            Calendar fechaAnterior = token.getFch_limite();
-	            //LE añado uno hora del UTC
+	            
+	            //Le añado uno hora del UTC
 	            fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
+	            
+	            //Comprobamos si paso el tiempo para cambiar la contraseña
 	            if(actual.after(fechaAnterior)) {
 	            	Escritura.EscribirFichero("Un usuario quiso modificar una contraseña pero se le paso el tiempo para cambiarla");
 	            	Alerta.Alerta(request,"Paso el Tiempo de cambiar contraseña","error");
@@ -229,6 +257,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            if (usuarioActual != null) {
 	                // Actualizar la contraseña en el objeto UsuarioDTO
 	                usuarioActual.setClaveUsuario(clave1);
+	                
 	                // Realizar la actualización en el sistema externo
 	                Escritura.EscribirFichero("Un usuario cambio la contraseña correctamente");
 	                return acciones.ActualizarUsuario(usuarioActual);
@@ -250,7 +279,9 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 
 	@Override
 	public boolean eliminarUsuario(UsuarioDTO usu, HttpServletRequest request) {
+		//Declaramos loq ue necesitemos
 		implementacionCRUD acciones = new implementacionCRUD();
+		//Comprobamos que ti`po de acceso tiene el usuario
 		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")) {
 			
 		}
@@ -258,7 +289,10 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			
 		}
 		else {
+			//Si es usuario cogemos todas las solicitudes y las filtramos por las suyas
 			List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
+			
+			//Cogemos tambien todos los tokens y filtramos por las suyas
 			List <TokenDTO> tokens= acciones.SeleccionarTodosTokens();
 			tokens= tokens.stream()
 			        .filter(t -> t.getId_usuario().getIdUsuario() == usu.getIdUsuario())
@@ -267,16 +301,21 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			solicitudes = solicitudes.stream()
 	                .filter(solicitud -> solicitud.getCliente().getIdUsuario() == usu.getIdUsuario())
 	                .collect(Collectors.toList());
+			
+			//Comprobamos si tiene solicitudes o no
 			if(solicitudes.isEmpty()) {
+				//Si no tiene borramos todo lo que tengamos del usuario
 				for(int i=0;i<tokens.size();i++) {
 					acciones.EliminarToken(String.valueOf(tokens.get(i).getIdToken()));
 				}
 				
 				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));
+				
 				Alerta.Alerta(request, "Se elimino Totalmente al usuario", "success");
 				Escritura.EscribirFichero("Se elimino un usuario por completo "+usu.getNombreUsuario());
 				return true;
 			}
+			//Si tiene solicitudes lo damos de baja y actualizamos el usuario
 			else {
 				usu.setFechaBaja(Calendar.getInstance());
 				acciones.ActualizarUsuario(usu);

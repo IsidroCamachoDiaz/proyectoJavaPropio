@@ -2,6 +2,19 @@ package Dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Clase que representa un trabajo con sus atributos y métodos asociados.
+ * Esta clase es un Data Transfer Object (DTO) para transferir información de trabajos.
+ * 
+ * @author Isidro Camacho Diaz
+ * 
+ * @param id_trabajo Identificador del trabajo.
+ * @param descripcion Descripción del trabajo.
+ * @param estado Estado del trabajo (true si está completado, false si no está completado).
+ * @param horas Horas dedicadas al trabajo.
+ * @param incidencia Objeto IncidenciaDTO asociado al trabajo.
+ * @param tipoIncidencia Objeto TipoTrabajoDTO asociado al tipo de incidencia.
+ */ 
 public class TrabajoDTO {
 	
 	//Atributos
@@ -26,32 +39,55 @@ public class TrabajoDTO {
 	
 	//Constructores
 
+	/**
+	 * Constructor para crear un objeto TrabajoDTO con todos los atributos.
+	 * 
+	 * @param descripcion Descripción del trabajo.
+	 * @param estado Estado del trabajo.
+	 * @param horas Horas dedicadas al trabajo.
+	 * @param incidencia Objeto IncidenciaDTO asociado al trabajo.
+	 * @param tipoIncidencia Objeto TipoTrabajoDTO asociado al tipo de incidencia.
+	 */
 	public TrabajoDTO(String descripcion, boolean estado, int horas, IncidenciaDTO incidencia,
-			TipoTrabajoDTO tipoIncidencia) {
-		super();
-		this.descripcion = descripcion;
-		this.estado = estado;
-		this.horas = horas;
-		this.incidencia = incidencia;
-		this.tipoIncidencia = tipoIncidencia;
+	        TipoTrabajoDTO tipoIncidencia) {
+	    super();
+	    this.descripcion = descripcion;
+	    this.estado = estado;
+	    this.horas = horas;
+	    this.incidencia = incidencia;
+	    this.tipoIncidencia = tipoIncidencia;
 	}
 
+	/**
+	 * Constructor para crear un objeto TrabajoDTO con todos los atributos.
+	 * 
+	 * @param id_trabajo Identificador del trabajo.
+	 * @param descripcion Descripción del trabajo.
+	 * @param estado Estado del trabajo.
+	 * @param horas Horas dedicadas al trabajo.
+	 * @param incidencia Objeto IncidenciaDTO asociado al trabajo.
+	 * @param tipoIncidencia Objeto TipoTrabajoDTO asociado al tipo de incidencia.
+	 */
 	public TrabajoDTO(int id_trabajo, String descripcion, boolean estado, int horas, IncidenciaDTO incidencia,
-			TipoTrabajoDTO tipoIncidencia) {
-		super();
-		this.id_trabajo = id_trabajo;
-		this.descripcion = descripcion;
-		this.estado = estado;
-		this.horas = horas;
-		this.incidencia = incidencia;
-		this.tipoIncidencia = tipoIncidencia;
+	        TipoTrabajoDTO tipoIncidencia) {
+	    super();
+	    this.id_trabajo = id_trabajo;
+	    this.descripcion = descripcion;
+	    this.estado = estado;
+	    this.horas = horas;
+	    this.incidencia = incidencia;
+	    this.tipoIncidencia = tipoIncidencia;
 	}
+
+	/**
+	 * Constructor predeterminado para crear un objeto TrabajoDTO sin atributos.
+	 */
+	public TrabajoDTO() {
+	    super();
+	}
+
 	
 	//Geters y Seters
-	
-	public TrabajoDTO() {
-		super();
-	}
 
 	public int getId_trabajo() {
 		return id_trabajo;

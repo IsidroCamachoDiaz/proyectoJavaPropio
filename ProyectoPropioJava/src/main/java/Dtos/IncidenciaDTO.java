@@ -7,6 +7,24 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Clase que representa una incidencia con sus atributos y métodos asociados.
+ * Esta clase es un Data Transfer Object (DTO) para transferir información de incidencias.
+ * 
+ * @author Isidro Camacho Diaz
+ * 
+ * @param id_incidencia Identificador de la incidencia
+ * @param descripcion_usuario Descripción de la incidencia proporcionada por el usuario
+ * @param descripcion_tecnica Descripción técnica de la incidencia
+ * @param horas Horas dedicadas a resolver la incidencia
+ * @param coste Coste asociado a la incidencia
+ * @param estado Estado de la incidencia (resuelta o no)
+ * @param fecha_inicio Fecha de inicio de la incidencia
+ * @param fecha_fin Fecha de finalización de la incidencia
+ * @param solicitud DTO de la solicitud asociada a la incidencia
+ * @param empleado DTO del usuario empleado asociado a la incidencia
+ * @param trabajosConIncidencias Lista de trabajos con incidencias asociadas a la incidencia
+ */ 
 public class IncidenciaDTO {
 	@JsonProperty("id_incidencia")
 	private int id_incidencia;
@@ -136,41 +154,75 @@ public class IncidenciaDTO {
 		
 		// Constructores
 
+		/**
+		 * Constructor predeterminado para crear un objeto IncidenciaDTO sin atributos.
+		 */
 		public IncidenciaDTO() {
-			super();
+		    super();
 		}
 
+		/**
+		 * Constructor para crear un objeto IncidenciaDTO con todos los atributos.
+		 * 
+		 * @param id_incidencia Identificador único de la incidencia.
+		 * @param descripcion_usuario Descripción proporcionada por el usuario.
+		 * @param descripcion_tecnica Descripción técnica de la incidencia.
+		 * @param horas Horas dedicadas a resolver la incidencia.
+		 * @param coste Coste asociado a la incidencia.
+		 * @param estado Estado de la incidencia (resuelta o no).
+		 * @param fecha_inicio Fecha de inicio de la incidencia.
+		 * @param fecha_fin Fecha de finalización de la incidencia.
+		 */
 		public IncidenciaDTO(int id_incidencia, String descripcion_usuario, String descripcion_tecnica, int horas,
-				float coste, boolean estado, Calendar fecha_inicio, Calendar fecha_fin) {
-			super();
-			this.id_incidencia = id_incidencia;
-			this.descripcion_usuario = descripcion_usuario;
-			this.descripcion_tecnica = descripcion_tecnica;
-			this.horas = horas;
-			this.coste = coste;
-			this.estado = estado;
-			this.fecha_inicio = fecha_inicio;
-			this.fecha_fin = fecha_fin;
+		        float coste, boolean estado, Calendar fecha_inicio, Calendar fecha_fin) {
+		    super();
+		    this.id_incidencia = id_incidencia;
+		    this.descripcion_usuario = descripcion_usuario;
+		    this.descripcion_tecnica = descripcion_tecnica;
+		    this.horas = horas;
+		    this.coste = coste;
+		    this.estado = estado;
+		    this.fecha_inicio = fecha_inicio;
+		    this.fecha_fin = fecha_fin;
 		}
 
+		/**
+		 * Constructor para crear un objeto IncidenciaDTO con algunos atributos.
+		 * 
+		 * @param descripcion_usuario Descripción proporcionada por el usuario.
+		 * @param descripcion_tecnica Descripción técnica de la incidencia.
+		 * @param horas Horas dedicadas a resolver la incidencia.
+		 * @param coste Coste asociado a la incidencia.
+		 * @param estado Estado de la incidencia (resuelta o no).
+		 * @param fecha_inicio Fecha de inicio de la incidencia.
+		 * @param fecha_fin Fecha de finalización de la incidencia.
+		 */
 		public IncidenciaDTO(String descripcion_usuario, String descripcion_tecnica, int horas, float coste, boolean estado,
-				Calendar fecha_inicio, Calendar fecha_fin) {
-			super();
-			this.descripcion_usuario = descripcion_usuario;
-			this.descripcion_tecnica = descripcion_tecnica;
-			this.horas = horas;
-			this.coste = coste;
-			this.estado = estado;
-			this.fecha_inicio = fecha_inicio;
-			this.fecha_fin = fecha_fin;
+		        Calendar fecha_inicio, Calendar fecha_fin) {
+		    super();
+		    this.descripcion_usuario = descripcion_usuario;
+		    this.descripcion_tecnica = descripcion_tecnica;
+		    this.horas = horas;
+		    this.coste = coste;
+		    this.estado = estado;
+		    this.fecha_inicio = fecha_inicio;
+		    this.fecha_fin = fecha_fin;
 		}
 
+		/**
+		 * Constructor para crear un objeto IncidenciaDTO con algunos atributos.
+		 * 
+		 * @param descripcion_usuario Descripción proporcionada por el usuario.
+		 * @param estado Estado de la incidencia (resuelta o no).
+		 * @param solicitud Solicitud asociada a la incidencia.
+		 */
 		public IncidenciaDTO(String descripcion_usuario, boolean estado, SolicitudDTO solicitud) {
-			super();
-			this.descripcion_usuario = descripcion_usuario;
-			this.estado = estado;
-			this.solicitud = solicitud;
+		    super();
+		    this.descripcion_usuario = descripcion_usuario;
+		    this.estado = estado;
+		    this.solicitud = solicitud;
 		}
+
 		
 		
 		

@@ -10,6 +10,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Clase que representa una solicitud con sus atributos y métodos asociados.
+ * Esta clase es un Data Transfer Object (DTO) para transferir información de solicitudes.
+ * 
+ * @author Isidro Camacho Diaz
+ * 
+ * @param idSolicitud Identificador único de la solicitud.
+ * @param descripcion Descripción de la solicitud.
+ * @param estado Estado de la solicitud (true si está hecha, false si no está hecha).
+ * @param fechaSolicitud Fecha de la solicitud.
+ * @param cliente Objeto UsuarioDTO asociado a la solicitud.
+ * @param incidenciaSolicitud Objeto IncidenciaDTO asociado a la solicitud.
+ */
 public class SolicitudDTO implements Serializable {
 	
 	 @JsonProperty("id_solicitud")

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Clase de Usuario (DTO) 
  *  
- * @author El Equipazo de los Lentos
+ * @author Isidro Camacho Diaz
  * 
  * @param idUsuarioDto id del Usuario
  * @param dniUsuarioDto DNI del usuario

@@ -16,7 +16,9 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 
 	@Override
 	public boolean CrearIncidencia(SolicitudDTO solicitud, IncidenciaDTO incidencia, HttpServletRequest request) {
+		//Declaramos lo que necesitemos
 		 implementacionCRUD acciones=new implementacionCRUD();
+		 //Insertamos la solicitud
 		return acciones.InsertarSolicitud(solicitud);
 	}
 

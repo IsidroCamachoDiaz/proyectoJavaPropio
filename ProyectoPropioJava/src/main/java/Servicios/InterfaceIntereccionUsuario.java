@@ -50,6 +50,13 @@ public interface InterfaceIntereccionUsuario {
      */
     public boolean actualizarContrasena(HttpServletRequest request, TokenDTO token, String nuevaContrasena);
     
-    
+    /**
+     * Método para eliminar un usuario
+     *
+     * @param usu usuario que se va a eliminar de la base de datos
+     * @param request que usaremos para las alertas
+     * @return true si se elimino correctamente false si hubo algun fallo
+     * @since 3/2/24
+     */
     public boolean eliminarUsuario(UsuarioDTO usu, HttpServletRequest request);
 }
