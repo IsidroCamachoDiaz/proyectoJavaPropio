@@ -7,6 +7,7 @@ import Dtos.AccesoDTO;
 import Dtos.UsuarioDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
+import Utilidades.ComprobacionImagen;
 import Utilidades.Correo;
 import Utilidades.Encriptado;
 import Utilidades.implementacionCRUD;
@@ -57,17 +58,40 @@ public class ControladorPerfil extends HttpServlet{
 	        Part filePart;
 			try {
 				filePart = request.getPart("imagen");
+				
+				
+				ComprobacionImagen com=new ComprobacionImagen();
+				
+				 //Comprobamos si ha metido una foto
 				  if (filePart.getSize() > 0) {
-				        InputStream fileContent = filePart.getInputStream();
-				        // Convertir InputStream a byte[]
-				        usuarioCambio.setFoto(fileContent.readAllBytes());
-				        cambio=true;
+					  
+					  if(com.esArchivoImagen(filePart)) {
+						  InputStream fileContent = filePart.getInputStream();
+					        // Convertir InputStream a byte[]
+					        usuarioCambio.setFoto(fileContent.readAllBytes());
+					        cambio=true;
+					  }
+					  //Si no metio algo que sea una foto se pone una por defecto
+					  else {
+						  try (InputStream defaultImageStream = getClass().getResourceAsStream("/user.png")) {
+						        if (defaultImageStream != null) {
+						            // Convertir InputStream a byte[]
+						            usuarioCambio.setFoto(defaultImageStream.readAllBytes());
+						            cambio=true;
+						        } 
+						    } catch (IOException e) {
+						        // Manejar la excepción de entrada/salida si es necesario
+						        e.printStackTrace();
+						    }
+					  }
+				        
 				  }
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ServletException e) {
 				e.printStackTrace();
 			}
+			
 			//Compruebo si cambio el email
 			if(!usuarioCambio.getEmailUsuario().equals(correo)) {
 				Correo correoAccion = new Correo();

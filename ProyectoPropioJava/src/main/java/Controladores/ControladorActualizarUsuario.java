@@ -7,6 +7,7 @@ import Dtos.UsuarioDTO;
 import Servicios.ImplementacionAdministracion;
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
+import Utilidades.ComprobacionImagen;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -59,12 +60,35 @@ public class ControladorActualizarUsuario extends HttpServlet{
 	 	//Cojo la imagen
         Part filePart;
 			filePart = request.getPart("imagen");
-			if (filePart.getSize() > 0) {
-			     InputStream fileContent = filePart.getInputStream();
-			     // Convertir InputStream a byte[]
-			      usuarioCambiar.setFoto(fileContent.readAllBytes());
-			      cambio=true;
-			}
+			
+			ComprobacionImagen com=new ComprobacionImagen();
+			
+			 //Comprobamos si ha metido una foto
+			  if (filePart.getSize() > 0) {
+				  
+				  if(com.esArchivoImagen(filePart)) {
+					  InputStream fileContent = filePart.getInputStream();
+				        // Convertir InputStream a byte[]
+				        usuarioCambiar.setFoto(fileContent.readAllBytes());
+				        cambio=true;
+				  }
+				  //Si no metio algo que sea una foto se pone una por defecto
+				  else {
+					  try (InputStream defaultImageStream = getClass().getResourceAsStream("/user.png")) {
+					        if (defaultImageStream != null) {
+					            // Convertir InputStream a byte[]
+					            usuarioCambiar.setFoto(defaultImageStream.readAllBytes());
+					            cambio=true;
+					        } 
+					    } catch (IOException e) {
+					        // Manejar la excepción de entrada/salida si es necesario
+					        e.printStackTrace();
+					    }
+				  }
+			        
+			  }
+			
+			
 			if(cambio) {
 				acciones.ActualizarUsuario(usuarioCambiar);
 				Alerta.Alerta(request, "Se modifico correctamente el usuario "+usuarioCambiar.getNombreUsuario(), "success");

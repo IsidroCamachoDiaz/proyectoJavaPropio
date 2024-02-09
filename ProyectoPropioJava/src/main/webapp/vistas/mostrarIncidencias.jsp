@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="Dtos.UsuarioDTO" %>
 <%@ page import="Dtos.SolicitudDTO" %>
+<%@ page import="Dtos.IncidenciaDTO" %>
 <%@ page import="java.awt.image.BufferedImage" %>
 <%@ page import="java.io.ByteArrayInputStream" %>
 <%@ page import="javax.imageio.ImageIO" %>
@@ -31,9 +32,9 @@
 String accesoSesion = "0";
 try {
     accesoSesion = session.getAttribute("acceso").toString();
-    if (accesoSesion.equals("2") || accesoSesion.equals("3")) {
+    if (accesoSesion.equals("1")) {
     	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
-    	Escritura.EscribirFichero("Un usuario o empleado intento entrar a la administracion");
+    	Escritura.EscribirFichero("Un usuario intento entrar a las incidencias");
     	response.sendRedirect("home.jsp");
     	return;
     }
@@ -43,7 +44,7 @@ try {
     response.sendRedirect("../index.jsp");
     return;
 }
-Escritura.EscribirFichero("Se accedio al panel de mostrar las solicitudes");
+Escritura.EscribirFichero("Se accedio al panel de mostrar las incidencias");
 System.out.println(accesoSesion);
 implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
@@ -114,100 +115,169 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
             <div class="user-info-container2 d-flex align-items-center">
-                <h2 class="text-white">Solicitudes De <%=user.getNombreUsuario() %></h2>
+                <h2 class="text-white">Incidencias</h2>
             </div>
         </form>
     </div>
 	<%
 	
-	List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
-	List <SolicitudDTO> pendientes=new ArrayList <SolicitudDTO> ();
-	List <SolicitudDTO> finalizados=new ArrayList <SolicitudDTO> ();
-	for(int i=0;i<solicitudes.size();i++){
-		if(solicitudes.get(i).getCliente().getIdUsuario()!=user.getIdUsuario()){
-			solicitudes.remove(i);
+	List <IncidenciaDTO> incidencias=acciones.SeleccionarTodasIncidencias();
+	List <IncidenciaDTO> mias=new ArrayList <IncidenciaDTO> ();
+	List <IncidenciaDTO> sinAsignar=new ArrayList <IncidenciaDTO> ();
+	List <IncidenciaDTO> finalizadas=new ArrayList <IncidenciaDTO> ();
+	
+	for(IncidenciaDTO in:incidencias ){
+		if(in.getEmpleado()==null){
+			sinAsignar.add(in);
 		}
-		else{
-			if(solicitudes.get(i).isEstado()){
-				finalizados.add(solicitudes.get(i));
-			}
-			else{
-				pendientes.add(solicitudes.get(i));
-			}
+		else if(in.isEstado()==true){
+			finalizadas.add(in);
+		}
+		else if(in.getEmpleado().getIdUsuario()==user.getIdUsuario()){
+			mias.add(in);
 		}
 	}
 	
 	%>
 	<div class="container-fluid">
     <div class="row">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+    </div>
+
+    <div class="row justify-content-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" onclick="mostrarTabla('tabla1')">Solicitudes Pendientes</a>
+                        <a class="nav-link" onclick="mostrarTabla('tabla1')">Incidencias Propias</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="mostrarTabla('tabla2')">Solicitudes Finalizadas</a>
+                        <a class="nav-link" onclick="mostrarTabla('tabla2')">Incidencias Sin Asignar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="crearSolicitud.jsp" >Crear Solicitud</a>
+                        <a class="nav-link" onclick="mostrarTabla('tabla3')">Incidencias Finalizadas</a>
                     </li>
                 </ul>
             </div>
         </nav>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-8 table-container">
+        <div class="col-12 col-md-12 table-container">
             <table id="tabla1" class="table">
-                <caption class="text-center text-light">Solicitudes Pendientes</caption>
+                <caption class="text-center text-light">Incidencias Propias</caption>
                 <thead>
                     <tr>
-                        <th>Descripcion</th>
-                        <th>Fecha De Solicitud</th>
+                        <th>Descripcion Del Cliente</th>
+                        <th>Descripcion Tecnica</th>
+                        <th>Horas Acumuladas</th>
+                        <th>Coste Hasta El Momento</th>
+                        <th>Fecha De Inicio</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(SolicitudDTO so:pendientes){ 
-                  	  SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                      String fechaFormateada = sdf.format(so.getFechaSolicitud().getTime());
+                <% for(IncidenciaDTO in:mias){ 
+                    	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        String fechaFormateada = sdf.format(in.getFecha_inicio().getTime());
                     %>
                         <tr>
-                            <td class="text-center"><%=so.getDescripcion() %></td>
-                            <td class="text-center"><%=fechaFormateada %></td>
-                            <td class="text-center"><a href="modificarSolicitud.jsp?idS=<%=so.getIdSolicitud() %>">
-					        	<button  class="btn btn-info" type="button">Modificar Solicitud</button>
-					      	</a>
-					      	</td>
+                            <td class="text-center"><%=in.getDescripcion_usuario() %></td>
+                            <%if(in.getDescripcion_tecnica()==null||in.getDescripcion_tecnica().equals("")){ %>
+                            <td class="text-danger text-center">No puso Descripcion Tecnica</td>
+                            <%}else{ %>
+                            <td class="text-center"><%=in.getDescripcion_tecnica() %></td>
+                            <%} %>
+                            <td class="text-center"><%=in.getHoras() %></td>
+                            <td class="text-center"><%=in.getCoste() %></td>
+                           	<td class="text-center"><%=fechaFormateada %></td>
+                           	<td  class="text-center">
+	                       <form action="./ControladorFinalizarIncidencia" method="post">
+	                            <input type="hidden" name="id" value="<%=user.getIdUsuario() %>">
+						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
+						        <button type="submit" class="btn btn-info" >Finalizar Incidencia</button>	
+						  </form>	
+						 			      		     
+                        	</td>
                         </tr>
                     <% } %>
                 </tbody>
             </table>
 
             <table id="tabla2" class="table" style="display: none;">
-                <caption class="text-center text-light">Solicitudes Finalizadas</caption>
+                <caption class="text-center text-light">Incidencias Sin Asignar</caption>
                 <thead>
                     <tr>
-                        <th>Descripcion</th>
-                        <th>Fecha De Solicitud</th>
+                        <th>Descripcion Del Cliente</th>
+                        <th>Horas Acumuladas</th>
+                        <th>Coste Hasta El Momento</th>
+                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(SolicitudDTO so:finalizados){ 
-                    	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                        String fechaFormateada = sdf.format(so.getFechaSolicitud().getTime());
+ 					<% for(IncidenciaDTO in:sinAsignar){ 
                     %>
                         <tr>
-                            <td class="text-center"><%=so.getDescripcion() %></td>
-                            <td class="text-center"><%=fechaFormateada %></td>
+                            <td class="text-center"><%=in.getDescripcion_usuario() %></td>
+                            <td class="text-center"><%=in.getHoras() %></td>
+                            <td class="text-center"><%=in.getCoste() %></td>
+                            <td  class="text-center">
+	                       <form action="./ControladorAsignarIncidencia" method="post">
+	                            <input type="hidden" name="id" value="<%=user.getIdUsuario() %>">
+						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
+						        <button type="submit" class="btn btn-info" >Asignar Incidencia</button>	
+						  </form>	
+						 			      		     
+                        	</td>
                         </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <table id="tabla3" class="table" style="display: none;">
+                <caption class="text-center text-light">Incidencias Finalizadas</caption>
+                <thead>
+                    <tr>
+                        <th>Descripcion Del Cliente</th>
+                        <th>Descripcion Tecnica</th>
+                        <th>Horas Acumuladas</th>
+                        <th>Coste</th>
+                        <th>Fecha De Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Empleado De La Incidencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<% for(IncidenciaDTO in:finalizadas){ 
+                    	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        String fechaInicio = sdf.format(in.getFecha_inicio().getTime());
+                        String fechaFin = sdf.format(in.getFecha_fin().getTime());
+                    %>
+                        <tr>
+                            <td class="text-center"><%=in.getDescripcion_usuario() %></td>
+                            <td class="text-center"><%=in.getDescripcion_tecnica() %></td>
+                            <td class="text-center"><%=in.getHoras() %></td>
+                            <td class="text-center"><%=in.getCoste() %></td>
+                           	<td class="text-center"><%=fechaInicio %></td>
+                           	<td class="text-center"><%=fechaFin %></td>
+                           	<td class="text-center"><%=in.getEmpleado().getNombreUsuario() %></td>                           	                        	
                     <% } %>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<script>
+    function mostrarTabla(tablaId) {
+        // Oculta todas las tablas
+        document.querySelectorAll('table').forEach(function(tabla) {
+            tabla.style.display = 'none';
+        });
+
+        // Muestra la tabla seleccionada
+        document.getElementById(tablaId).style.display = 'table';
+    }
+</script>
+	
+
 
 <script>
 	function mostrarTabla(tablaId) {

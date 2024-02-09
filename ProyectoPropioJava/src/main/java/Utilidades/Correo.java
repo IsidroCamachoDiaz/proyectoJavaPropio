@@ -118,6 +118,19 @@ public class Correo {
                 + "</div>";
     }
     /**
+     * Crea el cuerpo del correo para el mensaje de comfirmacion de terminar la incidencia
+     *
+     * @param nombre del usuario
+     * @return String que representa el cuerpo del correo.
+     */
+    public String MensajeCorreoConfirmacionTerminada(String nombreUsuario) {
+        return "<div style=\"text-align: center; background-color: #3498db; padding: 20px;\">\r\n"
+                + "    <p style=\"color: white;\">¡Hola " + nombreUsuario + ", tu Incidencia ha sido terminada!</p>\r\n"
+                + "    <p style=\"color: white;\">Puedes verificar el estado de tu Incidencia en nuestra plataforma.</p>\r\n"
+                + "    <p style=\"color: white;\">Gracias por utilizar nuestros servicios.</p>\r\n"
+                + "</div>";
+    }
+    /**
      * Envía un mensaje de correo electrónico.
      *
      * @param body    Cuerpo del correo.

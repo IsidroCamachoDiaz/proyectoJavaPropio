@@ -463,7 +463,7 @@ public class implementacionCRUD implements interfazCRUD {
      */
     @Override
     public boolean ActualizarIncidencia(IncidenciaDTO nuevaIncidencia) {
-        return hacerPut("incidencia/Actualizar/" + nuevaIncidencia, nuevaIncidencia);
+        return hacerPut("incidencia/Actualizar/" + nuevaIncidencia.getId_incidencia(), nuevaIncidencia);
     }
 
     /**
@@ -474,7 +474,7 @@ public class implementacionCRUD implements interfazCRUD {
      */
     @Override
     public boolean ActualizarSolicitud(SolicitudDTO nuevaSolicitud) {
-        return hacerPut("solicitud/Actualizar/" + nuevaSolicitud, nuevaSolicitud);
+        return hacerPut("solicitud/Actualizar/" + nuevaSolicitud.getIdSolicitud(), nuevaSolicitud);
     }
 
     /**

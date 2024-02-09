@@ -143,7 +143,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     <img src="img/img-04.jpg" alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2>Incidencias</h2>
-                        <a href="photo-detail.html"></a>
+                        <a href="mostrarIncidencias.jsp"></a>
                     </figcaption>                    
                 </figure>
             </div>

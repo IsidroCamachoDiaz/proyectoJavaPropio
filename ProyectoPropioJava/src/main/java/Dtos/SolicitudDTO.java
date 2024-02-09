@@ -28,7 +28,6 @@ public class SolicitudDTO implements Serializable {
 	 @JsonProperty("cliente")
 	 private UsuarioDTO cliente;
 	 
-	 @JsonManagedReference
 	 @JsonProperty("incidencia")
 	 private IncidenciaDTO incidenciaSolicitud;
 

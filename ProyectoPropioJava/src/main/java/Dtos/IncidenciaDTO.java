@@ -32,8 +32,8 @@ public class IncidenciaDTO {
 	@JsonProperty("fecha_fin")
 	private Calendar fecha_fin;
 	
-	@JsonBackReference
 	@JsonProperty("solicitud")
+	@JsonIgnore
 	private SolicitudDTO solicitud;
 	
 	@JsonProperty("empleado")
@@ -44,7 +44,7 @@ public class IncidenciaDTO {
 	
 	//Geters y Seters
 	
-		public long getId_incidencia() {
+		public int getId_incidencia() {
 			return id_incidencia;
 		}
 
@@ -125,6 +125,14 @@ public class IncidenciaDTO {
 			this.estado = estado;
 		}
 
+		public List<TrabajoDTO> getTrabajosConIncidencias() {
+			return trabajosConIncidencias;
+		}
+
+		public void setTrabajosConIncidencias(List<TrabajoDTO> trabajosConIncidencias) {
+			this.trabajosConIncidencias = trabajosConIncidencias;
+		}
+		
 		
 		// Constructores
 

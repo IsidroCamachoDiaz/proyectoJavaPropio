@@ -108,6 +108,45 @@
 		<servlet-name>ControladorCrearSolicitud</servlet-name>
 		<url-pattern>/ControladorCrearSolicitud</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorModificarSolicitud</display-name>
+		<servlet-name>ControladorModificarSolicitud</servlet-name>
+		<servlet-class>Controladores.ControladorModificarSolicitud</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorModificarSolicitud</servlet-name>
+		<url-pattern>/ControladorModificarSolicitud</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorAsignarIncidencia</display-name>
+		<servlet-name>ControladorAsignarIncidencia</servlet-name>
+		<servlet-class>Controladores.ControladorAsignarIncidencia</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorAsignarIncidencia</servlet-name>
+		<url-pattern>/vistas/ControladorAsignarIncidencia</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorFinalizarIncidencia</display-name>
+		<servlet-name>ControladorFinalizarIncidencia</servlet-name>
+		<servlet-class>Controladores.ControladorFinalizarIncidencia</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorFinalizarIncidencia</servlet-name>
+		<url-pattern>/vistas/ControladorFinalizarIncidencia</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

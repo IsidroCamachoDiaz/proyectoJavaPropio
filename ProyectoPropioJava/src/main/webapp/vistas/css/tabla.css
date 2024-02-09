@@ -45,6 +45,7 @@ tr:hover {
 
 
 
+
 .navbar {
             text-align: center; /* Centra los enlaces de navegación */
         }
@@ -63,4 +64,8 @@ tr:hover {
 
 #tabla2{
 	 margin-top: -400px;
+}
+
+#tabla3{
+	margin-top: -400px;
 }
