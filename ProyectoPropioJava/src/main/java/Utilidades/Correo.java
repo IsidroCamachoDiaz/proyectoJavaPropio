@@ -24,6 +24,7 @@ import Servicios.ImplentacionIntereaccionUsuario;
 /**
  * Clase que proporciona funciones relacionadas con el envío de correos electrónicos,
  * especialmente en el contexto de interacción con usuarios, como el envío de tokens y mensajes de bienvenida.
+ *@author Isidro Camacho Diaz
  */
 public class Correo {
 

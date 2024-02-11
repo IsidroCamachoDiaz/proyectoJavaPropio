@@ -4,7 +4,13 @@ import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
 import Dtos.UsuarioDTO;
 import jakarta.servlet.http.HttpServletRequest;
-
+/**
+ * La interfaz InterfaceInteraccionIncidencias proporciona métodos para interactuar con las incidencias.
+ * Permite la inserción y finalización de incidencias en el sistema.
+ *
+ * @since 7/2/24
+ * @author Isidro Camacho Diaz
+ */
 public interface InterfaceInteraccionIncidencias {
 	 /**
      * Método insertar las incidencias

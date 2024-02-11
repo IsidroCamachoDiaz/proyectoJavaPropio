@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 /**
  * Clase para el encriptado de la contraseña
- * @author ASMP-17/11/23
+ *@author Isidro Camacho Diaz
  */
 public class Encriptado {
 	

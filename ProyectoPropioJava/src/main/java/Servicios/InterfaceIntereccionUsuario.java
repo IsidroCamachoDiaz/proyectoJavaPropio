@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Interfaz para la interacción con operaciones relacionadas con el usuario, como registro e inicio de sesión.
+ * @author Isidro Camacho Diaz
  */
 public interface InterfaceIntereccionUsuario {
 

@@ -2,8 +2,10 @@ package Controladores;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 
 import Dtos.IncidenciaDTO;
+import Dtos.SolicitudDTO;
 import Dtos.UsuarioDTO;
 import Servicios.ImplementacionInteraccionIncedencias;
 import Utilidades.Alerta;
@@ -28,6 +30,17 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 					//Creamos el DTO con los paraemos pasados y usando el metodos de encriptar
 					UsuarioDTO usuario = acciones.SeleccionarUsuario("Select/"+idUsuario);
 					IncidenciaDTO incidenciaAsignar= acciones.SeleccionarIncidencia("Select/"+idUsuarioIncidencia);
+					
+					//Para asignar las incidencias con sus solicitudes
+					List <SolicitudDTO> solicitudes = acciones.SeleccionarTodasSolicitudes();
+					
+					for(SolicitudDTO s:solicitudes) {
+						if(s.getIncidenciaSolicitud().getId_incidencia()==incidenciaAsignar.getId_incidencia()) {
+							incidenciaAsignar.setSolicitud(s);
+							break;
+						}
+					}
+					
 					
 					if(usuario==null||incidenciaAsignar==null) {
 						Alerta.Alerta(request, "No se encontro al usuario o la incidencia", "error");

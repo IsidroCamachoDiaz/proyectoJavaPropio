@@ -3,6 +3,13 @@ package Servicios;
 import Dtos.UsuarioDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * La interfaz InterfaceAdministracion proporciona métodos para administrar usuarios en el sistema.
+ * Permite cambiar el acceso de un usuario y crear nuevos usuarios en la base de datos.
+ *
+ * @since 6/2/24
+ * @author Isidro Camacho Diaz
+ */
 public interface InterfaceAdministracion {
 	
 	/**

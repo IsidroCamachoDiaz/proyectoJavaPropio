@@ -23,6 +23,7 @@ import java.util.ArrayList;
 /**
  * Implementación de la interfaz CRUD que proporciona operaciones de consulta, inserción, actualización y eliminación
  * para entidades como Usuario, Acceso, Incidencia, Solicitud, TipoTrabajo, Token y Trabajo a través de una API REST.
+ *@author Isidro Camacho Diaz
  */
 public class implementacionCRUD implements interfazCRUD {
 
@@ -30,74 +31,38 @@ public class implementacionCRUD implements interfazCRUD {
 	// URL base de la API REST
     private static final String BASE_URL = "http://localhost:8080/";
 
-    
-    /**
-     * Realiza una solicitud GET para seleccionar todos los usuarios.
-     *
-     * @return Lista de objetos UsuarioDTO.
-     */
+
     @Override
     public List<UsuarioDTO> SeleccionarTodosUsuarios() {
         return hacerGetLista("usuario/Select", UsuarioDTO.class);
     }
     
-    /**
-     * Realiza una solicitud GET para seleccionar todos los usuarios.
-     *
-     * @return Lista de objetos UsuarioDTO.
-     */
     @Override
     public List<AccesoDTO> SeleccionarTodosAccesos() {
         return hacerGetLista("acceso/Select", AccesoDTO.class);
     }
 
-
-    /**
-     * Realiza una solicitud GET para seleccionar todas los accesos.
-     *
-     * @return Lista de objetos AccesoDTO.
-     */
     @Override
     public List<IncidenciaDTO> SeleccionarTodasIncidencias() {
         return hacerGetLista("incidencia/Select", IncidenciaDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar todas las solicitudes.
-     *
-     * @return Lista de objetos SolicitudDTO.
-     */
     @Override
     public List<SolicitudDTO> SeleccionarTodasSolicitudes() {
         return hacerGetLista("solicitud/Select", SolicitudDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar todos los tipos de trabajo.
-     *
-     * @return Lista de objetos TipoTrabajoDTO.
-     */
     @Override
     public List<TipoTrabajoDTO> SeleccionarTodosTiposDeTrabajo() {
         return hacerGetLista("tipo_incidencia/Select", TipoTrabajoDTO.class);
     }
 
 
-    /**
-     * Realiza una solicitud GET para seleccionar todos los trabajos.
-     *
-     * @return Lista de objetos TrabajoDTO.
-     */
     @Override
     public List<TrabajoDTO> SeleccionarTodosTrabajos() {
         return hacerGetLista("trabajo/Select", TrabajoDTO.class);
     }
     
-    /**
-     * Realiza una solicitud GET para seleccionar todos los trabajos.
-     *
-     * @return Lista de objetos TrabajoDTO.
-     */
     @Override
     public List<TokenDTO> SeleccionarTodosTokens() {
         return hacerGetLista("token/Select", TokenDTO.class);
@@ -136,78 +101,36 @@ public class implementacionCRUD implements interfazCRUD {
 
 
     
-    /**
-     * Realiza una solicitud GET para seleccionar un usuario por su identificador.
-     *
-     * @param queDar Identificador del usuario a seleccionar.
-     * @return Objeto UsuarioDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public UsuarioDTO SeleccionarUsuario(String queDar) {
         return hacerGet("usuario/" + queDar, UsuarioDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar un acceso por su identificador.
-     *
-     * @param queDar Identificador del acceso a seleccionar.
-     * @return Objeto AccesoDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public AccesoDTO SeleccionarAcceso(String queDar) {
         return hacerGet("acceso/" + queDar, AccesoDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar una incidencia por su identificador.
-     *
-     * @param queDar Identificador de la incidencia a seleccionar.
-     * @return Objeto IncidenciaDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public IncidenciaDTO SeleccionarIncidencia(String queDar) {
         return hacerGet("incidencia/" + queDar, IncidenciaDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar una solicitud por su identificador.
-     *
-     * @param queDar Identificador de la solicitud a seleccionar.
-     * @return Objeto SolicitudDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public SolicitudDTO SeleccionarSolicitud(String queDar) {
         return hacerGet("solicitud/" + queDar, SolicitudDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar un tipo de trabajo por su identificador.
-     *
-     * @param queDar Identificador del tipo de trabajo a seleccionar.
-     * @return Objeto TipoTrabajoDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public TipoTrabajoDTO SeleccionarTipoDeTrabajo(String queDar) {
         return hacerGet("tipo_incidencia/" + queDar, TipoTrabajoDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar un token por su identificador.
-     *
-     * @param queDar Identificador del token a seleccionar.
-     * @return Objeto TokenDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public TokenDTO SeleccionarToken(String queDar) {
         return hacerGet("token/Select/" + queDar, TokenDTO.class);
     }
 
-    /**
-     * Realiza una solicitud GET para seleccionar un trabajo por su identificador.
-     *
-     * @param queDar Identificador del trabajo a seleccionar.
-     * @return Objeto TrabajoDTO correspondiente al identificador proporcionado.
-     */
     @Override
     public TrabajoDTO SeleccionarTrabajo(String queDar) {
         return hacerGet("trabajo/" + queDar, TrabajoDTO.class);
@@ -245,78 +168,36 @@ public class implementacionCRUD implements interfazCRUD {
         return null;
     }
 
-    /**
-     * Realiza una solicitud POST para insertar un nuevo usuario en la base de datos.
-     *
-     * @param usuarioMeter Objeto UsuarioDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarUsuario(UsuarioDTO usuarioMeter) {
         return hacerPost("usuario/Insertar", usuarioMeter);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar un nuevo acceso en la base de datos.
-     *
-     * @param nuevoAcceso Objeto AccesoDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarAcceso(AccesoDTO nuevoAcceso) {
         return hacerPost("acceso/Insertar", nuevoAcceso);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar una nueva incidencia en la base de datos.
-     *
-     * @param nuevaIncidencia Objeto IncidenciaDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarIncidencia(IncidenciaDTO nuevaIncidencia) {
         return hacerPost("incidencia/Insertar", nuevaIncidencia);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar una nueva solicitud en la base de datos.
-     *
-     * @param nuevaSolicitud Objeto SolicitudDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarSolicitud(SolicitudDTO nuevaSolicitud) {
         return hacerPost("solicitud/Insertar", nuevaSolicitud);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar un nuevo tipo de trabajo en la base de datos.
-     *
-     * @param nuevoTipoTrabajo Objeto TipoTrabajoDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo) {
         return hacerPost("tipo_incidencia/Insertar", nuevoTipoTrabajo);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar un nuevo token en la base de datos.
-     *
-     * @param nuevoToken Objeto TokenDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarToken(TokenDTO nuevoToken) {
         return hacerPost("token/Insertar", nuevoToken);
     }
 
-    /**
-     * Realiza una solicitud POST para insertar un nuevo trabajo en la base de datos.
-     *
-     * @param nuevoTrabajo Objeto TrabajoDTO que se desea insertar.
-     * @return true si la operación de inserción fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean InsertarTrabajo(TrabajoDTO nuevoTrabajo) {
         return hacerPost("trabajo/Insertar", nuevoTrabajo);
@@ -357,78 +238,36 @@ public class implementacionCRUD implements interfazCRUD {
         return false;
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar un acceso de la base de datos.
-     *
-     * @param idAcceso Identificador del acceso que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarAcceso(String idAcceso) {
         return hacerDelete("acceso/Eliminar/" + idAcceso);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar una incidencia de la base de datos.
-     *
-     * @param idIncidencia Identificador de la incidencia que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarIncidencia(String idIncidencia) {
         return hacerDelete("incidencia/Eliminar/" + idIncidencia);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar una solicitud de la base de datos.
-     *
-     * @param idSolicitud Identificador de la solicitud que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarSolicitud(String idSolicitud) {
         return hacerDelete("solicitud/Eliminar/" + idSolicitud);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar un tipo de trabajo de la base de datos.
-     *
-     * @param idTipoTrabajo Identificador del tipo de trabajo que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarTipoDeTrabajo(String idTipoTrabajo) {
         return hacerDelete("tipoTrabajo/Eliminar/" + idTipoTrabajo);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar un token de la base de datos.
-     *
-     * @param idToken Identificador del token que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarToken(String idToken) {
         return hacerDelete("token/Eliminar/" + idToken);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar un trabajo de la base de datos.
-     *
-     * @param idTrabajo Identificador del trabajo que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarTrabajo(String idTrabajo) {
         return hacerDelete("trabajo/Eliminar/" + idTrabajo);
     }
 
-    /**
-     * Realiza una solicitud DELETE para eliminar un usuario de la base de datos.
-     *
-     * @param idUsuario Identificador del usuario que se desea eliminar.
-     * @return true si la operación de eliminación fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean EliminarUsuario(String idUsuario) {
         return hacerDelete("usuario/Eliminar/" + idUsuario);
@@ -455,56 +294,26 @@ public class implementacionCRUD implements interfazCRUD {
         return false;
     }
 
-    /**
-     * Realiza una solicitud PUT para actualizar una incidencia en la base de datos.
-     *
-     * @param nuevaIncidencia Objeto IncidenciaDTO con los nuevos datos.
-     * @return true si la operación de actualización fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean ActualizarIncidencia(IncidenciaDTO nuevaIncidencia) {
         return hacerPut("incidencia/Actualizar/" + nuevaIncidencia.getId_incidencia(), nuevaIncidencia);
     }
 
-    /**
-     * Realiza una solicitud PUT para actualizar una solicitud en la base de datos.
-     *
-     * @param nuevaSolicitud Objeto SolicitudDTO con los nuevos datos.
-     * @return true si la operación de actualización fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean ActualizarSolicitud(SolicitudDTO nuevaSolicitud) {
         return hacerPut("solicitud/Actualizar/" + nuevaSolicitud.getIdSolicitud(), nuevaSolicitud);
     }
 
-    /**
-     * Realiza una solicitud PUT para actualizar un tipo de trabajo en la base de datos.
-     *
-     * @param nuevoTipoTrabajo Objeto TipoTrabajoDTO con los nuevos datos.
-     * @return true si la operación de actualización fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean ActualizarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo) {
         return hacerPut("tipoTrabajo/Actualizar/" + nuevoTipoTrabajo, nuevoTipoTrabajo);
     }
 
-    /**
-     * Realiza una solicitud PUT para actualizar un trabajo en la base de datos.
-     *
-     * @param nuevoTrabajo Objeto TrabajoDTO con los nuevos datos.
-     * @return true si la operación de actualización fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean ActualizarTrabajo(TrabajoDTO nuevoTrabajo) {
         return hacerPut("trabajo/Actualizar/" + nuevoTrabajo, nuevoTrabajo);
     }
 
-    /**
-     * Realiza una solicitud PUT para actualizar un usuario en la base de datos.
-     *
-     * @param nuevoUsuario Objeto UsuarioDTO con los nuevos datos.
-     * @return true si la operación de actualización fue exitosa, false de lo contrario.
-     */
     @Override
     public boolean ActualizarUsuario(UsuarioDTO nuevoUsuario) {
         return hacerPut("usuario/Actualizar/" + nuevoUsuario.getIdUsuario(), nuevoUsuario);
