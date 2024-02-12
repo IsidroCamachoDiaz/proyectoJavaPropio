@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -51,7 +52,7 @@ public class IncidenciaDTO {
 	private Calendar fecha_fin;
 	
 	@JsonProperty("solicitud")
-	@JsonIgnore
+	@JsonIgnoreProperties("incidenciaSolicitud")
 	private SolicitudDTO solicitud;
 	
 	@JsonProperty("empleado")

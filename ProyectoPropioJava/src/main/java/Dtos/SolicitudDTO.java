@@ -39,9 +39,11 @@ public class SolicitudDTO implements Serializable {
 	private Calendar fechaSolicitud;
 	 
 	 @JsonProperty("cliente")
+	 @JsonIgnoreProperties("solicitudesUsuario")
 	 private UsuarioDTO cliente;
 	 
 	 @JsonProperty("incidencia")
+	 @JsonIgnoreProperties("solicitud")
 	 private IncidenciaDTO incidenciaSolicitud;
 
 	 /**

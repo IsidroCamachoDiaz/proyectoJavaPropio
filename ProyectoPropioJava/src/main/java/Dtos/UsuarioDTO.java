@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -58,9 +59,11 @@ public class UsuarioDTO implements Serializable {
 	private AccesoDTO acceso;
 	
 	@JsonProperty("tokens_usuario")
+	@JsonIgnoreProperties("usuario")
 	private List<TokenDTO> listaTokensUsuario;
 	
 	@JsonProperty("solicitudes_usuario")
+	@JsonIgnoreProperties("cliente")
 	private List <SolicitudDTO> solicitudesUsuario;
 	
 
