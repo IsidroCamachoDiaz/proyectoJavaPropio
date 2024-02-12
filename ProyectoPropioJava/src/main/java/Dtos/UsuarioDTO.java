@@ -59,15 +59,15 @@ public class UsuarioDTO implements Serializable {
 	private AccesoDTO acceso;
 	
 	@JsonProperty("tokens_usuario")
-	@JsonIgnoreProperties("usuario")
+	@JsonIgnoreProperties(value={"usuario"},allowSetters=true)
 	private List<TokenDTO> listaTokensUsuario;
 	
 	@JsonProperty("solicitudes_usuario")
-	@JsonIgnoreProperties("cliente")
+	@JsonIgnoreProperties(value={"cliente"},allowSetters=true)
 	private List <SolicitudDTO> solicitudesUsuario;
 	
 	@JsonProperty("incidencias_empleado")
-	@JsonIgnoreProperties("empleado")
+	@JsonIgnoreProperties(value={"empleado"},allowSetters=true)
 	private List <IncidenciaDTO> incidencias_empleado;
 
 	//Construtores

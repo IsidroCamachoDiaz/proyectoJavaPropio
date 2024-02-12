@@ -52,10 +52,11 @@ public class IncidenciaDTO {
 	private Calendar fecha_fin;
 	
 	@JsonProperty("solicitud")
-	@JsonIgnoreProperties("incidenciaSolicitud")
+	@JsonIgnoreProperties(value={"incidenciaSolicitud"},allowSetters=true)
 	private SolicitudDTO solicitud;
 	
 	@JsonProperty("empleado")
+	@JsonIgnoreProperties(value={"incidencias_empleado"},allowSetters=true)
 	private UsuarioDTO empleado;
 	
 	@JsonProperty("incidencia")
