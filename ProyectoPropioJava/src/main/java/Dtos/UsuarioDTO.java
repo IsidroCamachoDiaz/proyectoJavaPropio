@@ -66,6 +66,9 @@ public class UsuarioDTO implements Serializable {
 	@JsonIgnoreProperties("cliente")
 	private List <SolicitudDTO> solicitudesUsuario;
 	
+	@JsonProperty("incidencias_empleado")
+	@JsonIgnoreProperties("empleado")
+	private List <IncidenciaDTO> incidencias_empleado;
 
 	//Construtores
    
