@@ -46,6 +46,12 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 						Alerta.Alerta(request, "No se encontro al usuario o la incidencia", "error");
 						response.sendRedirect("index.jsp");
 					}
+					
+					if(incidenciaAsignar.getTrabajosConIncidencias()==null||incidenciaAsignar.getTrabajosConIncidencias().isEmpty()) {
+						Alerta.Alerta(request, "La incidencia indicada no tiene ningun trabajo hecho", "error");
+						response.sendRedirect("home.jsp");
+						return;
+					}
 										
 					//Comprobamos si esta bien el usuario
 					if(inter.FinalizarIncidencia(incidenciaAsignar, request)) {
@@ -56,8 +62,14 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 						response.sendRedirect("home.jsp");
 					}
 					
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				Alerta.Alerta(request, "La incidencia indicada no tiene ningun trabajo hecho", "error");
+				try {
+					response.sendRedirect("vistas/home.jsp");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 	 }
 }
