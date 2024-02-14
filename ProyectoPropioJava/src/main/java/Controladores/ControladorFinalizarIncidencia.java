@@ -21,9 +21,11 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {		
 		
 			try {
+					//Declaramos lo que necesitemos
 					implementacionCRUD acciones = new implementacionCRUD();
 					ImplementacionInteraccionIncedencias inter= new ImplementacionInteraccionIncedencias();
 					
+					//Cogemos los valores del formulario
 					String idUsuario= request.getParameter("id");
 					String idUsuarioIncidencia= request.getParameter("idI");
 					
@@ -41,24 +43,27 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 						}
 					}
 					
-					
+					//Comprobamos si es null algo
 					if(usuario==null||incidenciaAsignar==null) {
 						Alerta.Alerta(request, "No se encontro al usuario o la incidencia", "error");
 						response.sendRedirect("index.jsp");
 					}
 					
+					//Comprobamos si tienes trabajos asignados
 					if(incidenciaAsignar.getTrabajosConIncidencias()==null||incidenciaAsignar.getTrabajosConIncidencias().isEmpty()) {
 						Alerta.Alerta(request, "La incidencia indicada no tiene ningun trabajo hecho", "error");
 						response.sendRedirect("home.jsp");
 						return;
 					}
 										
-					//Comprobamos si esta bien el usuario
+					//Comprobamos si lo finaliza bien
 					if(inter.FinalizarIncidencia(incidenciaAsignar, request)) {
 						Alerta.Alerta(request, "Se Finalizo la Incidencia Correctamente", "success");
 						response.sendRedirect("home.jsp");							
 					}
-					else {				
+					//Si no conseigue finalizrlo se avisa al usuario
+					else {
+						Alerta.Alerta(request, "No se pudo finalizar la incidencia correctamente", "error");
 						response.sendRedirect("home.jsp");
 					}
 					

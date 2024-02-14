@@ -28,6 +28,7 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		Properties seguridad = new Properties();
 		implementacionCRUD acciones=new implementacionCRUD();
 		
+		//Declaramos el propertiesd de los datos del correo
 		try {
 			seguridad.load(ImplementacionInteraccionIncedencias.class.getResourceAsStream("/Utilidades/parametros.properties"));
 		} catch (IOException e) {
@@ -35,7 +36,7 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		}
 		
 		Correo co= new Correo();
-		//Se crea un booleano paar ver que cada trabajo se termino
+		//Se crea un booleano para ver que cada trabajo se termino
 		boolean terminado=true;
 		
 		//Se va comprobando que todos los trabajos esten terminados
