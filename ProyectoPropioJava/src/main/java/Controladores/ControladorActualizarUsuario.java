@@ -42,7 +42,7 @@ public class ControladorActualizarUsuario extends HttpServlet{
 				response.sendRedirect("vistas/home.jsp");
 	 	}
 	 	
-	 	if(!nombre.equals(usuarioCambiar.getNombreUsuario())||telefono.equals(usuarioCambiar.getTlfUsuario())
+	 	if(!nombre.equals(usuarioCambiar.getNombreUsuario())||!telefono.equals(usuarioCambiar.getTlfUsuario())
 	 			||!acceso.equals(String.valueOf(usuarioCambiar.getAcceso().getIdAcceso()))) {
 	 		
 	 		if(!acceso.equals(String.valueOf(usuarioCambiar.getAcceso().getIdAcceso()))) {
@@ -97,6 +97,7 @@ public class ControladorActualizarUsuario extends HttpServlet{
 			//Si no ha cambiado se le avisa
 			else {
 				Alerta.Alerta(request, "No hizo ninguna modificacion", "warning");
+				response.sendRedirect("vistas/gestionUsuarios.jsp");
 			}	
         
     	}catch (IOException e) {

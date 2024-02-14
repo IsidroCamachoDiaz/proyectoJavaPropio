@@ -80,7 +80,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     <a class="nav-link nav-link-1" aria-current="page" href="home.jsp">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 active" href="modificarPerfil.jsp">
+                    <a class="nav-link nav-link-2" href="modificarPerfil.jsp">
                         <div class="user-info-container d-flex align-items-center">
                             <img class="rounded-circle user-avatar" src="data:image/jpeg;base64,${base64Image}" alt="Imagen de Usuario">
                             <span class="ml-2 text-white">Perfil</span>

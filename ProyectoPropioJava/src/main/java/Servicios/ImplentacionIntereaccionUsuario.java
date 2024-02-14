@@ -31,6 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
 import Dtos.TokenDTO;
 import Dtos.UsuarioDTO;
@@ -281,22 +282,43 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	public boolean eliminarUsuario(UsuarioDTO usu, HttpServletRequest request) {
 		//Declaramos loq ue necesitemos
 		implementacionCRUD acciones = new implementacionCRUD();
+		
+		//Cogemos tambien todos los tokens y filtramos por las suyas
+		List <TokenDTO> tokens= acciones.SeleccionarTodosTokens();
+		tokens= tokens.stream()
+		        .filter(t -> t.getId_usuario().getIdUsuario() == usu.getIdUsuario())
+		        .collect(Collectors.toList());
+		
 		//Comprobamos que ti`po de acceso tiene el usuario
-		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")) {
+		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")||usu.getAcceso().getCodigoAcceso().equals("Empleado")) {
+			List <IncidenciaDTO> incidencias = acciones.SeleccionarTodasIncidencias();
 			
-		}
-		else if(usu.getAcceso().getCodigoAcceso().equals("Empleado")) {
-			
+			incidencias=incidencias.stream()
+	                .filter(incidencia -> incidencia.getEmpleado().getIdUsuario() == usu.getIdUsuario())
+	                .collect(Collectors.toList());
+			if(incidencias.isEmpty()) {
+				//Si no tiene borramos todo lo que tengamos del usuario
+				for(int i=0;i<tokens.size();i++) {
+					acciones.EliminarToken(String.valueOf(tokens.get(i).getIdToken()));
+				}
+				
+				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));
+				
+				Alerta.Alerta(request, "Se elimino Totalmente al usuario", "success");
+				Escritura.EscribirFichero("Se elimino un usuario por completo "+usu.getNombreUsuario());
+				return true;
+			}
+			else {
+				usu.setFechaBaja(Calendar.getInstance());
+				acciones.ActualizarUsuario(usu);
+				Alerta.Alerta(request, "Se dio de Baja al Usuario", "success");
+				Escritura.EscribirFichero("Un usuario se dio de baja en la web "+usu.getNombreUsuario());
+				return true;
+			}
 		}
 		else {
 			//Si es usuario cogemos todas las solicitudes y las filtramos por las suyas
 			List <SolicitudDTO> solicitudes=acciones.SeleccionarTodasSolicitudes();
-			
-			//Cogemos tambien todos los tokens y filtramos por las suyas
-			List <TokenDTO> tokens= acciones.SeleccionarTodosTokens();
-			tokens= tokens.stream()
-			        .filter(t -> t.getId_usuario().getIdUsuario() == usu.getIdUsuario())
-			        .collect(Collectors.toList());
 			
 			solicitudes = solicitudes.stream()
 	                .filter(solicitud -> solicitud.getCliente().getIdUsuario() == usu.getIdUsuario())
@@ -324,7 +346,6 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 				return true;
 			}
 		}
-		return false;
 	}
 
 
