@@ -16,7 +16,7 @@ public class TipoTrabajoDTO {
 	@JsonProperty("precio_tipo")
 	private float precio_tipo;
 	
-	@JsonProperty("fecha_expiracion")
+	@JsonProperty("fecha_fin")
 	private Calendar fecha_fin;
 	
 	//Geters y Seters

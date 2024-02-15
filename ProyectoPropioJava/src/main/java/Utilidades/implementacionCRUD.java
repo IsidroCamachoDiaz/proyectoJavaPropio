@@ -306,7 +306,7 @@ public class implementacionCRUD implements interfazCRUD {
 
     @Override
     public boolean ActualizarTipoDeTrabajo(TipoTrabajoDTO nuevoTipoTrabajo) {
-        return hacerPut("tipoTrabajo/Actualizar/" + nuevoTipoTrabajo, nuevoTipoTrabajo);
+        return hacerPut("tipo_incidencia/Actualizar/" + nuevoTipoTrabajo.getId_tipo(), nuevoTipoTrabajo);
     }
 
     @Override

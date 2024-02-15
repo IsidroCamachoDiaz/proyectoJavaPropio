@@ -193,7 +193,12 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 	                            <input type="hidden" name="id" value="<%=user.getIdUsuario() %>">
 						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
 						        <button type="submit" class="btn btn-info" >Finalizar Incidencia</button>	
-						  </form>	
+						  </form>
+						  
+						  <form action="./ControladorFinalizarIncidencia" method="post">
+						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
+						        <button type="submit" class="btn btn-primary" >Modificar Incidencia</button>	
+						  </form>		
 						 			      		     
                         	</td>
                         </tr>

@@ -147,6 +147,45 @@
 		<servlet-name>ControladorFinalizarIncidencia</servlet-name>
 		<url-pattern>/vistas/ControladorFinalizarIncidencia</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorCrearTipoTrabajo</display-name>
+		<servlet-name>ControladorCrearTipoTrabajo</servlet-name>
+		<servlet-class>Controladores.ControladorCrearTipoTrabajo</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorCrearTipoTrabajo</servlet-name>
+		<url-pattern>/ControladorCrearTipoTrabajo</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorFinalizarTipo</display-name>
+		<servlet-name>ControladorFinalizarTipo</servlet-name>
+		<servlet-class>Controladores.ControladorFinalizarTipo</servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorFinalizarTipo</servlet-name>
+		<url-pattern>/ControladorFinalizarTipo</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorModificarIncidencia</display-name>
+		<servlet-name>ControladorModificarIncidencia</servlet-name>
+		<servlet-class>Controladores.ControladorModificarIncidencia </servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorModificarIncidencia</servlet-name>
+		<url-pattern>/ControladorModificarIncidencia</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

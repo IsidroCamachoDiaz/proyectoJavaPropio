@@ -149,7 +149,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                         <a class="nav-link" onclick="mostrarTabla('tabla2')">Tipos De Trabajo Finalizados</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="crearSolicitud.jsp" >Crear Tipo De Trabajo</a>
+                        <a class="nav-link" href="crearTipoTrabajo.jsp" >Crear Tipo De Trabajo</a>
                     </li>
                 </ul>
             </div>
@@ -173,9 +173,11 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                         <tr>
                             <td class="text-center"><%=t.getDescripcion_tipo() %></td>
                             <td class="text-center"><%=t.getPrecio_tipo() %></td>
-                            <td class="text-center"><a href="modificarSolicitud.jsp?idS=<%=t.getId_tipo() %>">
-					        	<button  class="btn btn-info" type="button">Modificar Tipo De Trabajo</button>
-					      	</a>
+                            <td class="text-center">
+                             <form action="../ControladorFinalizarTipo" method="post" id="form">
+					        <input type="hidden" name="id" value="<%=t.getId_tipo() %>">
+					        <button  class="btn btn-danger" type="submit">Finalizar Tipo De Trabajo</button>
+					      	</form>					        	
 					      	</td>
                         </tr>
                     <% } %>

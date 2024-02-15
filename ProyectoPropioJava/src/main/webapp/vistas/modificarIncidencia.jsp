@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="Dtos.UsuarioDTO" %>
+<%@ page import="Dtos.SolicitudDTO" %>
+<%@ page import="Dtos.IncidenciaDTO" %>
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Escritura" %>
@@ -20,9 +22,11 @@
  try{
 String acceso=session.getAttribute("acceso").toString();
 
-if(acceso.equals("1")){
-	Alerta.Alerta(request,"No puede Acceder a esta parte de la web","error");
+if(!acceso.equals("1")){
+	Alerta.Alerta(request,"Solo los usuarios pueden modificar Solicitudes","error");
 	response.sendRedirect("home.jsp");
+	 Escritura.EscribirFichero("Una persona intento acceder a modificar solicitudes pero no es Usuario");
+
 }
    }catch(Exception e){
 	   Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
@@ -30,13 +34,23 @@ if(acceso.equals("1")){
 	   response.sendRedirect("index.jsp");
 		
    }
- Escritura.EscribirFichero("Se accedio a crear Solicitud");
+ Escritura.EscribirFichero("Se accedio a modificar Solicitud");
  
  implementacionCRUD acciones=new implementacionCRUD();
 //Si modifico el usuario que se actualice
 UsuarioDTO user =acciones.SeleccionarUsuario("Select/"+session.getAttribute("usuario"));
 //Convierto la imagen
 request.setAttribute("base64Image", session.getAttribute("imagen"));
+
+String idIncidencia = request.getParameter("idI");
+IncidenciaDTO incidencia= acciones.SeleccionarIncidencia(idIncidencia);
+
+if(incidencia.getEmpleado().getIdUsuario()!=user.getIdUsuario()){
+	Alerta.Alerta(request,"Esta Incidencia no es suya","error");
+	response.sendRedirect("home.jsp");
+}
+
+
 %>
 	<!-- Lógica de JavaScript para mostrar la alerta -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -95,36 +109,31 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="img/hero.jpg">
         <form class="d-flex tm-search-form">
-            <h2 class="text-white">Crear Tipo de Trabajo</h2>
+            <h2 class="text-white">Modificar Incidencia</h2>
         </form>
     </div>
 
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary text-white">
-                Cree el Tipo
+                Modifique la Solicitud
             </h2>
         </div>
        <div class="row tm-mb-90">            
     <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 text-center">
-        <img src="https://aprendepsicologia.com/wp-content/uploads/2020/08/01-how-questions-never-ask-job-interview-shironosov-1-1080x675.jpg" alt="Image" class="img-fluid rounded">
+        <img src="https://img.freepik.com/foto-gratis/ilustradora-adulta-que-trabaja-dispositivo-tableta_23-2149863244.jpg" img-fluid rounded">
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
-        <form action="../ControladorCrearTipoTrabajo" method="post" id="formulario">
+        <form action="../ControladorModificarIncidencia" method="post" id="formulario">
             <div class="container mt-4">
-                <label for="exampleTextarea" class="form-label">Describe de que tipo se trata:</label>
-                <textarea class="form-control" id="exampleTextarea" rows="4" name="descripcion"></textarea>
-              </div>           
-              <!-- Campo de precio -->
-             <div class="form-group">
-                <label for="precio">Precio Del Servicio:</label>
-                <input type="number" class="form-control" id="precio" name="precio" required step="any">
-            </div>
-            
+                <label for="exampleTextarea" class="form-label">Describenos lo que te ocurre:</label>
+                <textarea class="form-control"  rows="4" name="descripcion"><%=incidencia.getDescripcion_tecnica() %></textarea>
+              </div>
              <div class="mb-4 text-center" style="margin-top:10px;">
-                <button class="btn btn-primary tm-btn-big"  type="submit">Crear tipo De Trabajo</button>
+                <button class="btn btn-primary tm-btn-big"  type="submit">Modificar Incidencia</button>
             </div>
+            <input type="text" id="id" name="idI" value="<%=idIncidencia %>" style="display: none;" >
           </form>
            <a href="mostrarSolicitudes.jsp">
 				<button  class="btn btn-primary" type="button">Volver</button>
