@@ -17,19 +17,21 @@
 </head>
 <body>
 <%
- try{
+try{
 String acceso=session.getAttribute("acceso").toString();
 
-if(!acceso.equals("1")&&!acceso.equals("2")&&!acceso.equals("3")){
-	response.sendRedirect("index.jsp");
-	Alerta.Alerta(request,"No ha iniciado Sesion en la web","error");
+if(!acceso.equals("1")){
+	Alerta.Alerta(request,"Solo los usuarios pueden modificar Solicitudes","error");
+	response.sendRedirect("home.jsp");
+	 Escritura.EscribirFichero("Una persona intento acceder a modificar solicitudes pero no es Usuario");
+
 }
-   }catch(Exception e){
+  }catch(Exception e){
 	   Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
 	   Alerta.Alerta(request,"No ha iniciado Sesion en la web","error");
 	   response.sendRedirect("index.jsp");
 		
-   }
+  }
  Escritura.EscribirFichero("Se accedio a crear Solicitud");
  
  implementacionCRUD acciones=new implementacionCRUD();

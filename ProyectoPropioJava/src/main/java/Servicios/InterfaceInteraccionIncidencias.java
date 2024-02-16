@@ -17,11 +17,10 @@ public interface InterfaceInteraccionIncidencias {
      *
      * @param request para mostrar las laertas
      * @param solicitud que se insertara junto a la incidencia
-     * @param incidencia que se creara en la base de datos
      * @return true si se creo bien y false si hubo algun problema
      * @since 7/2/24
      */
-	public boolean CrearIncidencia(SolicitudDTO solicitud,IncidenciaDTO incidencia,HttpServletRequest request);
+	public boolean CrearIncidencia(SolicitudDTO solicitud,HttpServletRequest request);
 	
 	/**
      * Método para finalizar una incidencia

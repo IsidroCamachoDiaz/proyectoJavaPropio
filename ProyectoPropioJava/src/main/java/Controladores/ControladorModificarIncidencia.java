@@ -47,25 +47,30 @@ public class ControladorModificarIncidencia extends HttpServlet {
 			 implementacionCRUD acciones=new implementacionCRUD();
 			 	
 			 	//Cogemos los datos insertados por el usuario
-			 	String idSolicitud=request.getParameter("idI");
+			 	String idIncidencia=request.getParameter("idI");
 			 	String descripcionNueva=request.getParameter("descripcion");
 			 	
 			 	
 			 	//Cogemos la solicitud
-				SolicitudDTO solicitud = acciones.SeleccionarSolicitud("Select/"+idSolicitud);
+				IncidenciaDTO incidencia = acciones.SeleccionarIncidencia("Select/"+idIncidencia);
 				
 				//Comprobamos si esta vacio
-				if(solicitud.getDescripcion().equals(null)||solicitud.getDescripcion().equals("")) {
-					Escritura.EscribirFichero("Un usuario quizo cambiar una solicitud pero no puso nada");
+				if(descripcionNueva==null||descripcionNueva.equals("")) {
+					Escritura.EscribirFichero("Un empleado quizo cambiar la descripcion pero no puso nada");
 					Alerta.Alerta(request,"No introdujo ningun descripcion del problema","info");
-					response.sendRedirect("vistas/crearSolicitud.jsp");
+					response.sendRedirect("vistas/home.jsp");
 				}
 				
 				//Comprobamos si es distinta a la antigua
-				if(!solicitud.getDescripcion().equals(descripcionNueva)) {
-					solicitud.setDescripcion(descripcionNueva);
-					solicitud.getIncidenciaSolicitud().setDescripcion_usuario(descripcionNueva);
+				if(incidencia.getDescripcion_tecnica()==null) {
+					incidencia.setDescripcion_tecnica(descripcionNueva);
 					cambio=true;
+				}
+				else{
+					if(!incidencia.getDescripcion_tecnica().equals(descripcionNueva)) {
+						incidencia.setDescripcion_tecnica(descripcionNueva);
+						cambio=true;
+					}
 				}
 				
 				
@@ -76,23 +81,22 @@ public class ControladorModificarIncidencia extends HttpServlet {
 					//Comprobamos si se cambio la descripcion
 					if(cambio) {
 						//Comprobamos sis e actualizo bien
-						if(acciones.ActualizarSolicitud(solicitud)) {
-							acciones.ActualizarIncidencia(solicitud.getIncidenciaSolicitud());
-							Escritura.EscribirFichero("Un usuario cambio la descripcion de una solicitud");
-						Alerta.Alerta(request,"Se envio la Solicitud Correctamente","success");
+						if(acciones.ActualizarIncidencia(incidencia)) {
+							Escritura.EscribirFichero("Un empleado cambio la descripcion de una incidencia");
+						Alerta.Alerta(request,"Se Actualizo la incidencia correctamente","success");
 						response.sendRedirect("vistas/home.jsp");
 						}
 						//Si no se pudo actualizar se avisa al usuario
 						else {
-							Escritura.EscribirFichero("Un usuario quizo cambiar una solicitud pero no se pudo actualizar");
+							Escritura.EscribirFichero("Un empelado quiso cambiar una incidencia pero no se pudo actualizar");
 							Alerta.Alerta(request,"Hubo un error paar actualizar su solicitud intentelo mas tarde","error");
-							response.sendRedirect("vistas/mostrarSolicitudes.jsp");	
+							response.sendRedirect("vistas/mostrarIncidencias.jsp");	
 						}
 					}
 					//Si no cambio nada se le avisa
 					else {
-						Escritura.EscribirFichero("Un usuario quizo cambiar una solicitud pero no cambio nada");
-						Alerta.Alerta(request,"No cambio la descripcion de la solicitud","warning");
+						Escritura.EscribirFichero("Un empleado quizo cambiar un descripcion de una incidencia pero no cambio nada");
+						Alerta.Alerta(request,"No cambio la descripcion de la incidencia","warning");
 						response.sendRedirect("vistas/home.jsp");
 					}
 				} catch (IOException e) {
@@ -103,7 +107,6 @@ public class ControladorModificarIncidencia extends HttpServlet {
 				
 		 }catch(Exception e) {
 			 Escritura.EscribirFichero("Hubo un error "+e.getLocalizedMessage());
-			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
 			}
 		 	
 		}

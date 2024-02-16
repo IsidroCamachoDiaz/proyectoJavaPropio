@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
@@ -64,10 +66,12 @@ public class ControladorModificarSolicitud extends HttpServlet {
 					response.sendRedirect("vistas/crearSolicitud.jsp");
 				}
 				
+				List <IncidenciaDTO> incidencias=acciones.SeleccionarTodasIncidencias();
 				//Comprobamos si es distinta a la antigua
 				if(!solicitud.getDescripcion().equals(descripcionNueva)) {
 					solicitud.setDescripcion(descripcionNueva);
-					solicitud.getIncidenciaSolicitud().setDescripcion_usuario(descripcionNueva);
+					incidencias=incidencias.stream().filter((x)->x.getSolicitud().getIdSolicitud()==solicitud.getIdSolicitud()).collect(Collectors.toList());					
+					incidencias.get(0).setDescripcion_usuario(descripcionNueva);
 					cambio=true;
 				}
 				
@@ -80,7 +84,7 @@ public class ControladorModificarSolicitud extends HttpServlet {
 					if(cambio) {
 						//Comprobamos sis e actualizo bien
 						if(acciones.ActualizarSolicitud(solicitud)) {
-							acciones.ActualizarIncidencia(solicitud.getIncidenciaSolicitud());
+						acciones.ActualizarIncidencia(incidencias.get(0));
 							Escritura.EscribirFichero("Un usuario cambio la descripcion de una solicitud");
 						Alerta.Alerta(request,"Se envio la Solicitud Correctamente","success");
 						response.sendRedirect("vistas/home.jsp");

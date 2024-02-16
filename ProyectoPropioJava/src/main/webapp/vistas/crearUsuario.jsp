@@ -17,19 +17,21 @@
 </head>
 <body>
  <%
- try{
-String acceso=session.getAttribute("acceso").toString();
+ String accesoSesion = "0";
+ try {
+     accesoSesion = session.getAttribute("acceso").toString();
+     if (accesoSesion.equals("1") || accesoSesion.equals("2")) {
+     	Alerta.Alerta(request, "No puede acceder a este lugar de la web", "warning");
+     	Escritura.EscribirFichero("Un usuario o empleado intento entrar a la administracion");
+     	response.sendRedirect("home.jsp");
+     	return;
+     }
 
-if(!acceso.equals("1")&&!acceso.equals("2")&&!acceso.equals("3")){
-	response.sendRedirect("index.jsp");
-	Alerta.Alerta(request,"No ha iniciado Sesion en la web","error");
-}
-   }catch(Exception e){
-	   Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
-	   Alerta.Alerta(request,"No ha iniciado Sesion en la web","error");
-	   response.sendRedirect("index.jsp");
-		
-   }
+ } catch (Exception e) {
+     Alerta.Alerta(request, "No ha iniciado Sesión en la web", "error");
+     response.sendRedirect("../index.jsp");
+     return;
+ }
  Escritura.EscribirFichero("Se accedio a crear Usuario");
 %>
 <%

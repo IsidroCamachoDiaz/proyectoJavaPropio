@@ -195,10 +195,9 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 						        <button type="submit" class="btn btn-info" >Finalizar Incidencia</button>	
 						  </form>
 						  
-						  <form action="./ControladorFinalizarIncidencia" method="post">
-						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
-						        <button type="submit" class="btn btn-primary" >Modificar Incidencia</button>	
-						  </form>		
+						  <a href="modificarIncidencia.jsp?idI=<%=in.getId_incidencia() %>">
+					        	<button  class="btn btn-info" type="button" style="margin:10px;" >Modificar Incidencia</button>
+					      	</a>		
 						 			      		     
                         	</td>
                         </tr>

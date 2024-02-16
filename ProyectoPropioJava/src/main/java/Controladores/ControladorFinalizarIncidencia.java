@@ -36,12 +36,12 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 					//Para asignar las incidencias con sus solicitudes
 					List <SolicitudDTO> solicitudes = acciones.SeleccionarTodasSolicitudes();
 					
-					for(SolicitudDTO s:solicitudes) {
+					/*for(SolicitudDTO s:solicitudes) {
 						if(s.getIncidenciaSolicitud().getId_incidencia()==incidenciaAsignar.getId_incidencia()) {
 							incidenciaAsignar.setSolicitud(s);
 							break;
 						}
-					}
+					}*/
 					
 					//Comprobamos si es null algo
 					if(usuario==null||incidenciaAsignar==null) {
@@ -70,7 +70,7 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 			} catch (Exception e) {
 				Alerta.Alerta(request, "La incidencia indicada no tiene ningun trabajo hecho", "error");
 				try {
-					response.sendRedirect("vistas/home.jsp");
+					response.sendRedirect("home.jsp");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

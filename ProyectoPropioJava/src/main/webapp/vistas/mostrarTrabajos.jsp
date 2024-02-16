@@ -143,9 +143,10 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 			
 			<% 			
 			for(IncidenciaDTO incidencia : incidenciasPendientes) { %>
-				    <div class="col-12">
+			 <div class="col-2"></div>
+				    <div class="col-8">
 				 		<br>
-				       <table id="tabla1" class="table">
+				       <table class="table">
                 <caption class="text-center text-light">Incidencia 
                 			<%if(incidencia.getDescripcion_tecnica()==null||incidencia.getDescripcion_tecnica().equals("")){ %>
                            		No puso Descripcion Tecnica
@@ -188,7 +189,11 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 
                 </tbody>
             </table>
+            		<a href="crearTrabajo.jsp?idI=<%=incidencia.getId_incidencia() %>">
+					      <button  class="btn btn-success text-center" type="button">Crear Trabajo</button>
+					  </a>
 				    </div>
+				     <div class="col-2"></div>
 				<% } %>
 			</div>        
         </div>

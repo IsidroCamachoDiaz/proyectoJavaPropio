@@ -42,9 +42,9 @@ public class SolicitudDTO implements Serializable {
 	 @JsonIgnoreProperties(value={"solicitudesUsuario"},allowSetters=true)
 	 private UsuarioDTO cliente;
 	 
-	 @JsonProperty("incidencia")
+	/* @JsonProperty("incidencia")
 	 @JsonIgnoreProperties(value={"solicitud"},allowSetters=true)
-	 private IncidenciaDTO incidenciaSolicitud;
+	 private IncidenciaDTO incidenciaSolicitud;*/
 
 	 /**
 	  * Constructor para crear un objeto SolicitudDTO con todos los atributos.
@@ -180,18 +180,18 @@ public class SolicitudDTO implements Serializable {
 	  * 
 	  * @return Objeto IncidenciaDTO asociado a la solicitud.
 	  */
-	 public IncidenciaDTO getIncidenciaSolicitud() {
+	/* public IncidenciaDTO getIncidenciaSolicitud() {
 	     return incidenciaSolicitud;
-	 }
+	 }*/
 
 	 /**
 	  * Establece el objeto IncidenciaDTO asociado a la solicitud.
 	  * 
 	  * @param incidenciaSolicitud Nuevo objeto IncidenciaDTO asociado a la solicitud.
 	  */
-	 public void setIncidenciaSolicitud(IncidenciaDTO incidenciaSolicitud) {
+	 /*public void setIncidenciaSolicitud(IncidenciaDTO incidenciaSolicitud) {
 	     this.incidenciaSolicitud = incidenciaSolicitud;
-	 }
+	 }*/
 	 
 	public void setCliente(UsuarioDTO cliente) {
 		this.cliente = cliente;
@@ -206,7 +206,7 @@ public class SolicitudDTO implements Serializable {
 	 public String toString() {
 	     return "SolicitudDTO [idSolicitud=" + idSolicitud + ", descripcion=" + descripcion + ", estado=" + estado
 	             + ", fechaSolicitud=" + fechaSolicitud + ", usuarioSolicitud=" + cliente
-	             + ", incidenciaSolicitud=" + incidenciaSolicitud + "]";
+	             + ", incidenciaSolicitud=" +  "]";
 	 }
 
 

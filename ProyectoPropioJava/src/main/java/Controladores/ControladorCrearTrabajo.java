@@ -9,6 +9,8 @@ import java.util.Calendar;
 
 import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
+import Dtos.TipoTrabajoDTO;
+import Dtos.TrabajoDTO;
 import Dtos.UsuarioDTO;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +27,7 @@ import Servicios.ImplementacionInteraccionIncedencias;
 import Servicios.ImplentacionIntereaccionUsuario;
 
 @MultipartConfig
-public class ControladorCrearSolicitud extends HttpServlet {
+public class ControladorCrearTrabajo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response){
@@ -44,9 +46,22 @@ public class ControladorCrearSolicitud extends HttpServlet {
 			 implementacionCRUD acciones=new implementacionCRUD();
 			 	
 			 	//Cogemos los datos insertados por el usuario
-			 	String idUsuario=request.getParameter("id");
-			 		 	
-			 	UsuarioDTO user =acciones.SeleccionarUsuario("Select/"+idUsuario);
+			 	String idIncidencia=request.getParameter("idI");
+			 	String idTipo=request.getParameter("tipo");
+			 	String descripcion=request.getParameter("descripcion");
+			 	int horas=Integer.parseInt(request.getParameter("horas"));
+			 	
+			 	
+			 	IncidenciaDTO incidenciaBD=acciones.SeleccionarIncidencia("Select/"+idIncidencia);
+			 	TipoTrabajoDTO tipoBD=acciones.SeleccionarTipoDeTrabajo("Select/"+idTipo);
+			 	
+			 	if(descripcion==null||incidenciaBD==null||tipoBD==null||horas==0) {
+			 		Alerta.Alerta(request,"no introdujo bien los valores","info");
+					response.sendRedirect("vistas/crearTrabajo.jsp");
+			 	}
+			 	
+			 	TrabajoDTO trabajoMeter=new TrabajoDTO(descripcion,false,horas,incidenciaBD,tipoBD);
+			 	
 			 	//Creamos la solicitud y la incidencia
 				SolicitudDTO solicitud = new SolicitudDTO(request.getParameter("descripcion"),false,Calendar.getInstance(),user);
 				
