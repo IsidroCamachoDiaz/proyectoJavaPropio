@@ -24,6 +24,14 @@ import Servicios.ImplentacionIntereaccionUsuario;
 public class ControladorCrearUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 
+	/**
+	 *
+	 * Metodo que se usa en el formulario para coger los valores
+	 * y comprobarlos para crear un usuario en la gestion de administradores
+	 * @param request
+	 * @param response
+	 * 
+	 * */
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 			
 		 try {

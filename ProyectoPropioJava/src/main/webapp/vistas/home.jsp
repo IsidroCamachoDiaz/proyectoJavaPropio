@@ -93,6 +93,9 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 					      <button class="btn btn-danger"  type="submit">Salir</button>
 					    </form>
                     </li>-->
+                     <li class="nav-item">
+                        <a class="nav-link nav-link-3" aria-current="page" href="../index.jsp">Salir</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-1 active" aria-current="page" href="home.jsp">Menu</a>
                     </li>

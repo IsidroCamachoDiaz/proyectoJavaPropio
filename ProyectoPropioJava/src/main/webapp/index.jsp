@@ -13,6 +13,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
 <body>
+<%
+//Quitamos los atributos de la sesion
+session.removeAttribute("acceso");
+session.removeAttribute("usuario");
+%>
 	<!-- Lógica de JavaScript para mostrar la alerta -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>

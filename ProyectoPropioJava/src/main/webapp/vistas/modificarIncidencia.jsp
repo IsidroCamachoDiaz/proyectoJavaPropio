@@ -138,7 +138,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             </div>
             <input type="text" id="id" name="idI" value="<%=idIncidencia %>" style="display: none;" >
           </form>
-           <a href="mostrarSolicitudes.jsp">
+           <a href="mostrarIncidencias.jsp">
 				<button  class="btn btn-primary" type="button">Volver</button>
 			</a>	
         </div>

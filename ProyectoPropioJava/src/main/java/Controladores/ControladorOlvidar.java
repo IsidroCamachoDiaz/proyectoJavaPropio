@@ -10,9 +10,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//Aqui va el controlador es para el formulario para restablecer enviar el correo
 public class ControladorOlvidar extends HttpServlet{
 	
+	/**
+	 *
+	 * Metodo que se usa en el formulario para coger los valores
+	 * y comprobarlos para la peticion de olvidar contraseña
+	 * @param request
+	 * @param response
+	 * 
+	 * */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 		try {
     	//Cogemos el correo

@@ -31,6 +31,14 @@ import Servicios.ImplentacionIntereaccionUsuario;
 public class ControladorModificarSolicitud extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 
+	/**
+	 *
+	 * Metodo que se usa en el formulario para coger los valores
+	 * y comprobarlos para Modificar una Solicitud
+	 * @param request
+	 * @param response
+	 * 
+	 * */
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 			
 		 try {
