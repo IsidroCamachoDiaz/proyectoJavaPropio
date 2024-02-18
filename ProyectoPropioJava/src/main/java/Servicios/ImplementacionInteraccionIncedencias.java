@@ -75,5 +75,12 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		}
 		
 	}
+	@Override
+	public boolean CrearTrabajo(TrabajoDTO trabajo, HttpServletRequest request) {
+		//Declaramos lo que necesitemos
+		 implementacionCRUD acciones=new implementacionCRUD();
+		 //Insertamos el trabajo	
+		return acciones.InsertarTrabajo(trabajo);
+	}
 
 }

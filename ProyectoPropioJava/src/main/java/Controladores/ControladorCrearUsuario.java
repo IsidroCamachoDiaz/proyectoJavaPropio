@@ -16,6 +16,7 @@ import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
+import Utilidades.Escritura;
 import Servicios.ImplementacionAdministracion;
 import Servicios.ImplentacionIntereaccionUsuario;
 
@@ -36,15 +37,19 @@ public class ControladorCrearUsuario extends HttpServlet {
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 			
 		 try {
+			 //Declaramos lo que necesitemos
 			 	Encriptado nc = new Encriptado();
 			 	HttpSession session = request.getSession();
 				
+			 	//Creamos el usuario
 				UsuarioDTO usuario = new UsuarioDTO(request.getParameter("nombre"),
 						request.getParameter("telefono"),
 						request.getParameter("correo"),
 						nc.EncriptarContra(request.getParameter("contrasenia")));
 				
+				//Cogemos la imagenn
 				 Part filePart = request.getPart("imagen");
+				 //Damos de alta
 				 usuario.setAlta(true);
 				 
 				 ComprobacionImagen com=new ComprobacionImagen();
@@ -82,7 +87,8 @@ public class ControladorCrearUsuario extends HttpServlet {
 					        e.printStackTrace();
 					    }
 					}
-			
+				  
+				  //Declaramos la implementacion
 				  ImplementacionAdministracion cosa = new ImplementacionAdministracion();
 				
 				// Redirigir a la vista JSP
@@ -92,17 +98,26 @@ public class ControladorCrearUsuario extends HttpServlet {
 					if(cosa.CrearUsuario(usuario, request)) {
 						Alerta.Alerta(request,"Se ha creado el Usuario Correctamente ya puede acceder a la cuenta","success");
 						response.sendRedirect("vistas/crearUsuario.jsp");
+						Escritura.EscribirFichero("Se creo un usuario: "+usuario.getNombreUsuario());
 					}
+					//Si no se creo bien avsiamos al usuario
 					else {
+						Escritura.EscribirFichero("Un usuario quiso crear un usuario pero no se pudo insertar");
 						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					response.sendRedirect("vistas/crearUsuario.jsp");
+					Escritura.EscribirFichero("Hubo un error en crear usuario "+e.getLocalizedMessage());
 				}
 				
 		 }catch(Exception e) {
-			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
+			 try {
+				response.sendRedirect("vistas/crearUsuario.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			 Escritura.EscribirFichero("Hubo un error en crear usuario "+e.getLocalizedMessage());
 			}
 		 	
 		}

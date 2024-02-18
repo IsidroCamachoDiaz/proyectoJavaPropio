@@ -2,6 +2,7 @@ package Servicios;
 
 import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
+import Dtos.TrabajoDTO;
 import Dtos.UsuarioDTO;
 import jakarta.servlet.http.HttpServletRequest;
 /**
@@ -31,4 +32,14 @@ public interface InterfaceInteraccionIncidencias {
      * @since 9/2/24
      */	
 	public boolean FinalizarIncidencia(IncidenciaDTO incidencia,HttpServletRequest request);
+	
+	/**
+     * Método para insertar trabajos en la base de datos
+     *
+     * @param request para mostrar las alertas
+     * @param Trabjo para meter en la BD
+     * @return true si se creo bien y false si hubo algun problema
+     * @since 18/2/24
+     */	
+	public boolean CrearTrabajo(TrabajoDTO trabajo, HttpServletRequest request);
 }

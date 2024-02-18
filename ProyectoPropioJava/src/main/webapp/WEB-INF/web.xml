@@ -186,6 +186,19 @@
 		<servlet-name>ControladorModificarIncidencia</servlet-name>
 		<url-pattern>/ControladorModificarIncidencia</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorCrearTrabajo</display-name>
+		<servlet-name>ControladorCrearTrabajo</servlet-name>
+		<servlet-class>Controladores.ControladorCrearTrabajo </servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorCrearTrabajo</servlet-name>
+		<url-pattern>/ControladorCrearTrabajo</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

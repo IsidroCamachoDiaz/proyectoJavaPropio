@@ -20,6 +20,7 @@
 </head>
 <body>
  <%
+ //Control de Sesion
  String accesoSesion = "0";
  try {
      accesoSesion = session.getAttribute("acceso").toString();
@@ -35,22 +36,37 @@
      response.sendRedirect("../index.jsp");
      return;
  }
- Escritura.EscribirFichero("Se accedio a crear Usuario");
+ Escritura.EscribirFichero("Se accedio a crear Trabajo");
 %>
 <%
+//Declaramos lo que necesitemos
 implementacionCRUD acciones=new implementacionCRUD();
+
+//Cogemos el usuario
 UsuarioDTO usuario =acciones.SeleccionarUsuario("Select/"+session.getAttribute("usuario"));
+
+//Insertamos la imagen
 request.setAttribute("base64Image", session.getAttribute("imagen"));
 
-String idIncidencia = request.getParameter("idC");
+//Cogemos la incidencia
+String idIncidencia = request.getParameter("idI");
 
+//Cogemos todas los tipos y los filtramos por los disponibles
 List <TipoTrabajoDTO> tipos=acciones.SeleccionarTodosTiposDeTrabajo();
 List <TipoTrabajoDTO> tiposActivos=new ArrayList <TipoTrabajoDTO>();
+
 	for(TipoTrabajoDTO t:tipos){
 		if(t.getFecha_fin()==null){
 			tiposActivos.add(t);
 		}
 	}
+	
+//Si no hay ninguno se avisa al usuario y se manda al home
+if(tiposActivos.isEmpty()){
+	Alerta.Alerta(request, "No hay ningun tipo de trabajo disponible", "warning");
+	response.sendRedirect("home.jsp");
+	return;
+}
 %>
 	<!-- Lógica de JavaScript para mostrar la alerta -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -125,7 +141,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     </div>
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
-        <form action="../ControladorCrearUsuario" method="post" enctype="multipart/form-data" id="formulario">
+        <form action="../ControladorCrearTrabajo" method="post" enctype="multipart/form-data" id="formulario">
             <!-- Campo de Descripcion -->
             <div class="form-group">
                 <label for="exampleTextarea" class="form-label">Describe lo que haras:</label>
@@ -135,7 +151,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <!-- Campo de Número de Horas -->
             <div class="form-group">
                 <label for="telefono">Horas Del Trabajo:</label>
-                <input type="tel" class="form-control" id="horas" name=horas" pattern="[0-9]" required >
+                <input type="tel" class="form-control" id="horas" name="horas" pattern="[0-9]" required >
             </div>
             
             <!-- Campo de Tipo de Trabajo -->

@@ -16,6 +16,7 @@ import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
+import Utilidades.Escritura;
 import Servicios.ImplentacionIntereaccionUsuario;
 
 @MultipartConfig
@@ -35,15 +36,19 @@ public class ControladorRegistro extends HttpServlet {
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 			
 		 try {
+			 //Declaramos loq ue necesitemos
 			 	Encriptado nc = new Encriptado();
 			 	HttpSession session = request.getSession();
 				
+			 	//Creamos el usuario
 				UsuarioDTO usuario = new UsuarioDTO(request.getParameter("nombreUsuario"),
 						request.getParameter("telefonoUsuario"),
 						request.getParameter("correoUsuario"),
 						nc.EncriptarContra(request.getParameter("contraseniaUsuario")));
 				
+				//Cojemos la imagen
 				 Part filePart = request.getPart("imagenUsuario");
+				 
 				 ComprobacionImagen com=new ComprobacionImagen();
 				 //Comprobamos si ha metido una foto
 				  if (filePart.getSize() > 0) {
@@ -82,23 +87,27 @@ public class ControladorRegistro extends HttpServlet {
 			
 				ImplentacionIntereaccionUsuario cosa = new ImplentacionIntereaccionUsuario();
 				
-				// Redirigir a la vista JSP
 				
 				try {
 					//Comprobamos si esta bien el usuario
 					if(cosa.RegistrarUsuario(usuario,request)) {
 						Alerta.Alerta(request,"Se ha creado el Usuario Correctamente se le ha enviando un correo para activar la cuenta","success");
 						response.sendRedirect("index.jsp");
+						Escritura.EscribirFichero("Un usuario se registro en la web y s ele mando un correo de alta");
 					}
+					//Si no se pudo se avisa al usuario
 					else {
+						Escritura.EscribirFichero("Un usuario quizo registrarse en la web pero nos e pudo insertar");
 						response.sendRedirect("index.jsp");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					response.sendRedirect("index.html");
+					Escritura.EscribirFichero("Hubo un error en regsitar usuario "+e.getLocalizedMessage());
 				}
 				
 		 }catch(Exception e) {
+			 Escritura.EscribirFichero("Hubo un error en regsitar usuario "+e.getLocalizedMessage());
 			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
 			}
 		 	

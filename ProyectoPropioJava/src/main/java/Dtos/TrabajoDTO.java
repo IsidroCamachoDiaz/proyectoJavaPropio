@@ -22,19 +22,19 @@ public class TrabajoDTO {
 	@JsonProperty("id_trabajo")
 	private int id_trabajo;
 	
-	@JsonProperty("descripcion_trabajo")
+	@JsonProperty("descripcion")
 	private String descripcion;
 	
-	@JsonProperty("estado_trabajo")
+	@JsonProperty("estado")
 	private boolean estado;
 	
-	@JsonProperty("horas_trabajo")
+	@JsonProperty("horas")
 	private int horas;
 	
-	@JsonProperty("id_incidencia")
+	@JsonProperty("incidencia")
 	private IncidenciaDTO incidencia;
 	
-	@JsonProperty("id_tipo_incidencia")
+	@JsonProperty("tipoIncidencia")
 	private TipoTrabajoDTO tipoIncidencia;
 	
 	//Constructores

@@ -5,6 +5,7 @@ import java.io.IOException;
 import Dtos.UsuarioDTO;
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,12 +18,17 @@ public class ControladorEliminarUsuario extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {		
 		
 			try {
+					//Declaramos lo que necesitemos
 					implementacionCRUD acciones = new implementacionCRUD();
 					String idUsuarioEliminar= request.getParameter("id");
-					//Crearmos el DTO con los paraemos pasados y usando el metodos de encriptar
+					
+					//Cogemos el usuario de la base de datos
 					UsuarioDTO usuario = acciones.SeleccionarUsuario("Select/"+idUsuarioEliminar);
+					
+					//Comprobamos si se encontro
 					if(usuario==null) {
 						Alerta.Alerta(request, "No se encontro al usuario", "error");
+						Escritura.EscribirFichero("Un adminsitardor quiso eliminar un usuario pero no se encontro el usuario");
 					}
 					
 					//USamos la implementacion
@@ -30,15 +36,19 @@ public class ControladorEliminarUsuario extends HttpServlet{
 					
 					//Comprobamos si esta bien el usuario
 					if(cosa.eliminarUsuario(usuario, request)) {
-						response.sendRedirect("gestionUsuarios.jsp");							
+						response.sendRedirect("gestionUsuarios.jsp");
+						Escritura.EscribirFichero("Un administrador elimino un usuario "+usuario.getNombreUsuario());
 					}
+					//Si no se pudo elimiinar se avisa al usuario
 					else {
 						Alerta.Alerta(request, "No se pudo borrar al usuario intentelo mas tarde", "error");
 						response.sendRedirect("home.jsp");
+						Escritura.EscribirFichero("Unadministrador quiso eliminar usuario pero no se pudo eliminar");
 					}
 					
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
+				Escritura.EscribirFichero("Hubo un error en eliminar usuario "+e.getLocalizedMessage());
 			}
 	 }
 }

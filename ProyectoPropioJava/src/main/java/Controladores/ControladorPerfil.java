@@ -10,6 +10,7 @@ import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Correo;
 import Utilidades.Encriptado;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -26,8 +27,11 @@ public class ControladorPerfil extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
+		 try {
+		 	//Declaramos lo que necesitemos
 		 	implementacionCRUD acciones = new implementacionCRUD ();
 		 	Encriptado nc = new Encriptado();
+		 	
 	     	//Cogemos los valores del formulario
 
 		 	String id=request.getParameter("id");
@@ -35,20 +39,25 @@ public class ControladorPerfil extends HttpServlet{
 		 	String telefono=request.getParameter("telefono");
 		 	String correo =request.getParameter("correo");
 		 	String contrasenia =request.getParameter("contrasenia");
+		 	
 		 	//Creo una variable para  ver si ha modificado algun campo
 		 	boolean cambio=false;
+		 	
 		 	//Busco al usuario para modificarle los campos
 	        UsuarioDTO usuarioCambio=acciones.SeleccionarUsuario("Select/"+id);
+	        
 	        //Compruebo cada campo y si lo modifica cambio el boleano
 	        if(!usuarioCambio.getNombreUsuario().equals(nombre)) {
 	        	usuarioCambio.setNombreUsuario(nombre);
 	        	cambio=true;
 	        }
+	        //Comprobamos si cambio el telefono
 	        if(!usuarioCambio.getTlfUsuario().equals(telefono)) {
 	        	usuarioCambio.setTlfUsuario(telefono);
 	        	cambio=true;
 	        }
 	        
+	        //Comprobamos si quizo cambiar la contraseña
 	        if(!contrasenia.equals("")) {
 	        	usuarioCambio.setClaveUsuario(nc.EncriptarContra(contrasenia));
 	        	cambio=true;
@@ -94,35 +103,39 @@ public class ControladorPerfil extends HttpServlet{
 			
 			//Compruebo si cambio el email
 			if(!usuarioCambio.getEmailUsuario().equals(correo)) {
+				//Declaramos lo que necesitemos
 				Correo correoAccion = new Correo();
 				usuarioCambio.setEmailUsuario(correo);
+				
 				//Pongo nuevo acceso
 				usuarioCambio.setAlta(false);
 				//Envio el correo con el nuevo token
 				correoAccion.EnviarCorreoToken(usuarioCambio);
 				//Actualizamos
 				acciones.ActualizarUsuario(usuarioCambio);
-				try {
-					response.sendRedirect("index.jsp");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+				response.sendRedirect("index.jsp");
+				
+				Escritura.EscribirFichero("Un usuario cambios sus datos uno de ellos el correo y se le envio el correo para el alta "+usuarioCambio.getNombreUsuario());
 				Alerta.Alerta(request, "Le hemos enviado un correo a su nuevo Correo Comfirmelo", "warning");
 				
 			}
 			//Si cambio lo actualizo el usuario y lo mando al home
 			else if(cambio) {
 				acciones.ActualizarUsuario(usuarioCambio);
-				try {
-					response.sendRedirect("vistas/home.jsp");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				
+				response.sendRedirect("vistas/home.jsp");
+				
+				Escritura.EscribirFichero("Un usuario cambio sus datos "+usuarioCambio.getNombreUsuario());
 			}
 			//Si no ha cambiado se le avisa
 			else {
+				Escritura.EscribirFichero("Un usuario quizo cambiar sus datos pero no modifico nada");
 				Alerta.Alerta(request, "No hizo ninguna modificacion", "warning");
-			}	        	             	        	    
+			}	
+		 }catch(Exception e) {
+			 Escritura.EscribirFichero("Hubo un error en modificar perfil "+e.getLocalizedMessage());
+		 }
+		 
 	    }
 }

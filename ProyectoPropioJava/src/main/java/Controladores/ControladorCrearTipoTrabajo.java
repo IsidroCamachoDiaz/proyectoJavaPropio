@@ -20,6 +20,7 @@ import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import Servicios.ImplementacionAdministracion;
 import Servicios.ImplementacionInteraccionIncedencias;
@@ -49,11 +50,14 @@ public class ControladorCrearTipoTrabajo extends HttpServlet {
 			 	String descripcionTipo=request.getParameter("descripcion");
 			 	Float precioServicio=Float.parseFloat(request.getParameter("precio"));
 			 	
+			 	//Comprobamos que no haya valores nulos
 			 	if(descripcionTipo==null||descripcionTipo.equals("")||precioServicio==null||precioServicio==0) {
 			 		Alerta.Alerta(request, "No puso todos los campos", "error");
+			 		Escritura.EscribirFichero("Un usuario quiso crear un tipo de trabajo pero puso valores nulos");
 			 		response.sendRedirect("vistas/home.jsp");
 			 	}
 			 	
+			 	//Creamos el tipo de traabjo
 			 	TipoTrabajoDTO tipoMeter=new TipoTrabajoDTO(descripcionTipo,precioServicio);
 			 					
 				//Declaramos la implementacion
@@ -62,19 +66,28 @@ public class ControladorCrearTipoTrabajo extends HttpServlet {
 				try {
 					//Comprobamos si se creo bien la incidencia
 					if(impl.CrearTipo(tipoMeter, request)) {
+						Escritura.EscribirFichero("Un usuario creo un tipo de trabajo");
 						response.sendRedirect("vistas/home.jsp");
 					}
+					//Si no se creo bien avisamos al usuario
 					else {
+						Escritura.EscribirFichero("Un usuario quiso crear un tipo de trabajo pero no se pudo insertar");
 						response.sendRedirect("vistas/home.jsp");
 					}
 				} catch (IOException e) {
 					Alerta.Alerta(request, "Hubo un error intentelo mas tarde", "error");
+					Escritura.EscribirFichero("Hubo un error en crear tipo de trabajo "+e.getLocalizedMessage());
 					response.sendRedirect("vistas/home.jsp");
 				}
 				
 		 }catch(Exception e) {
-			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
+			 Escritura.EscribirFichero("Hubo un error en crear tipo de trabajo "+e.getLocalizedMessage());
+			try {
+				response.sendRedirect("vistas/home.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
+		 }
 		 	
 		}
 }

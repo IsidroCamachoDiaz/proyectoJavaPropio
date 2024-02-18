@@ -21,6 +21,7 @@ import jakarta.servlet.http.Part;
 import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import Servicios.ImplementacionAdministracion;
 import Servicios.ImplementacionInteraccionIncedencias;
@@ -52,45 +53,51 @@ public class ControladorCrearTrabajo extends HttpServlet {
 			 	int horas=Integer.parseInt(request.getParameter("horas"));
 			 	
 			 	
+			 	//Cogemos la incidencia y el tipo de trabajo de eligio el usuario
 			 	IncidenciaDTO incidenciaBD=acciones.SeleccionarIncidencia("Select/"+idIncidencia);
 			 	TipoTrabajoDTO tipoBD=acciones.SeleccionarTipoDeTrabajo("Select/"+idTipo);
 			 	
-			 	if(descripcion==null||incidenciaBD==null||tipoBD==null||horas==0) {
+			 	//Comprobamos si esta todo correcto los valores
+			 	if(descripcion==null||incidenciaBD==null||tipoBD==null||horas==0||descripcion.equals("")) {
 			 		Alerta.Alerta(request,"no introdujo bien los valores","info");
 					response.sendRedirect("vistas/crearTrabajo.jsp");
+					Escritura.EscribirFichero("Un usuario quiso crear un trabajo pero puso valores nulos");
+					return;
 			 	}
 			 	
-			 	TrabajoDTO trabajoMeter=new TrabajoDTO(descripcion,false,horas,incidenciaBD,tipoBD);
-			 	
-			 	//Creamos la solicitud y la incidencia
-				SolicitudDTO solicitud = new SolicitudDTO(request.getParameter("descripcion"),false,Calendar.getInstance(),user);
-				
-				if(solicitud.getDescripcion().equals(null)||solicitud.getDescripcion().equals("")) {
-					Alerta.Alerta(request,"No introdujo ningun descripcion del problema","info");
-					response.sendRedirect("vistas/crearSolicitud.jsp");
-				}
+			 	//Creamos el trabajo
+			 	TrabajoDTO trabajoMeter=new TrabajoDTO(descripcion,false,horas,incidenciaBD,tipoBD);				
 				
 				//Declaramos la implementacion
 				ImplementacionInteraccionIncedencias impl = new ImplementacionInteraccionIncedencias();
 
 				try {
-					//Comprobamos si se creo bien la incidencia
-					if(impl.CrearIncidencia(solicitud, request)) {
-						Alerta.Alerta(request,"Se envio la Solicitud Correctamente","success");
+					//Comprobamos si se creo bien el trabajo
+					if(impl.CrearTrabajo(trabajoMeter, request)) {
+						Alerta.Alerta(request,"Se creo el trabajo Correctamente","success");
 						response.sendRedirect("vistas/home.jsp");
+						Escritura.EscribirFichero("Un usuario creo un trabajo par una incidencia");
 					}
+					//Si no se pudo crear se avisa al usuario
 					else {
-						Alerta.Alerta(request,"Hubo un fallo al crear la solicitud","error");
+						Alerta.Alerta(request,"Hubo un fallo al crear el trabajo","error");
 						response.sendRedirect("vistas/home.jsp");
+						Escritura.EscribirFichero("Un usuario quiso crear un trabajo pero no se pudo insertar");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					response.sendRedirect("vistas/crearUsuario.jsp");
+					Escritura.EscribirFichero("Hubo un error en crear Trabajo "+e.getLocalizedMessage());
 				}
 				
 		 }catch(Exception e) {
-			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
+			 try {
+				response.sendRedirect("vistas/home.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
+			 Escritura.EscribirFichero("Hubo un error en crear Trabajo "+e.getLocalizedMessage());
+		 }
 		 	
 		}
 }

@@ -110,7 +110,11 @@ public class ControladorModificarSolicitud extends HttpServlet {
 				
 		 }catch(Exception e) {
 			 Escritura.EscribirFichero("Hubo un error "+e.getLocalizedMessage());
-			 System.out.println("[ERROR-ControladorRegistro-doPost] Se produjo un error en el metodo post al insertar al usuario. | "+e);
+			 try {
+				response.sendRedirect("vistas/home.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			}
 		 	
 		}
