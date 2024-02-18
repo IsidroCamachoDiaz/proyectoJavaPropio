@@ -19,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Mostrar Trabajos</title>
     <link rel="icon" href="img/logoPNG.png" type="image/jpg">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
@@ -89,7 +89,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img class="logo" src="img/logo.png" alt="Imagen de Usuario">
-                <span class="text-white">Menu</span>
+                <span class="text-white">SystemRevive</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -133,6 +133,16 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 	    }
 	}
 	
+	//Cogemos todos los trabajos y los filtramos por los de la incidencia
+	List <TrabajoDTO> trabajos = acciones.SeleccionarTodosTrabajos();
+	for(IncidenciaDTO in:incidenciasPendientes){
+		in.setTrabajosConIncidencias(new ArrayList <TrabajoDTO>());
+		for(TrabajoDTO tra:trabajos){
+			if(tra.getIncidencia().getId_incidencia()==in.getId_incidencia()){
+				in.getTrabajosConIncidencias().add(tra);
+			}
+		}
+	}
 	%>
 	<div class="container-fluid">
 
@@ -143,8 +153,8 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 			
 			<% 			
 			for(IncidenciaDTO incidencia : incidenciasPendientes) { %>
-			 <div class="col-2"></div>
-				    <div class="col-8">
+			 <div class="col-12"></div>
+				    <div class="col-12">
 				 		<br>
 				       <table class="table">
                 <caption class="text-center text-light">Incidencia 
@@ -171,8 +181,8 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 	}
                 	else{
                 		for(TrabajoDTO t:incidencia.getTrabajosConIncidencias()){
-                			String estado="Finalizado";
-                			if(t.isEstado()){
+                			String estado="En Proceso";
+                			if(t.isEstado()==true){
                 				estado="Termindado";
                 			}
                 		%>
@@ -180,7 +190,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                             <td class="text-center"><%=t.getDescripcion() %></td>
                             <td class="text-center"><%=t.getHoras() %></td>
                             <td class="text-center"><%=estado %></td>
-                           	<td class="text-center">Acciones</td>
+                           	<td class="text-center"><button  class="btn btn-success text-center" type="button">Finalizar Trabajo</button></td>
                         </tr>
                 		<%
                 		}
@@ -193,7 +203,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 					      <button  class="btn btn-success text-center" type="button">Crear Trabajo</button>
 					  </a>
 				    </div>
-				     <div class="col-2"></div>
+				     <div class="col-12"></div>
 				<% } %>
 			</div>        
         </div>

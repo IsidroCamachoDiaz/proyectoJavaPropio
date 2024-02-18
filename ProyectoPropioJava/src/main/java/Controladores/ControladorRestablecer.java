@@ -19,17 +19,6 @@ public class ControladorRestablecer extends HttpServlet{
     private static final long serialVersionUID = 1L;
 	
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response){
-		 try
-		 {
-			 response.getWriter().append("Served at: ").append(request.getContextPath());
-		 }catch(Exception e) {
-
-				System.out.println("[ERROR-ControladorRegistro-doGet] Se produjo un error en el metodo get");
-			}
-		
-		}
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 		try {
         //Declaramos loq ue necesitemos

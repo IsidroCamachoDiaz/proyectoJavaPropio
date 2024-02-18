@@ -132,7 +132,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary text-white">
-                Ingrese los datos del usuario que quiere crear
+                Ingrese los datos para crear el trabajo
             </h2>
         </div>
        <div class="row tm-mb-90">            

@@ -9,6 +9,7 @@ import Dtos.SolicitudDTO;
 import Dtos.TrabajoDTO;
 import Utilidades.Alerta;
 import Utilidades.Correo;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -58,12 +59,18 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 			//Se comprueba si se envio bien
 			if(co.EnviarMensaje(mensaje, incidencia.getSolicitud().getCliente().getEmailUsuario(),
 					true,"Tu Incidencia Ha Sido Resuelta",seguridad.getProperty("correo"),true)) {
+				
+				//Volvemos aponer la lista como nulo para que no de problemas
+				incidencia.setTrabajosConIncidencias(null);
+				
 				//Se actualiza la incidencia
 				acciones.ActualizarIncidencia(incidencia);
+				Escritura.EscribirFichero("Un usuario finalizo una incidencia");
 				return true;
 			}
 			//Si no se pudo finalizar se avisa al usuario
 			else {
+				Escritura.EscribirFichero("Se termino una incidencia pero no se le pudo enviar el correo al usuario");
 				Alerta.Alerta(request, "No se pudo Enviar El correo al Usuario", "error");
 				return false;
 			}
@@ -71,7 +78,8 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		//Si hay trabajos pendientes se avisa al empleado
 		else {
 			Alerta.Alerta(request, "La incidencia no se puede terminar porque hay tareas pendientes con esta incidencia", "error");
-		return false;
+			Escritura.EscribirFichero("Un usuario usuario intento finalizar una incidencia pero la incidencia tienen trabajos pendientes");
+			return false;
 		}
 		
 	}

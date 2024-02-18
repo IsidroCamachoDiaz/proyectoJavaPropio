@@ -1,11 +1,13 @@
 package Controladores;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import Dtos.IncidenciaDTO;
 import Dtos.SolicitudDTO;
+import Dtos.TrabajoDTO;
 import Dtos.UsuarioDTO;
 import Servicios.ImplementacionInteraccionIncedencias;
 import Utilidades.Alerta;
@@ -36,14 +38,23 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 					
 					//Para asignar las incidencias con sus solicitudes
 					List <SolicitudDTO> solicitudes = acciones.SeleccionarTodasSolicitudes();
-					
-					
+										
 					//Comprobamos si es null algo
 					if(usuario==null||incidenciaAsignar==null) {
 						Alerta.Alerta(request, "No se encontro al usuario o la incidencia", "error");
 						response.sendRedirect("index.jsp");
 						Escritura.EscribirFichero("Un usuario quiso finalizar una incidencia pero no se encontro el usuario o la incidencia");
 					}
+					
+					//Cogemos todos los trabajos y los filtramos por los de la incidencia
+					List <TrabajoDTO> trabajos = acciones.SeleccionarTodosTrabajos();
+						incidenciaAsignar.setTrabajosConIncidencias(new ArrayList <TrabajoDTO>());
+						for(TrabajoDTO tra:trabajos){
+							if(tra.getIncidencia().getId_incidencia()==incidenciaAsignar.getId_incidencia()){
+								incidenciaAsignar.getTrabajosConIncidencias().add(tra);
+							}
+						}
+					
 					
 					//Comprobamos si tienes trabajos asignados
 					if(incidenciaAsignar.getTrabajosConIncidencias()==null||incidenciaAsignar.getTrabajosConIncidencias().isEmpty()) {
@@ -61,7 +72,6 @@ public class ControladorFinalizarIncidencia extends HttpServlet{
 					}
 					//Si no conseigue finalizarlo se avisa al usuario
 					else {
-						Alerta.Alerta(request, "No se pudo finalizar la incidencia correctamente", "error");
 						response.sendRedirect("home.jsp");
 						Escritura.EscribirFichero("Un usuario quiso finalizar ua incdencia pero no se pudo finalizar");
 					}
