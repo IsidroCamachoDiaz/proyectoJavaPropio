@@ -289,7 +289,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		        .filter(t -> t.getId_usuario().getIdUsuario() == usu.getIdUsuario())
 		        .collect(Collectors.toList());
 		
-		//Comprobamos que ti`po de acceso tiene el usuario
+		//Comprobamos que tipo de acceso tiene el usuario
 		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")||usu.getAcceso().getCodigoAcceso().equals("Empleado")) {
 			List <IncidenciaDTO> incidencias = acciones.SeleccionarTodasIncidencias();
 			
@@ -311,6 +311,12 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 			else {
 				usu.setFechaBaja(Calendar.getInstance());
 				acciones.ActualizarUsuario(usu);
+				for(IncidenciaDTO in:incidencias) {
+					if(in.isEstado()==false) {
+					in.setEmpleado(null);
+					acciones.ActualizarIncidencia(in);
+					}
+				}
 				Alerta.Alerta(request, "Se dio de Baja al Usuario", "success");
 				Escritura.EscribirFichero("Un usuario se dio de baja en la web "+usu.getNombreUsuario());
 				return true;

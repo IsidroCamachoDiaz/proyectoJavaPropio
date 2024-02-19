@@ -64,8 +64,12 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 				//Volvemos aponer la lista como nulo para que no de problemas
 				incidencia.setTrabajosConIncidencias(null);
 				
+				//Ponemos a finalizado la solicitud
+				incidencia.getSolicitud().setEstado(true);
+				
 				//Se actualiza la incidencia
 				acciones.ActualizarIncidencia(incidencia);
+				acciones.ActualizarSolicitud(incidencia.getSolicitud());
 				Escritura.EscribirFichero("Un usuario finalizo una incidencia");
 				return true;
 			}
