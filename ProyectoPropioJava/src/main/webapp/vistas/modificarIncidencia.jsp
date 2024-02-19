@@ -45,6 +45,14 @@ request.setAttribute("base64Image", session.getAttribute("imagen"));
 String idIncidencia = request.getParameter("idI");
 IncidenciaDTO incidencia= acciones.SeleccionarIncidencia("Select/"+idIncidencia);
 
+//Comprobamos si encontro la solicitud
+if(incidencia==null) {
+	Escritura.EscribirFichero("Un usuario quizo cambiar una incidencia pero no  se encontro la incidencia");
+	Alerta.Alerta(request,"No se encontro la incidencia","info");
+	response.sendRedirect("home.jsp");
+	return;
+}
+
 if(incidencia.getEmpleado().getIdUsuario()!=user.getIdUsuario()){
 	Alerta.Alerta(request,"Esta Incidencia no es suya","error");
 	response.sendRedirect("home.jsp");

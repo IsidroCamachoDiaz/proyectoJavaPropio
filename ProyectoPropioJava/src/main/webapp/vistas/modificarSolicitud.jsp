@@ -44,6 +44,14 @@ request.setAttribute("base64Image", session.getAttribute("imagen"));
 String idSolicitud = request.getParameter("idS");
 SolicitudDTO solicitud= acciones.SeleccionarSolicitud("Select/"+idSolicitud);
 
+//Comprobamos si encontro la solicitud
+if(solicitud==null) {
+	Escritura.EscribirFichero("Un usuario quizo cambiar una solicitud pero no  se encontro la solicitud");
+	Alerta.Alerta(request,"No se encontro la solicitud","info");
+	response.sendRedirect("home.jsp");
+	return;
+}
+
 if(solicitud.getCliente().getIdUsuario()!=user.getIdUsuario()){
 	Alerta.Alerta(request,"Esta solicitud no es suya","error");
 	response.sendRedirect("home.jsp");

@@ -140,6 +140,7 @@ public class ControladorPerfil extends HttpServlet{
 			else {
 				Escritura.EscribirFichero("Un usuario quizo cambiar sus datos pero no modifico nada");
 				Alerta.Alerta(request, "No hizo ninguna modificacion", "warning");
+				response.sendRedirect("vistas/home.jsp");
 			}	
 		 }catch(Exception e) {
 			 Escritura.EscribirFichero("Hubo un error en modificar perfil "+e.getLocalizedMessage());
