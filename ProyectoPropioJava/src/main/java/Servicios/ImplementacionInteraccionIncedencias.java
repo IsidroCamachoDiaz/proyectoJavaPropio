@@ -1,6 +1,7 @@
 package Servicios;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -90,5 +91,36 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		 //Insertamos el trabajo	
 		return acciones.InsertarTrabajo(trabajo);
 	}
-
+	@Override
+	public boolean FinalizarTrabajo(TrabajoDTO trabajo, HttpServletRequest request) {
+		//Declaramos lo que necesitemos
+		implementacionCRUD acciones=new implementacionCRUD();
+		
+		//Le añado a la incidencia las horas echadas mas las actuales
+		trabajo.getIncidencia().setHoras(trabajo.getIncidencia().getHoras()+trabajo.getHoras());
+		//Creo el decimal format que sirve para poner formato en mi caso a 2 decimales
+		DecimalFormat df = new DecimalFormat("#.##");
+		//suma el precio altual y el sumo las horas nuevas y le pongo el precio del tipo
+		float resultado = trabajo.getIncidencia().getCoste() +
+                (trabajo.getHoras() * trabajo.getTipoIncidencia().getPrecio_tipo());
+		
+		//Lo convertimos en string paar que tenga el formado
+		String resultadoFormateado = df.format(resultado);
+		
+		//Le replazamos la coma por un punto
+		resultadoFormateado = resultadoFormateado.replace(",", ".");
+		
+		// Convertir el resultado formateado de nuevo a float
+		float precioTotal = Float.parseFloat(resultadoFormateado);
+		
+		//Se lo asigno
+		trabajo.getIncidencia().setCoste(precioTotal);
+		
+		//Le indicamos que ha acabado
+		trabajo.setEstado(true);
+		
+		//Actualizamos la incidencia y el trabajo
+		acciones.ActualizarIncidencia(trabajo.getIncidencia());
+		return acciones.ActualizarTrabajo(trabajo);
+	}
 }

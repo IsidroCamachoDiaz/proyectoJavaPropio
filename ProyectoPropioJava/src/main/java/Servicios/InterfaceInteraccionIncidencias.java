@@ -42,4 +42,14 @@ public interface InterfaceInteraccionIncidencias {
      * @since 18/2/24
      */	
 	public boolean CrearTrabajo(TrabajoDTO trabajo, HttpServletRequest request);
+	
+	/**
+     * Método para finalizar los trabajos asignados de la incdencia
+     *
+     * @param request para mostrar las alertas
+     * @param Trabjo para finalizar
+     * @return true si se finalizo bien y false si hubo algun problema
+     * @since 19/2/24
+     */	
+	public boolean FinalizarTrabajo(TrabajoDTO trabajo, HttpServletRequest request);
 }

@@ -199,6 +199,19 @@
 		<servlet-name>ControladorCrearTrabajo</servlet-name>
 		<url-pattern>/ControladorCrearTrabajo</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ControladorFinalizarTrabajo</display-name>
+		<servlet-name>ControladorFinalizarTrabajo</servlet-name>
+		<servlet-class>Controladores.ControladorFinalizarTrabajo </servlet-class>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControladorFinalizarTrabajo</servlet-name>
+		<url-pattern>/ControladorFinalizarTrabajo</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

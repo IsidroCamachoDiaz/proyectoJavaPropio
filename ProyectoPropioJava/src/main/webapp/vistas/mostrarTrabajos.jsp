@@ -190,7 +190,12 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                             <td class="text-center"><%=t.getDescripcion() %></td>
                             <td class="text-center"><%=t.getHoras() %></td>
                             <td class="text-center"><%=estado %></td>
-                           	<td class="text-center"><button  class="btn btn-success text-center" type="button">Finalizar Trabajo</button></td>
+                           	<td class="text-center">
+                           	<form action="../ControladorFinalizarTrabajo" method="post" id="formulario">
+					        <input type="hidden" name="idT" value="<%=t.getId_trabajo() %>">
+					        <button  class="btn btn-success text-center" type="submit">Finalizar Trabajo</button>
+					      	</form>                    	                          	
+                           	</td>
                         </tr>
                 		<%
                 		}
