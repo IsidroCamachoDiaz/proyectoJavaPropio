@@ -50,6 +50,7 @@ public class ControladorModificarSolicitud extends HttpServlet {
 			 	String idUsuario=request.getParameter("id");
 			 	String idSolicitud=request.getParameter("idS");
 			 	String descripcionNueva=request.getParameter("descripcion");
+			 				 	
 			 	
 			 	//Cogemos el usuario
 			 	UsuarioDTO user =acciones.SeleccionarUsuario("Select/"+idUsuario);
@@ -58,10 +59,11 @@ public class ControladorModificarSolicitud extends HttpServlet {
 				SolicitudDTO solicitud = acciones.SeleccionarSolicitud("Select/"+idSolicitud);
 				
 				//Comprobamos si esta vacio
-				if(solicitud.getDescripcion().equals(null)||solicitud.getDescripcion().equals("")) {
+				if(descripcionNueva==null||descripcionNueva.equals("")) {
 					Escritura.EscribirFichero("Un usuario quizo cambiar una solicitud pero no puso nada");
 					Alerta.Alerta(request,"No introdujo ningun descripcion del problema","info");
 					response.sendRedirect("vistas/crearSolicitud.jsp");
+					return;
 				}
 				
 				List <IncidenciaDTO> incidencias=acciones.SeleccionarTodasIncidencias();

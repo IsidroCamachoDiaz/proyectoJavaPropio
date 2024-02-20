@@ -112,9 +112,10 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
         <div class="tm-bg-gray tm-video-details">
         <form action="../ControladorCrearTipoTrabajo" method="post" id="formulario">
+        	<!-- Campo de Descripcion -->
             <div class="container mt-4">
                 <label for="exampleTextarea" class="form-label">Describe de que tipo se trata:</label>
-                <textarea class="form-control" id="exampleTextarea" rows="4" name="descripcion"></textarea>
+                <textarea class="form-control" id="exampleTextarea" rows="4" name="descripcion" required></textarea>
               </div>           
               <!-- Campo de precio -->
              <div class="form-group">

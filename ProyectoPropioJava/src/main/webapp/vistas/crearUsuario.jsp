@@ -127,13 +127,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <!-- Campo de Número de Correo -->
             <div class="form-group">
                 <label for="correo">Correo Propio:</label>
-                <input type="email" class="form-control" id="correo" name="correo"   equired>
+                <input type="email" class="form-control" id="correo" name="correo" required>
             </div>
             
 			<!-- Campo contraseña -->
 			<div class="form-group">
                 <label for="contrasenia">Contraseña:</label>
-                <input type="password" class="form-control" id="contrasenia" name="contrasenia" value="" >
+                <input type="password" class="form-control" id="contrasenia" name="contrasenia" value="" required>
             </div>
 			
             <!-- Campo de Subir Archivo (Imagen) -->

@@ -48,6 +48,15 @@ public class ControladorPerfil extends HttpServlet{
 		 	String correo =request.getParameter("correo");
 		 	String contrasenia =request.getParameter("contrasenia");
 		 	
+		 	//Comprobamos que no hay valores nulos
+		 	if(nombre==null||nombre.equals("")||telefono.equals("")||telefono==null||correo==null
+		 			||correo.equals("")) {
+		 		response.sendRedirect("vistas/home.jsp");
+				Escritura.EscribirFichero("Un usuario puso campos vacios ");
+				Alerta.Alerta(request, "No puede poner campos vacios", "warning");
+				return;
+		 	}
+		 	
 		 	//Creo una variable para  ver si ha modificado algun campo
 		 	boolean cambio=false;
 		 	

@@ -157,7 +157,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <!-- Campo de Tipo de Trabajo -->
             <div class="form-group">
                 <label for="campo_select" class="form-label">Selecciona el acceso del usuario:</label>
-		    <select class="form-select" id="tipo" name="tipo">
+		    <select class="form-select" id="tipo" name="tipo" required>
 			<%	
 			for(int i=0;i<tiposActivos.size();i++){
 					%><option value="<%=tiposActivos.get(i).getId_tipo() %>"><%=tiposActivos.get(i).getDescripcion_tipo() %></option><%

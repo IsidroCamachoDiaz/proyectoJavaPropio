@@ -139,7 +139,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         <form action="../ControladorModificarIncidencia" method="post" id="formulario">
             <div class="container mt-4">
                 <label for="exampleTextarea" class="form-label">Describenos lo que te ocurre:</label>
-                <textarea class="form-control"  rows="4" name="descripcion"><%=incidencia.getDescripcion_tecnica() %></textarea>
+                <textarea class="form-control"  rows="4" name="descripcion" required><%=incidencia.getDescripcion_tecnica() %></textarea>
               </div>
              <div class="mb-4 text-center" style="margin-top:10px;">
                 <button class="btn btn-primary tm-btn-big"  type="submit">Modificar Incidencia</button>

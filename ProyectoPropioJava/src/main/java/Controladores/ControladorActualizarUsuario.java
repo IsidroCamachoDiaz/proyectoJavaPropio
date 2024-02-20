@@ -8,6 +8,7 @@ import Servicios.ImplementacionAdministracion;
 import Servicios.ImplentacionIntereaccionUsuario;
 import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
+import Utilidades.Escritura;
 import Utilidades.implementacionCRUD;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -39,6 +40,14 @@ public class ControladorActualizarUsuario extends HttpServlet{
 	 	String nombre=request.getParameter("nombre");
 	 	String telefono=request.getParameter("telefono");
 	 	String acceso=request.getParameter("acceso");
+	 	
+	 	//Comprobamos que no hay valores nulos
+	 	if(nombre==null||nombre.equals("")||telefono.equals("")||telefono==null) {
+	 		response.sendRedirect("vistas/home.jsp");
+			Escritura.EscribirFichero("Un usuario puso campos vacios");
+			Alerta.Alerta(request, "No puede poner campos vacios", "warning");
+			return;
+	 	}
 	 	
 	    ImplementacionAdministracion inter = new ImplementacionAdministracion();
 	 	

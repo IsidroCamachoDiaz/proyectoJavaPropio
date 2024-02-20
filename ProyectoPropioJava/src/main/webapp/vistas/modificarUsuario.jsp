@@ -137,17 +137,17 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
            
            <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuarioCambiar.getNombreUsuario() %>" >
+                <input type="text" class="form-control" id="nombre" name="nombre" value="<%=usuarioCambiar.getNombreUsuario() %>" required >
             </div>
 
             <!-- Campo de Número de Teléfono -->
             <div class="form-group">
                 <label for="telefono">Número de Teléfono:</label>
-                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuarioCambiar.getTlfUsuario() %>">
+                <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{9}" value="<%=usuarioCambiar.getTlfUsuario() %>" required>
             </div>
                        
 			<label for="campo_select" class="form-label">Selecciona el acceso del usuario:</label>
-		    <select class="form-select" id="acceso" name="acceso">
+		    <select class="form-select" id="acceso" name="acceso" required>
 			<%
 			List <AccesoDTO> accesos=acciones.SeleccionarTodosAccesos();		
 			for(int i=0;i<accesos.size();i++){

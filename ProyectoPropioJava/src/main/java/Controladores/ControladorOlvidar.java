@@ -25,6 +25,13 @@ public class ControladorOlvidar extends HttpServlet{
     	//Cogemos el correo
         String correo=request.getParameter("correo");
         
+        if(correo==null||correo.equals("")) {
+			Escritura.EscribirFichero("Un usuario quizo cambiar la contraseña pero no puso nada");
+			Alerta.Alerta(request,"No introdujo ningun correo par la peticion","info");
+			response.sendRedirect("contrasenia.jsp");
+			return;
+		}
+        
         //Declaramos la implementacion
         ImplentacionIntereaccionUsuario inter = new ImplentacionIntereaccionUsuario();
         
