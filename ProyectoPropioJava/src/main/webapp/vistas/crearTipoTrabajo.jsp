@@ -120,7 +120,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
               <!-- Campo de precio -->
              <div class="form-group">
                 <label for="precio">Precio Del Servicio:</label>
-                <input type="number" class="form-control" id="precio" name="precio" required step="any">
+                <input type="number" class="form-control" id="precio" name="precio" required step="0.01" pattern="\d+(\.\d{1,2})?">
             </div>
             
              <div class="mb-4 text-center" style="margin-top:10px;">

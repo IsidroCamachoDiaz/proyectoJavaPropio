@@ -151,7 +151,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
             <!-- Campo de Número de Horas -->
             <div class="form-group">
                 <label for="telefono">Horas Del Trabajo:</label>
-                <input type="tel" class="form-control" id="horas" name="horas" pattern="[0-9]" required >
+                <input type="number" class="form-control" id="horas" name="horas" pattern="[0-9]" required >
             </div>
             
             <!-- Campo de Tipo de Trabajo -->
