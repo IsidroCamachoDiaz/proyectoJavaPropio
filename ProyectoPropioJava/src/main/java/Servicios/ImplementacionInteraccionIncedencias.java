@@ -29,7 +29,6 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		//Se declara lo que se necesite
 		Properties seguridad = new Properties();
 		implementacionCRUD acciones=new implementacionCRUD();
-		try {
 		
 		//Declaramos el propertiesd de los datos del correo
 		try {
@@ -88,14 +87,7 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 			return false;
 		}
 		
-		}catch (NullPointerException e) {
-	        e.printStackTrace();
-	        // Manejar la excepción de puntero nulo aquí
-	        return false;
-	    }
-		
 	}
-	
 	@Override
 	public boolean CrearTrabajo(TrabajoDTO trabajo, HttpServletRequest request) {
 		//Declaramos lo que necesitemos
@@ -103,13 +95,11 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		 //Insertamos el trabajo	
 		return acciones.InsertarTrabajo(trabajo);
 	}
-	
 	@Override
 	public boolean FinalizarTrabajo(TrabajoDTO trabajo, HttpServletRequest request) {
 		//Declaramos lo que necesitemos
 		implementacionCRUD acciones=new implementacionCRUD();
 		
-		try {
 		//Le añado a la incidencia las horas echadas mas las actuales
 		trabajo.getIncidencia().setHoras(trabajo.getIncidencia().getHoras()+trabajo.getHoras());
 		//Creo el decimal format que sirve para poner formato en mi caso a 2 decimales
@@ -136,13 +126,5 @@ public class ImplementacionInteraccionIncedencias implements InterfaceInteraccio
 		//Actualizamos la incidencia y el trabajo
 		acciones.ActualizarIncidencia(trabajo.getIncidencia());
 		return acciones.ActualizarTrabajo(trabajo);
-		
-		}catch (NullPointerException e) {
-	        e.printStackTrace();
-	        return false;
-	    } catch (NumberFormatException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
 	}
 }

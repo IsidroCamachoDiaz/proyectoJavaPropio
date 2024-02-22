@@ -109,10 +109,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
 	            	return false;
 	            }
-		}catch (NullPointerException e) {
-	        Escritura.EscribirFichero("Error al autenticar al usuario: " + e.getMessage());
-	        return false;
-	    }catch(Exception e) {
+		}catch(Exception e) {
 			Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
 			Escritura.EscribirFichero("Hubo un error en el login "+e.getLocalizedMessage());
 			System.out.println(e.getLocalizedMessage());
@@ -272,11 +269,6 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	                return false;
 	            }
 
-	        }catch (NullPointerException e) {
-	            System.out.println("Error de NullPointerException: " + e.getMessage());
-	            Alerta.Alerta(request, "Ocurrió un error de NullPointerException al intentar cambiar la contraseña. ", "error");
-	            Escritura.EscribirFichero("Error de NullPointerException al intentar cambiar la contraseña: " + e.getMessage());
-	            return false;
 	        } catch (Exception e) {
 	            // Manejar cualquier excepción
 	            e.printStackTrace();
