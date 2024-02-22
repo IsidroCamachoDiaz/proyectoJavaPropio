@@ -27,7 +27,8 @@ if(!acceso.equals("1")&&!acceso.equals("2")&&!acceso.equals("3")){
    }catch(Exception e){
 	   Escritura.EscribirFichero("Una persona intento acceder sin haberse logueado");
 	   Alerta.Alerta(request,"No ha iniciado Sesion en la web","error");
-	   response.sendRedirect("index.jsp");
+	   response.sendRedirect("../index.jsp");
+	   return;
 		
    }
  Escritura.EscribirFichero("Se accedio a modificar perfil");

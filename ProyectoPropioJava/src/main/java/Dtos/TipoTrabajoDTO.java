@@ -4,6 +4,17 @@ import java.util.Calendar;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Clase que representa un tipo de trabajo con sus atributos y métodos asociados.
+ * Esta clase es un Data Transfer Object (DTO) para transferir información de tipos de trabajo.
+ * 
+ * @author Isidro Camacho Diaz
+ * 
+ * @param id_tipo Identificador único del tipo de trabajo.
+ * @param descripcion_tipo Descripción del tipo de trabajo.
+ * @param precio_tipo Precio del tipo de trabajo.
+ * @param fecha_fin Fecha de finalización del tipo de trabajo.
+ */
 public class TipoTrabajoDTO {
 	
 	//Propiedades

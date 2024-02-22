@@ -53,6 +53,7 @@ public class ControladorCrearTipoTrabajo extends HttpServlet {
 			 		Alerta.Alerta(request, "No puso todos los campos", "error");
 			 		Escritura.EscribirFichero("Un usuario quiso crear un tipo de trabajo pero puso valores nulos");
 			 		response.sendRedirect("vistas/home.jsp");
+			 		return;
 			 	}
 			 	
 			 	//Creamos el tipo de traabjo

@@ -10,6 +10,7 @@
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="Utilidades.Escritura" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,13 +117,15 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         </form>
     </div>
 	<%
+	//Cogemos todos los usuarios y los filtramos
+	List <UsuarioDTO> usuariosTodos=acciones.SeleccionarTodosUsuarios();
+	List <UsuarioDTO> usuarios=new ArrayList <UsuarioDTO>();
 	
-	List <UsuarioDTO> usuarios=acciones.SeleccionarTodosUsuarios();
-	for(int i=0;i<usuarios.size();i++){
-		if(usuarios.get(i).getIdUsuario()==user.getIdUsuario()){
-			usuarios.remove(i);
-			break;
+	for(int i=0;i<usuariosTodos.size();i++){
+		if(usuariosTodos.get(i).getIdUsuario()!=user.getIdUsuario()&& usuariosTodos.get(i).getFechaBaja()==null){
+			usuarios.add(usuariosTodos.get(i));
 		}
+
 	}
 	%>
 	<div class="container-fluid">

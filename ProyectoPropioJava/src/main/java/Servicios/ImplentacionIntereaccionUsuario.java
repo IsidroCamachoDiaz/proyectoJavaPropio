@@ -109,7 +109,10 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
 	            	return false;
 	            }
-		}catch(Exception e) {
+		}catch (NullPointerException e) {
+	        Escritura.EscribirFichero("Error al autenticar al usuario: " + e.getMessage());
+	        return false;
+	    }catch(Exception e) {
 			Alerta.Alerta(request,"Hubo un error intentelo mas tarde","error");
 			Escritura.EscribirFichero("Hubo un error en el login "+e.getLocalizedMessage());
 			System.out.println(e.getLocalizedMessage());
@@ -269,6 +272,11 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	                return false;
 	            }
 
+	        }catch (NullPointerException e) {
+	            System.out.println("Error de NullPointerException: " + e.getMessage());
+	            Alerta.Alerta(request, "Ocurrió un error de NullPointerException al intentar cambiar la contraseña. ", "error");
+	            Escritura.EscribirFichero("Error de NullPointerException al intentar cambiar la contraseña: " + e.getMessage());
+	            return false;
 	        } catch (Exception e) {
 	            // Manejar cualquier excepción
 	            e.printStackTrace();
@@ -293,21 +301,24 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 		if(usu.getAcceso().getCodigoAcceso().equals("Administrador")||usu.getAcceso().getCodigoAcceso().equals("Empleado")) {
 			List <IncidenciaDTO> incidencias = acciones.SeleccionarTodasIncidencias();
 			
+			//Filtramos por las de le usuario
 			incidencias=incidencias.stream()
 	                .filter(incidencia -> incidencia.getEmpleado().getIdUsuario() == usu.getIdUsuario())
 	                .collect(Collectors.toList());
+			//Comprobamos si esta vacio
 			if(incidencias.isEmpty()) {
 				//Si no tiene borramos todo lo que tengamos del usuario
 				for(int i=0;i<tokens.size();i++) {
 					acciones.EliminarToken(String.valueOf(tokens.get(i).getIdToken()));
 				}
 				
-				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));
-				
+
+				acciones.EliminarUsuario(String.valueOf(usu.getIdUsuario()));				
 				Alerta.Alerta(request, "Se elimino Totalmente al usuario", "success");
 				Escritura.EscribirFichero("Se elimino un usuario por completo "+usu.getNombreUsuario());
 				return true;
 			}
+			//Si es usuario
 			else {
 				usu.setFechaBaja(Calendar.getInstance());
 				acciones.ActualizarUsuario(usu);
