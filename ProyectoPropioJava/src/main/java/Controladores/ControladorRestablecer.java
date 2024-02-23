@@ -64,7 +64,7 @@ public class ControladorRestablecer extends HttpServlet{
 			try {
 				response.sendRedirect("index.jsp");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				Escritura.EscribirFichero("Hubo un erroe en restablecer contraseña "+e.getLocalizedMessage());
 				e1.printStackTrace();
 			}
 		}

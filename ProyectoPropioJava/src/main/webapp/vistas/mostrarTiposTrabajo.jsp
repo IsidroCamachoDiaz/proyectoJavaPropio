@@ -172,7 +172,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     %>
                         <tr>
                             <td class="text-center"><%=t.getDescripcion_tipo() %></td>
-                            <td class="text-center"><%=t.getPrecio_tipo() %></td>
+                            <td class="text-center"><%=t.getPrecio_tipo() %>€</td>
                             <td class="text-center">
                              <form action="../ControladorFinalizarTipo" method="post" id="form">
 					        <input type="hidden" name="id" value="<%=t.getId_tipo() %>">
@@ -200,7 +200,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                     %>
                         <tr>
                             <td class="text-center"><%=t.getDescripcion_tipo() %></td>
-                            <td class="text-center"><%=t.getPrecio_tipo() %></td>
+                            <td class="text-center"><%=t.getPrecio_tipo() %>€</td>
                             <td class="text-center"><%=fechaFormateada %></td>
                         </tr>
                     <% } %>

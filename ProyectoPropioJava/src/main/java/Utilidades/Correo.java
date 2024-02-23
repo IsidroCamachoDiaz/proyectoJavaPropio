@@ -182,16 +182,23 @@ public class Correo {
             msg.setFrom(addressFrom);
             msg.setReplyTo(addressReply);
             msg.setRecipients(Message.RecipientType.TO, addressToOK);
-
-            if (cco)
+            
+            // Verifica si se incluirán destinatarios ocultos
+            if (cco) // Agrega los destinatarios ocultos al mensaje
                 msg.addRecipients(Message.RecipientType.BCC, addressReply);
-
+            
+            // Establece el asunto del mensaje
             msg.setSubject(subject);
-
+            
+            // Verifica si el cuerpo del mensaje es HTML
             if (html) {
+            	 // Si el cuerpo es HTML, establece el contenido del mensaje como HTML
+                // Utiliza charset ISO-8859-1 para codificar caracteres especiales
                 body = body;
                 msg.setContent(body, "text/html; charset=ISO-8859-1");
             } else {
+            	// Si el cuerpo no es HTML, establece el contenido del mensaje como texto plano
+                // Utiliza charset ISO-8859-1 para codificar caracteres especiales
                 msg.setContent(body, "text/plain; charset=ISO-8859-1");
             }
 

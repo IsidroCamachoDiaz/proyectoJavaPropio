@@ -33,9 +33,10 @@ public class ControladorActualizarUsuario extends HttpServlet{
 	 * */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
     	try {
-    		
+    	//Declaramos loq ue encesitemos
     	boolean cambio=false;
     	
+    	//Cogemos los valores del fomulario
         String idUsuario=request.getParameter("id");
 	 	String nombre=request.getParameter("nombre");
 	 	String telefono=request.getParameter("telefono");
@@ -52,23 +53,35 @@ public class ControladorActualizarUsuario extends HttpServlet{
 	    ImplementacionAdministracion inter = new ImplementacionAdministracion();
 	 	
 	 	implementacionCRUD acciones = new implementacionCRUD();
+	 	
+	 	//Cogemos el usuario que se quiere cambiar
 	 	UsuarioDTO usuarioCambiar = acciones.SeleccionarUsuario("Select/"+idUsuario);
 	 	
+	 	//Comprobamos si se encontro
 	 	if(usuarioCambiar==null) {
 	 		Alerta.Alerta(request, "No se encontro al usuario", "error");
-				response.sendRedirect("vistas/home.jsp");
+			response.sendRedirect("vistas/home.jsp");
+			Escritura.EscribirFichero("Un administrador quiso modificar un usuario pero no se encontro el usuario");
 	 	}
 	 	
+	 	//Comprobamos si tiene campos diferentes
 	 	if(!nombre.equals(usuarioCambiar.getNombreUsuario())||!telefono.equals(usuarioCambiar.getTlfUsuario())
 	 			||!acceso.equals(String.valueOf(usuarioCambiar.getAcceso().getIdAcceso()))) {
 	 		
+	 		//Comprobamos si es el acceso
 	 		if(!acceso.equals(String.valueOf(usuarioCambiar.getAcceso().getIdAcceso()))) {
+	 			//Comprobamos si se cambia bien
 	 			if(inter.CambiarAcceso(usuarioCambiar, request, acceso)) {
+	 				Escritura.EscribirFichero("Se cambio el acceso al usuario: "+usuarioCambiar.getNombreUsuario());
 	 			}
-	 			else {
+	 			//Si no se puede cambiar bien se avisa al usuario
+	 			else {	 				
+	 				Escritura.EscribirFichero("Un administrador quiso cambiar un acceso pero no se pudo cambiar");
 	 				response.sendRedirect("vistas/home.jsp");
+	 				return;
 	 			}
 	 		}
+	 		//Se cambia el resto de campo
 	 		usuarioCambiar.setNombreUsuario(nombre);
 	 		usuarioCambiar.setTlfUsuario(telefono);
 	 		cambio=true;
@@ -105,24 +118,29 @@ public class ControladorActualizarUsuario extends HttpServlet{
 			        
 			  }
 			
-			
+			//Comprobamos se se cambio campos
 			if(cambio) {
 				acciones.ActualizarUsuario(usuarioCambiar);
+				Escritura.EscribirFichero("Un administrador modifico al usuario: "+usuarioCambiar.getNombreUsuario());
 				Alerta.Alerta(request, "Se modifico correctamente el usuario "+usuarioCambiar.getNombreUsuario(), "success");
 				response.sendRedirect("vistas/gestionUsuarios.jsp");
 			}
 			//Si no ha cambiado se le avisa
 			else {
+				Escritura.EscribirFichero("Un administrador quiso cambiar a un usuario pero no cambiar ningun dato");
 				Alerta.Alerta(request, "No hizo ninguna modificacion", "warning");
 				response.sendRedirect("vistas/gestionUsuarios.jsp");
 			}	
         
     	}catch (IOException e) {
 			e.printStackTrace();
+			Escritura.EscribirFichero("Hubo un error en modificar usuario "+e.getLocalizedMessage());
 		}catch (ServletException e) {
 			e.printStackTrace();
+			Escritura.EscribirFichero("Hubo un error en modificar usuario "+e.getLocalizedMessage());
 		}
-    	catch(Exception e) {	
+    	catch(Exception e) {
+    		Escritura.EscribirFichero("Hubo un error en modificar usuario "+e.getLocalizedMessage());
     	}
     }
 

@@ -186,13 +186,13 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                             <td class="text-center"><%=in.getDescripcion_tecnica() %></td>
                             <%} %>
                             <td class="text-center"><%=in.getHoras() %></td>
-                            <td class="text-center"><%=in.getCoste() %></td>
+                            <td class="text-center"><%=in.getCoste() %>€</td>
                            	<td class="text-center"><%=fechaFormateada %></td>
                            	<td  class="text-center">
 	                       <form action="./ControladorFinalizarIncidencia" method="post">
 	                            <input type="hidden" name="id" value="<%=user.getIdUsuario() %>">
 						        <input type="hidden" name="idI" value="<%=in.getId_incidencia() %>">
-						        <button type="submit" class="btn btn-info" >Finalizar Incidencia</button>	
+						        <button type="submit" class="btn btn-danger" >Finalizar Incidencia</button>	
 						  </form>
 						  
 						  <a href="modificarIncidencia.jsp?idI=<%=in.getId_incidencia() %>">
@@ -221,7 +221,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                         <tr>
                             <td class="text-center"><%=in.getDescripcion_usuario() %></td>
                             <td class="text-center"><%=in.getHoras() %></td>
-                            <td class="text-center"><%=in.getCoste() %></td>
+                            <td class="text-center"><%=in.getCoste() %>€</td>
                             <td  class="text-center">
 	                       <form action="./ControladorAsignarIncidencia" method="post">
 	                            <input type="hidden" name="id" value="<%=user.getIdUsuario() %>">
@@ -258,7 +258,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                             <td class="text-center"><%=in.getDescripcion_usuario() %></td>
                             <td class="text-center"><%=in.getDescripcion_tecnica() %></td>
                             <td class="text-center"><%=in.getHoras() %></td>
-                            <td class="text-center"><%=in.getCoste() %></td>
+                            <td class="text-center"><%=in.getCoste() %>€</td>
                            	<td class="text-center"><%=fechaInicio %></td>
                            	<td class="text-center"><%=fechaFin %></td>
                            	<td class="text-center"><%=in.getEmpleado().getNombreUsuario() %></td>                           	                        	

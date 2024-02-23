@@ -16,7 +16,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Administracion De Usuario</title>
     <link rel="icon" href="img/logoPNG.png" type="image/jpg">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
@@ -86,7 +86,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img class="logo" src="img/logo.png" alt="Imagen de Usuario">
-                <span class="text-white">Menu</span>
+                <span class="text-white">SystemRevive</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>

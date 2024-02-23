@@ -59,11 +59,12 @@ public class ControladorModificarIncidencia extends HttpServlet {
 					response.sendRedirect("vistas/home.jsp");
 				}
 				
-				//Comprobamos si es distinta a la antigua
+				//Comprobamos si es nulo
 				if(incidencia.getDescripcion_tecnica()==null) {
 					incidencia.setDescripcion_tecnica(descripcionNueva);
 					cambio=true;
 				}
+				//Comprobamos si es distinta a la antigua
 				else{
 					if(!incidencia.getDescripcion_tecnica().equals(descripcionNueva)) {
 						incidencia.setDescripcion_tecnica(descripcionNueva);
