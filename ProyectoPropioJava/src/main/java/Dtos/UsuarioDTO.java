@@ -227,37 +227,60 @@ public class UsuarioDTO implements Serializable {
 	    this.foto = foto;
 	}
 
-	
+	/**
+	 * Obtiene el ID del usuario.
+	 * @return El ID del usuario.
+	 */
 	public int getIdUsuario() {
 		return idUsuario;
 	}
 
 
+	/**
+	 * Establece el ID del usuario.
+	 * @param idUsuario El nuevo ID del usuario.
+	 */
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 
+
+	/**
+	 * Establece el acceso del usuario.
+	 * @param acceso El acceso del usuario.
+	 */
 	public void setAcceso(AccesoDTO acceso) {
 		this.acceso = acceso;
 	}
 
-	
-
+	/**
+	 * Comprueba si el usuario está activo.
+	 * @return true si el usuario está activo, false de lo contrario.
+	 */
 	public boolean isAlta() {
 		return alta;
 	}
 
-
+	/**
+	 * Establece el estado de alta del usuario.
+	 * @param alta El estado de alta del usuario.
+	 */
 	public void setAlta(boolean alta) {
 		this.alta = alta;
 	}
 
-
+	/**
+	 * Obtiene la fecha de baja del usuario.
+	 * @return La fecha de baja del usuario.
+	 */
 	public Calendar getFechaBaja() {
 		return fechaBaja;
 	}
 
-
+	/**
+	 * Establece la fecha de baja del usuario.
+	 * @param fechaBaja La nueva fecha de baja del usuario.
+	 */
 	public void setFechaBaja(Calendar fechaBaja) {
 		this.fechaBaja = fechaBaja;
 	}

@@ -88,51 +88,99 @@ public class TrabajoDTO {
 
 	
 	//Geters y Seters
-
+	
+	/**
+	 * Obtiene el ID del trabajo.
+	 * @return El ID del trabajo.
+	 */
 	public int getId_trabajo() {
 		return id_trabajo;
 	}
 
+	/**
+	 * Establece el ID del trabajo.
+	 * @param id_trabajo El nuevo ID del trabajo.
+	 */
 	public void setId_trabajo(int id_trabajo) {
 		this.id_trabajo = id_trabajo;
 	}
 
+	/**
+	 * Obtiene la descripción del trabajo.
+	 * @return La descripción del trabajo.
+	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
 
+	/**
+	 * Establece la descripción del trabajo.
+	 * @param descripcion La nueva descripción del trabajo.
+	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
+	/**
+	 * Comprueba si el trabajo está en estado.
+	 * @return true si el trabajo está en estado, false de lo contrario.
+	 */
 	public boolean isEstado() {
 		return estado;
 	}
 
+	/**
+	 * Establece el estado del trabajo.
+	 * @param estado El nuevo estado del trabajo.
+	 */
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
 
+	/**
+	 * Obtiene las horas del trabajo.
+	 * @return Las horas del trabajo.
+	 */
 	public int getHoras() {
 		return horas;
 	}
 
+	/**
+	 * Establece las horas del trabajo.
+	 * @param horas Las nuevas horas del trabajo.
+	 */
 	public void setHoras(int horas) {
 		this.horas = horas;
 	}
 
+	/**
+	 * Obtiene la incidencia asociada al trabajo.
+	 * @return La incidencia asociada al trabajo.
+	 */
 	public IncidenciaDTO getIncidencia() {
 		return incidencia;
 	}
 
+	/**
+	 * Establece la incidencia asociada al trabajo.
+	 * @param incidencia La nueva incidencia asociada al trabajo.
+	 */
 	public void setIncidencia(IncidenciaDTO incidencia) {
 		this.incidencia = incidencia;
 	}
-
+	
+	/**
+	 * Obtiene el tipo de incidencia del trabajo.
+	 * @return El tipo de incidencia del trabajo.
+	 */
 	public TipoTrabajoDTO getTipoIncidencia() {
 		return tipoIncidencia;
 	}
 
+	/**
+	 * Establece el tipo de incidencia del trabajo.
+	 * @param tipoIncidencia El nuevo tipo de incidencia del trabajo.
+	 */
 	public void setTipoIncidencia(TipoTrabajoDTO tipoIncidencia) {
 		this.tipoIncidencia = tipoIncidencia;
 	}

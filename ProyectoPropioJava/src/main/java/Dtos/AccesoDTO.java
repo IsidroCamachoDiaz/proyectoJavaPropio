@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param  listaUsuariosConAccesoDto Lista de todos los usuarios con Acceso
  */
 public class AccesoDTO {
+	
     @JsonProperty("idAcceso")
     private int idAccesoDto;
     @JsonProperty("codigoAcceso")
@@ -28,8 +29,7 @@ public class AccesoDTO {
     public AccesoDTO() {
         super();
     }
-    
-    
+       
     /**
      * Constructor con los datos del Id, Codigo y Descripcion
      * 
