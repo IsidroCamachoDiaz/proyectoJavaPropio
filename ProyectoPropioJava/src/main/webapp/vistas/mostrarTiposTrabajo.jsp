@@ -157,7 +157,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-12 col-md-8 table-container">
+        <div class="col-12 col-md-8 ">
             <table id="tabla1" class="table">
                 <caption class="text-center text-light">Tipos De Trabajo Activos</caption>
                 <thead>

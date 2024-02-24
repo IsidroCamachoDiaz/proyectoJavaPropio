@@ -147,7 +147,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
 	<div class="container-fluid">
 
     <div class="row justify-content-center">
-        <div class="col-12 col-md-8 table-container">
+        <div class="col-12 col-md-8 ">
             
 			<div class="row">
 			

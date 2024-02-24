@@ -160,7 +160,7 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 </ul>
             </div>
         </nav>
-        <div class="col-12 col-md-12 table-container">
+        <div class="col-12 col-md-12 ">
             <table id="tabla1" class="table">
                 <caption class="text-center text-light">Incidencias Propias</caption>
                 <thead>
