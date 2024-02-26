@@ -22,8 +22,6 @@ public class Escritura {
         implementacionEscritura es = new implementacionEscritura();
         
         // Abre el archivo para escritura, con la opción de agregar al final del archivo si ya existe
-        //PrintWriter pr = es.abrirArchivo("C:\\Users\\isidr\\OneDrive\\Escritorio\\Ficheros\\log.txt", true);
-        //PrintWriter pr = es.abrirArchivo("C:\\Users\\Puesto3\\Desktop\\FicheroLog\\log.txt", true);
         PrintWriter pr = es.abrirArchivo("log.txt", true);
         
         // Escribe el texto en el archivo
