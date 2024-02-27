@@ -55,6 +55,7 @@ if(solicitud==null) {
 if(solicitud.getCliente().getIdUsuario()!=user.getIdUsuario()){
 	Alerta.Alerta(request,"Esta solicitud no es suya","error");
 	response.sendRedirect("home.jsp");
+	return;
 }
 
 

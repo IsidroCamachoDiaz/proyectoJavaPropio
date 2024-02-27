@@ -62,7 +62,7 @@ fechaAnterior.add(Calendar.HOUR_OF_DAY, 1);
 try{
 	//Comprobamos si se encontro el token
 if(tokenEncontrado.getToken().equals("")||tokenEncontrado.getToken()==null){
-	Alerta.Alerta(request,"No se pudo encontrar en usuario intentelo mas tarde","error");
+	Alerta.Alerta(request,"No se encontro el token o ya fue usado","error");
 }
 	//Comprobamos si se paso de la fecha
 else if(ahora.after(fechaAnterior)){
@@ -84,6 +84,7 @@ else{
 		//Comprobamos si se actualizo correctamente
 		if(acciones.ActualizarUsuario(usuario)){
 			Alerta.Alerta(request,"Felicidades Has dado de alta la cuenta","success");
+			acciones.EliminarToken(String.valueOf(tokenEncontrado.getIdToken()));
 		}
 		else{
 			Alerta.Alerta(request,"Hubo Un error intentelo mas tarde","error");

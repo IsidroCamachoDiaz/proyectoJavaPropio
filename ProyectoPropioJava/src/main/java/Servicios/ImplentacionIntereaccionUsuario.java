@@ -106,7 +106,7 @@ public class ImplentacionIntereaccionUsuario implements InterfaceIntereccionUsua
 	            //El usuario no puso bien los datos al logearse
 	            else {
 	            	Escritura.EscribirFichero("Un usuario intento logearse en la aplicacion pero no puso bien los valores");
-					Alerta.Alerta(request,"El DNI y/o Clave son incorrectos","error");
+					Alerta.Alerta(request,"El Correo y/o Contraseña son incorrectos","error");
 	            	return false;
 	            }
 		}catch(Exception e) {
