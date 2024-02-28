@@ -93,9 +93,16 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
     		 //Cogemos las incidencias y se filtran por las del el usuario
     		 List <IncidenciaDTO> incidencias = acciones.SeleccionarTodasIncidencias();
     		 
+    		 //Filtramos por lo que tienen incidencias
+    		 incidencias = incidencias.stream()
+  	                .filter(incidencia -> incidencia.getEmpleado()!= null)
+  	                .collect(Collectors.toList());
+    		 
+    		 //Filtramos por las suyas
     		 incidencias = incidencias.stream()
  	                .filter(incidencia -> incidencia.getEmpleado().getIdUsuario() == usuario.getIdUsuario())
  	                .collect(Collectors.toList());
+    		 
     		 //Si no tiene ninguna incidencia se le da el rol de usuario
     		 if(incidencias.isEmpty()) {
     			 usuario.setAcceso(accesoDar);
@@ -129,7 +136,7 @@ public class ImplementacionAdministracion implements InterfaceAdministracion {
  			//Esta disponible el correo
  			else {
  				//Se inserta con los datos y se vuelve a coger ya con id
- 				acciones.InsertarUsuario(usu);
+ 				acciones.InsertarUsuarioAdministrador(usu);
  	            
  	            UsuarioDTO usuId=acciones.SeleccionarUsuario("SelectCorreo/"+usu.getEmailUsuario());
  	            Correo correo=new Correo();

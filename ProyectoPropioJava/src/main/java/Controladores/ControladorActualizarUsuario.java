@@ -62,6 +62,7 @@ public class ControladorActualizarUsuario extends HttpServlet{
 	 		Alerta.Alerta(request, "No se encontro al usuario", "error");
 			response.sendRedirect("vistas/home.jsp");
 			Escritura.EscribirFichero("Un administrador quiso modificar un usuario pero no se encontro el usuario");
+			return;
 	 	}
 	 	
 	 	//Comprobamos si tiene campos diferentes

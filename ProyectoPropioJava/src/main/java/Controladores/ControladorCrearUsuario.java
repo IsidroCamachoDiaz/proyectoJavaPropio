@@ -17,6 +17,7 @@ import Utilidades.Alerta;
 import Utilidades.ComprobacionImagen;
 import Utilidades.Encriptado;
 import Utilidades.Escritura;
+import Utilidades.implementacionCRUD;
 import Servicios.ImplementacionAdministracion;
 import Servicios.ImplentacionIntereaccionUsuario;
 
@@ -38,12 +39,19 @@ public class ControladorCrearUsuario extends HttpServlet {
 			 //Declaramos lo que necesitemos
 			 	Encriptado nc = new Encriptado();
 			 	HttpSession session = request.getSession();
-				
+				implementacionCRUD acciones= new implementacionCRUD();
+			 	
 			 	//Creamos el usuario
 				UsuarioDTO usuario = new UsuarioDTO(request.getParameter("nombre"),
 						request.getParameter("telefono"),
 						request.getParameter("correo"),
 						nc.EncriptarContra(request.getParameter("contrasenia")));
+				
+				//Cogemos el acceso
+				String acceso=request.getParameter("acceso");
+				
+				//Lo asignamos al usuario
+				usuario.setAcceso(acciones.SeleccionarAcceso("Select/"+acceso));
 				
 				//Cogemos la imagenn
 				 Part filePart = request.getPart("imagen");

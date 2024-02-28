@@ -87,6 +87,14 @@ public interface interfazCRUD {
 	public boolean InsertarUsuario(UsuarioDTO usuarioMeter);
 	
 	/**
+	 * Realiza una solicitud POST para insertar un nuevo usuario como administrador en la base de datos.
+	 *
+	 * @param usuarioMeter Objeto UsuarioDTO que se desea insertar.
+	 * @return true si la operación de inserción fue exitosa, false de lo contrario.
+	 */
+	public boolean InsertarUsuarioAdministrador(UsuarioDTO usuarioMeter);
+	
+	/**
 	 * Realiza una solicitud POST para insertar una nueva incidencia en la base de datos.
 	 *
 	 * @param incidenciaMeter Objeto IncidenciaDTO que se desea insertar.

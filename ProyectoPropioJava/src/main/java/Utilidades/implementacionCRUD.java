@@ -190,6 +190,11 @@ public class implementacionCRUD implements interfazCRUD {
     public boolean InsertarUsuario(UsuarioDTO usuarioMeter) {
         return hacerPost("usuario/Insertar", usuarioMeter);
     }
+    
+    @Override
+    public boolean InsertarUsuarioAdministrador(UsuarioDTO usuarioMeter) {
+        return hacerPost("usuario/InsertarAdministrador", usuarioMeter);
+    }
 
     @Override
     public boolean InsertarAcceso(AccesoDTO nuevoAcceso) {

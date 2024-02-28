@@ -4,6 +4,8 @@
 <%@ page import="Utilidades.Alerta" %>
 <%@ page import="Utilidades.implementacionCRUD" %>
 <%@ page import="Utilidades.Escritura" %>
+<%@ page import="java.util.List" %>
+<%@ page import="Dtos.AccesoDTO" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,6 +137,18 @@ var tipo = '<%= session.getAttribute("tipoAlerta") %>';
                 <label for="contrasenia">Contraseña:</label>
                 <input type="password" class="form-control" id="contrasenia" name="contrasenia" value="" required>
             </div>
+            
+            
+            <!-- Campo de Acceso -->
+            <label for="campo_select" class="form-label">Selecciona el acceso del usuario:</label>
+		    <select class="form-select" id="acceso" name="acceso" required>
+			<%
+			List <AccesoDTO> accesos=acciones.SeleccionarTodosAccesos();		
+			for(int i=0;i<accesos.size();i++){
+					%><option value="<%=accesos.get(i).getIdAcceso() %>"><%=accesos.get(i).getCodigoAcceso() %></option><%
+		    }
+		    %>
+		    </select>
 			
             <!-- Campo de Subir Archivo (Imagen) -->
             <div class="form-group">
